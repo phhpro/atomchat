@@ -1,6 +1,6 @@
 <?php
 //** script folder and max characters
-$ac_dir = "/site/chat/";
+$ac_dir = "/chat/";
 $ac_max = 256;
 
 //** init session
