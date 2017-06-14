@@ -163,10 +163,7 @@ if (isset ($_POST['ac_post'])) {
     }
 
     //** add post to log file
-    $ac_text  = '      <div id="' . gethostbyaddr($_SERVER['REMOTE_ADDR']) . '_' . gmdate('Ymd-His') . '_' . $ac_name . '" class=ac_item>' . "\n" . 
-                '        <div>' . gmdate('Y-m-d H:i:s') . " " . $ac_name . "</div>\n" . 
-                "        <div>" . str_replace("&#13;&#10;", "", $ac_text) . "</div>\n" . 
-                "      </div>\n";
+    $ac_text  = '      <div id="' . gethostbyaddr($_SERVER['REMOTE_ADDR']) . '_' . gmdate('Ymd-His') . '_' . $ac_name . '" class=ac_item>' . gmdate('Y-m-d H:i:s') . " " . $ac_name . " :: " . str_replace("&#13;&#10;", "", $ac_text) . "</div>\n";
     $ac_text .= file_get_contents($ac_log);
     file_put_contents($ac_log, $ac_text);
     header("Location: #NEW_POST");
@@ -175,7 +172,7 @@ if (isset ($_POST['ac_post'])) {
 }
 
 //** script version
-$ac_ver = 20170611;
+$ac_ver = 20170614;
 ?>
 <!DOCTYPE html>
 <html lang=en-GB>
@@ -243,10 +240,6 @@ $ac_ver = 20170611;
 
     #ac_footer {
       font-size: small;
-    }
-
-    p {
-      text-align: justify;
     }
 
     label {
@@ -319,7 +312,7 @@ $ac_ver = 20170611;
   </head>
   <body>
     <div id=ac_header><span id=ac_logo><a href="http://phclaus.com/php-scripts/#AtomChat" title="Powered by Atom Chat v<?php echo $ac_ver; ?>. Click here to get a free copy."><img src="ac_logo.png" width=16 height=16 alt=""/> Atom Chat</span></a> <span id=ac_stat>Online: <span id=ac_uoc><?php echo $ac_uon; ?></span></span></div>
-      <p><strong><noscript>Java Script disabled or not available!</noscript></strong></p>
+    <p><strong><noscript>Java Script disabled or not available!</noscript></strong></p>
 <?php
 if (isset ($_SESSION['ac_name'])) {
 ?>
