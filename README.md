@@ -1,5 +1,20 @@
 # Atom Chat
 
-**Atom Chat** is a **free PHP chat script** with minimal bloat for low volume and personal sites.
+**Atom Chat** is a **free IRC like PHP chat script** with minimal bloat for low volume and personal sites.
 
-Edit `$ac_dir` to set the script's folder and `$ac_max` to set the maximum characters allowed to post. User names are dynamically assigned without password, assuming a save environment of trusted users. Unauthorised access can easily be denied by placing the script in a restricted area. Pressing the optional Push button manually refreshes the log file if the browser doesn't support Java Script or for mere convenience.
+- **What it is**
+    - Completely anonymous no thrills IRC like chat script.
+    - Self-contained set it and forget it upload and done.
+    - Zero data tracking and no passwords ever.
+    - Fully themeable responsive cross-browser design.
+- **What it is <em>not</em>**
+    - Fancy hyperbole gadget with more bells than whistles.
+    - Resources leeching dependency stricken database voodoo.
+    - Neither a pink jellyfish nor Santa Claus on steroids.
+- **How it works**
+    - Enter prefered name and click **Login** to start chatting.
+    - Names are assigned dynamically first come, first serve.
+    - Inactive sessions are auto-closed after 30 minutes.
+    - Smart conversion of smileys, variants or keywords to icons.
+- **What it does**
+    - Chat, chat, **Atom Chat**!
