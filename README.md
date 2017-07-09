@@ -7,7 +7,7 @@
     - Self-contained set it and forget it upload and done.
     - Zero data tracking and no passwords ever.
     - Fully themeable responsive cross-browser design.
-- **What it is <em>not</em>**
+- **What it is not**
     - Fancy hyperbole gadget with more bells than whistles.
     - Resources leeching dependency stricken database voodoo.
     - Neither a pink jellyfish nor Santa Claus on steroids.
