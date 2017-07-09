@@ -1,6 +1,6 @@
 # Atom Chat
 
-**Atom Chat** is a **free IRC like PHP chat script** with minimal bloat for low volume and personal sites.
+**Free IRC like PHP chat script** with minimal bloat for low volume and personal sites.
 
 - **What it is**
     - Completely anonymous no thrills IRC like chat script.
