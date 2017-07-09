@@ -1,0 +1,14 @@
+Icon filenames must match the associated primary keyword. The default
+file type is set in $ac_emo_type. Definitions of keywords, text smiles
+and variants are stored in list.txt in the folder containing the icons.
+The default separator symbol is the vertical bar | which must not occur
+in either of the alternate, variant, or keyword spellings.
+
+Create a subdirectoy in the emo folder, e.g. myemos, and place the icons
+in that folder to add a new set. Then edit $ac_emo_home = "myemos" to
+set myemos as the new default. Don't forget to keep a valid list.txt in
+the folder and make sure there are no trailing lines at the end of the
+file to prevent invalid options.
+
+Despite having multiple icon sets, only one can be selected at any time.
+Please note that a large list may considerably slow down the script.
