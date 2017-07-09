@@ -1,0 +1,157 @@
+body {
+  background-color: #fff;
+  color: #000;
+  font-family: "Droid Sans", Arial, sans-serif;
+  font-size: 100%;
+  font-weight: normal;
+  overflow: hidden;
+}
+
+#ac_header {
+  background-color: #fff;
+  color: #000;
+  font-weight: bold;
+  padding: 2px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+
+#ac_sub {
+  background-color: #fff;
+  color: #000;
+  position: fixed;
+  top: 28px;
+  right: 0;
+  bottom: 175px;
+  left: 0;
+  overflow: auto;
+  padding: 8px;
+  z-index: 1000;
+  font-size: 115%;
+}
+
+#ac_push {
+  position: fixed;
+  top: 28px;
+  right: 0;
+  bottom: 175px;
+  left: 0;
+  overflow: auto;
+  padding: 8px;
+}
+
+#ac_menu {
+  background-color: #fff;
+  color: #000;
+  text-align: center;
+  padding: 2px;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+img {
+  border: 0;
+  vertical-align: text-bottom;
+  font-size: 75%;
+}
+
+#ac_logo {
+  float: left;
+  margin: 2px 2px 2px 4px;
+}
+
+#ac_logo img {
+  vertical-align: text-top;
+  margin-top: -1px;
+}
+
+#ac_live {
+  float: right;
+  font-weight: normal;
+  margin: 2px 4px 2px 2px;
+}
+
+#ac_footer {
+  font-size: small;
+}
+
+#ac_info {
+  font-size: 75%;
+  font-weight: bold;
+  padding-bottom: 8px;
+}
+
+label {
+  font-weight: bold;
+}
+
+input {
+  background-color: #fff;
+  color: #000;
+  border: 1px outset #ccc;
+  font-size: 100%;
+}
+
+input:hover {
+  background-color: #ccc;
+  color: #000;
+  border: 1px inset #ccc;
+}
+
+input[type=submit] {
+  font-weight: bold;
+  margin: 16px;
+}
+
+input[type=submit]:hover {
+  transform: scale(0.9);
+}
+
+textarea {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+  width: 99%;
+}
+
+textarea:hover {
+  background-color: #ccc;
+  color: #000;
+  border: 1px inset #999;
+}
+
+select {
+  background-color: #fff;
+  color: #000;
+  font-size: 105%;
+}
+
+select:hover {
+  background-color: #ccc;
+  color: #000;
+}
+
+.ac_item {
+  border-bottom: 1px solid #ccc;
+  padding: 8px;
+}
+
+.ac_item:hover {
+  background-color: #ccc;
+  color: #000;
+}
+
+a {
+  background-color: transparent;
+  color: #000;
+  text-decoration: none;
+}
+
+a:hover {
+  background-color: transparent;
+  color: #666;
+}
