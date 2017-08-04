@@ -1,32 +1,52 @@
 <?php
 /*
  * Atom Chat is a free PHP IRC like chat script with minimal bloat.
+ *
  * Chat logs are stored in plain text files. No database required.
+ * Unless you want to change something the script is good to go.
  *
  * http://phclaus.com/php-scripts/#AtomChat
+ *
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA 02110-1301, USA.
  */
 
-/*
- * server protocol
- * script folder
- */
-$ac_prot     = "http";
-$ac_home     = "chat";
 
 /*
  * css default theme
- * user can change css theme -- 0 off, 1 on
+ * css theme selection by user -- 0 off, 1 on
  */
 $ac_css_main = "retro";
 $ac_css_user = 1;
 
 /*
- * auto-convert keywords to emos -- 0 off, 1 on
- * emo theme
- * emo file type
+ * auto-convert emos -- 0 off, 1 on
+ *
+ * use with caution. this has a good potential to heavily bloat the
+ * logs and may also put some considerable extra load on the server!
  */
 $ac_emo_auto = 1;
-$ac_emo_home = "default";
+
+/*
+ * emo default icon set
+ * emo file type
+ *
+ * this only applies if $ac_emo_auto = 1
+ */
+$ac_emo_icon = "default";
 $ac_emo_type = "png";
 
 /*
@@ -40,6 +60,12 @@ $ac_kill     = 1800;
 /*
  ***********************************************************************
  *                                               NO NEED TO EDIT BELOW *
+ *                                                                     *
+ *                                  UNLESS YOU ARE ABSOLUTELY POSITIVE *
+ *                                         YOU KNOW WHAT YOU ARE DOING *
+ *                                 YOU REALLY REALLY (REALLY) OUGHT TO *
+ *                                                                     *
+ *                                                     STOP RIGHT HERE *
  ***********************************************************************
  */
 
@@ -47,16 +73,26 @@ $ac_kill     = 1800;
 /*
  * script version
  * init info system
- * host with full url
+ * default protocol
  */
-$ac_make = 20170708;
+$ac_make = 20170803;
 $ac_info = "Powered by Atom Chat v$ac_make";
-$ac_host = $ac_prot . "://" . $_SERVER['HTTP_HOST'] . "/" . $ac_home . "/";
+$ac_prot = "http";
 
-//** init session
+//** check secure protocol
+if (isset ($_SERVER['HTTPS']) && "on" === $_SERVER['HTTPS']) {
+  $ac_prot = $ac_prot . "s";
+}
+
+/*
+ * get script folder -- filter possible // and re-append trailing /
+ * build full url
+ */
+$ac_fold = end(explode("/", rtrim(dirname(__FILE__), "/"))) . "/";
+$ac_host = $ac_prot . "://" . $_SERVER['HTTP_HOST'] . "/" . $ac_fold;
+
+//** init and test session
 session_start();
-
-//** test session
 $_SESSION['ac_test'] = 1;
 
 if ($_SESSION['ac_test'] !== 1) {
@@ -95,7 +131,7 @@ $ac_lock_live = "lock_live.txt";
  * emo keywords list
  */
 $ac_css_list  = "./css/list.txt";
-$ac_emo_list  = "./emo/". $ac_emo_home . "/list.txt";
+$ac_emo_list  = "./emo/". $ac_emo_icon . "/list.txt";
 
 //** init counter
 if (!file_exists($ac_lock_name)) {
@@ -297,7 +333,7 @@ if (isset ($_POST['ac_post'])) {
 
           //** keyword to icon
           if (stripos($ac_text, $ac_emo_ckey) !== false) {
-            $ac_text = str_replace($ac_emo_ckey, '<img src="' . $ac_host . 'emo/' . $ac_emo_home . '/' . $ac_emo_ckey . '.' . $ac_emo_type . '" width=24 height=24 alt="' . $ac_emo_ckey . '"/>', $ac_text);
+            $ac_text = str_replace($ac_emo_ckey, '<img src="' . $ac_host . 'emo/' . $ac_emo_icon . '/' . $ac_emo_ckey . '.' . $ac_emo_type . '" width=24 height=24 alt="' . $ac_emo_ckey . '"/>', $ac_text);
           }
         }
 
@@ -327,7 +363,7 @@ if (isset ($_POST['ac_css_apply'])) {
   }
 }
 
-//** check theme session and apply selected theme
+//** check css session and apply selected theme
 if (isset ($_SESSION['ac_css'])) {
   $ac_css_theme = $_SESSION['ac_css'];
 } else {
@@ -444,7 +480,7 @@ if (isset ($_POST['ac_emos'])) {
       $ac_emo_calt   = $ac_emo_line[0];
       $ac_emo_cvar   = $ac_emo_line[1];
       $ac_emo_ckey   = $ac_emo_line[2];
-      echo '<img src="' . $ac_host . 'emo/' . $ac_emo_home . '/' . $ac_emo_ckey . '.' . $ac_emo_type . '" width=24 height=24 alt=""/> == ' . "$ac_emo_calt -&gt; $ac_emo_cvar -&gt; $ac_emo_ckey\n";
+      echo '<img src="' . $ac_host . 'emo/' . $ac_emo_icon . '/' . $ac_emo_ckey . '.' . $ac_emo_type . '" width=24 height=24 alt=""/> == ' . "$ac_emo_calt -&gt; $ac_emo_cvar -&gt; $ac_emo_ckey\n";
     }
 
     //** reset code
@@ -452,8 +488,8 @@ if (isset ($_POST['ac_emos'])) {
 ?>
       </pre>
       <p><strong>Examples</strong></p>
-      <p><code>psst santa has a gift for you :)</code><br/><img src="<?php echo $ac_host; ?>emo/<?php echo $ac_emo_home; ?>/psst.<?php echo $ac_emo_type; ?>" width=24 height=24 alt=""/> <img src="<?php echo $ac_host; ?>emo/<?php echo $ac_emo_home; ?>/santa.<?php echo $ac_emo_type; ?>" width=24 height=24 alt=""/> has a <img src="<?php echo $ac_host; ?>emo/<?php echo $ac_emo_home; ?>/gift.<?php echo $ac_emo_type; ?>" width=24 height=24 alt=""/> for you <img src="<?php echo $ac_host; ?>emo/<?php echo $ac_emo_home; ?>/smile.<?php echo $ac_emo_type; ?>" width=24 height=24 alt=""/></p>
-      <p><code>i'm so :( i want to :*</code><br/>i'm so <img src="<?php echo $ac_host; ?>emo/<?php echo $ac_emo_home; ?>/sad.<?php echo $ac_emo_type; ?>" width=24 height=24 alt=""/> i want to <img src="<?php echo $ac_host; ?>emo/<?php echo $ac_emo_home; ?>/cry.<?php echo $ac_emo_type; ?>" width=24 height=24 alt=""/></p>
+      <p><code>psst santa has a gift for you :)</code><br/><img src="<?php echo $ac_host; ?>emo/<?php echo $ac_emo_icon; ?>/psst.<?php echo $ac_emo_type; ?>" width=24 height=24 alt=""/> <img src="<?php echo $ac_host; ?>emo/<?php echo $ac_emo_icon; ?>/santa.<?php echo $ac_emo_type; ?>" width=24 height=24 alt=""/> has a <img src="<?php echo $ac_host; ?>emo/<?php echo $ac_emo_icon; ?>/gift.<?php echo $ac_emo_type; ?>" width=24 height=24 alt=""/> for you <img src="<?php echo $ac_host; ?>emo/<?php echo $ac_emo_icon; ?>/smile.<?php echo $ac_emo_type; ?>" width=24 height=24 alt=""/></p>
+      <p><code>i'm so :( i want to :*</code><br/>i'm so <img src="<?php echo $ac_host; ?>emo/<?php echo $ac_emo_icon; ?>/sad.<?php echo $ac_emo_type; ?>" width=24 height=24 alt=""/> i want to <img src="<?php echo $ac_host; ?>emo/<?php echo $ac_emo_icon; ?>/cry.<?php echo $ac_emo_type; ?>" width=24 height=24 alt=""/></p>
       <form action="#CHAT" id=ac_emo_form method=POST accept-charset="UTF-8">
         <div><input name=ac_emo_close value=Close title="Click here to close this window" type=submit /></div>
       </form>
