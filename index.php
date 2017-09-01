@@ -75,7 +75,7 @@ $ac_kill     = 1800;
  * init info system
  * default protocol
  */
-$ac_make = 20170803;
+$ac_make = 20170901;
 $ac_info = "Powered by Atom Chat v$ac_make";
 $ac_prot = "http";
 
@@ -162,7 +162,7 @@ if (isset ($_SESSION['ac_time']) && !empty ($_SESSION['ac_time']) &&
     $ac_live_data = file_get_contents($ac_lock_live);
     $ac_live_list = $ac_live_data;
 
-    if ($ac_live_list < 1) {
+    if ($ac_live_list <1) {
       $ac_live_data = 0;
     } else {
       $ac_live_data = ($ac_live_list-1);
@@ -251,7 +251,7 @@ if (isset ($_POST['ac_quit'])) {
   $ac_live_data = file_get_contents($ac_lock_live);
   $ac_live_list = $ac_live_data;
 
-  if ($ac_live_list < 1) {
+  if ($ac_live_list <1) {
     $ac_live_data = 0;
   } else {
     $ac_live_data = ($ac_live_list-1);
@@ -287,12 +287,14 @@ if (isset ($_POST['ac_post'])) {
       if (file_exists($ac_emo_list)) {
 
         //** check empty list -- returns true if file has only BOM or spaces
-        if (filesize($ac_emo_list) < 16 && empty (trim(file_get_contents($ac_emo_list)))) {
+        $ac_emo_trim = file_get_contents($ac_emo_list);
+
+        if (filesize($ac_emo_list) <16 && trim($ac_emo_trim) === false) {
           $ac_info = "Empty EMO definitions!";
         } else {
           //** link primary array and list
           $ac_emo_parr = array ();
-          $ac_emo_open = fopen($ac_emo_list, 'r');
+          $ac_emo_open = fopen($ac_emo_list, "r");
 
           //** parse list
           while (!feof($ac_emo_open)) {
@@ -401,7 +403,9 @@ if (isset ($_POST['ac_csst'])) {
   if (file_exists($ac_css_list)) {
 
     //** check empty list -- returns true if file has only BOM or spaces
-    if (filesize($ac_css_list) < 16 && empty (trim(file_get_contents($ac_css_list)))) {
+    $ac_css_trim = file_get_contents($ac_css_list);
+
+    if (filesize($ac_css_list) <16 && trim($ac_css_trim) === false) {
       $ac_info = "Empty CSS definitions! (Not checking empty lines)";
     } else {
       //** link lines
@@ -448,12 +452,14 @@ if (isset ($_POST['ac_emos'])) {
   if (file_exists($ac_emo_list)) {
 
     //** check empty list -- returns true if file has only BOM or spaces
-    if (filesize($ac_emo_list) < 16 && empty (trim(file_get_contents($ac_emo_list)))) {
+    $ac_emo_trim = file_get_contents($ac_emo_list);
+
+    if (filesize($ac_emo_list) <16 && trim($ac_emo_trim) === false) {
       $ac_info = "Empty EMO definitions! (Not checking empty lines)";
     } else {
       //** link primary array and list
       $ac_emo_parr = array ();
-      $ac_emo_open = fopen($ac_emo_list, 'r');
+      $ac_emo_open = fopen($ac_emo_list, "r");
 
       //** parse list
       while (!feof($ac_emo_open)) {
