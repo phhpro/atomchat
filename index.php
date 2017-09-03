@@ -274,7 +274,7 @@ if (isset ($_POST['ac_post'])) {
   $ac_text = filter_var($_POST['ac_text'], FILTER_SANITIZE_SPECIAL_CHARS);
 
   //** skip empty post
-  if ($ac_name !== "" || $ac_text !== "") {
+  if (!empty ($ac_text)) {
 
     if (!file_exists($ac_chat_log)) {
       file_put_contents($ac_chat_log, $ac_link);
@@ -351,6 +351,9 @@ if (isset ($_POST['ac_post'])) {
     $ac_text .= file_get_contents($ac_chat_log);
     file_put_contents($ac_chat_log, $ac_text);
     header('Location: #NEW_POST');
+    exit;
+  } else {
+    header('Location: #EMPTY_POST');
     exit;
   }
 }
