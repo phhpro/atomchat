@@ -8,10 +8,6 @@
  * http://phclaus.com/php-scripts/#AtomChat
  *
  *
- * Minor rewrite in 20170901 should allow script to run on PHP pre 5.5
- * albeit not exactly as obsolete as 4.x
- *
- *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -31,14 +27,16 @@
 
 /*
  * css default theme
- * let user change css theme -- 0 off, 1 on
+ * css theme selection by user -- 0 off, 1 on
  */
 $ac_css_main = "retro";
 $ac_css_user = 1;
 
 /*
  * auto-convert emos -- 0 off, 1 on
- * use with caution -- may bloat logs and put extra load on server
+ *
+ * use with caution. this has a good potential to heavily bloat the
+ * logs and may also put some considerable extra load on the server!
  */
 $ac_emo_auto = 1;
 
@@ -77,7 +75,7 @@ $ac_kill     = 1800;
  * init info system
  * default protocol
  */
-$ac_make = 20170902;
+$ac_make = 20170903;
 $ac_info = "Powered by Atom Chat v$ac_make";
 $ac_prot = "http";
 
@@ -120,13 +118,13 @@ if (!is_dir('log')) {
 }
 
 /*
- * chat log data file
+ * chat log
  * live users name lock
  * live users counter lock
  */
-$ac_chat_data  = "log/chat_" . $_SERVER['HTTP_HOST'] . "_" . date('Ymd') . ".html";
-$ac_lock_name = "name.lock";
-$ac_lock_live = "live.lock";
+$ac_chat_log  = "log/chat_" . $_SERVER['HTTP_HOST'] . "_" . date('Ymd') . ".html";
+$ac_lock_name = "lock_name.txt";
+$ac_lock_live = "lock_live.txt";
 
 /*
  * css themes list
@@ -151,10 +149,10 @@ if (isset ($_SESSION['ac_time']) && !empty ($_SESSION['ac_time']) &&
     //** update name lock
     file_put_contents($ac_lock_name, str_replace($_SESSION['ac_name'] . "\n", "", file_get_contents($ac_lock_name)));
 
-    //** update data file
+    //** update chat log
     $ac_text  = "      <div class=ac_item>" . gmdate('Y-m-d H:i:s') . " Atom Chat &gt; " . $_SESSION['ac_name'] . " left the chat</div>\n";
-    $ac_text .= file_get_contents($ac_chat_data);
-    file_put_contents($ac_chat_data, $ac_text);
+    $ac_text .= file_get_contents($ac_chat_log);
+    file_put_contents($ac_chat_log, $ac_text);
 
     //** clear session
     unset ($_SESSION['ac_time']);
@@ -203,14 +201,14 @@ if (isset ($_POST['ac_login'])) {
       //** lock name
       file_put_contents($ac_lock_name, $ac_name . "\n", FILE_APPEND);
 
-      //** update data file
+      //** update chat log
       $ac_text  = "      <div class=ac_item>" . gmdate('Y-m-d H:i:s') . " Atom Chat &gt; " . $_SESSION['ac_name'] . " entered the chat</div>\n";
 
-      if (file_exists($ac_chat_data)) {
-        $ac_text .= file_get_contents($ac_chat_data);
+      if (file_exists($ac_chat_log)) {
+        $ac_text .= file_get_contents($ac_chat_log);
       }
 
-      file_put_contents($ac_chat_data, $ac_text);
+      file_put_contents($ac_chat_log, $ac_text);
 
       //** update counter and reload interface
       $ac_live_data = file_get_contents($ac_lock_live);
@@ -226,11 +224,11 @@ if (isset ($_POST['ac_login'])) {
   }
 }
 
-//** save data file
+//** save chat log
 if (isset ($_POST['ac_save'])) {
   header('Content-type: text/html');
-  header('Content-Disposition: attachment; filename="' . str_replace("log/", "", $ac_chat_data) . '"');
-  readfile($ac_chat_data);
+  header('Content-Disposition: attachment; filename="' . str_replace("log/", "", $ac_chat_log) . '"');
+  readfile($ac_chat_log);
   exit;
 }
 
@@ -240,10 +238,10 @@ if (isset ($_POST['ac_quit'])) {
   //** update name lock
   file_put_contents($ac_lock_name, str_replace($_SESSION['ac_name'] . "\n", "", file_get_contents($ac_lock_name)));
 
-  //** update data file
+  //** update chat log
   $ac_text  = "      <div class=ac_item>" . gmdate('Y-m-d H:i:s') . " Atom Chat &gt; " . $_SESSION['ac_name'] . " left the chat</div>\n";
-  $ac_text .= file_get_contents($ac_chat_data);
-  file_put_contents($ac_chat_data, $ac_text);
+  $ac_text .= file_get_contents($ac_chat_log);
+  file_put_contents($ac_chat_log, $ac_text);
 
   //** clear session
   unset ($_SESSION['ac_time']);
@@ -278,8 +276,8 @@ if (isset ($_POST['ac_post'])) {
   //** skip empty post
   if ($ac_name !== "" || $ac_text !== "") {
 
-    if (!file_exists($ac_chat_data)) {
-      file_put_contents($ac_chat_data, $ac_link);
+    if (!file_exists($ac_chat_log)) {
+      file_put_contents($ac_chat_log, $ac_link);
     }
 
     //** check if smart conversion is enabled
@@ -348,10 +346,10 @@ if (isset ($_POST['ac_post'])) {
       }
     }
 
-    //** update data file
+    //** update chat log
     $ac_text  = '      <div id="' . gethostbyaddr($_SERVER['REMOTE_ADDR']) . '_' . gmdate('Ymd-His') . '_' . $ac_name . '" class=ac_item>' . gmdate('Y-m-d H:i:s') . " " . $ac_name . " &gt; " . str_replace("&#13;&#10;", "", $ac_text) . "</div>\n";
-    $ac_text .= file_get_contents($ac_chat_data);
-    file_put_contents($ac_chat_data, $ac_text);
+    $ac_text .= file_get_contents($ac_chat_log);
+    file_put_contents($ac_chat_log, $ac_text);
     header('Location: #NEW_POST');
     exit;
   }
@@ -381,13 +379,16 @@ if (isset ($_SESSION['ac_css'])) {
     <title>Atom Chat - <?php echo $_SERVER['HTTP_HOST']; ?></title>
     <meta charset="UTF-8"/>
     <meta name=language content="en-GB"/>
-    <meta name=description content="PHP Atom Chat is a free PHP IRC like chat script with minimal bloat. Chat logs are stored in plain text files. No database required."/>
+    <meta name=description content="Atom Chat is a free PHP IRC like chat script with minimal bloat. Chat logs are stored in plain text files. No database required."/>
     <meta name=keywords content="PHP Atom Chat,free PHP chat scripts"/>
     <meta name=robots content="noodp, noydir"/>
     <meta name=viewport content="width=device-width, height=device-height, initial-scale=1"/>
     <link rel=icon href="<?php echo $ac_host; ?>logo.png" type="image/png"/>
-    <link rel=stylesheet href="<?php echo $ac_host; ?>css/<?php echo $ac_css_theme; ?>.css" type="text/css"/>
     <style>
+<?php
+readfile("./css/" . $ac_css_theme . ".css");
+?>
+
     @media screen and (max-width: 800px) {
       body {
         font-size: 115%;
@@ -396,7 +397,7 @@ if (isset ($_SESSION['ac_css'])) {
     </style>
   </head>
   <body>
-    <div id=ac_header><span id=ac_logo><a href="http://phclaus.com/php-scripts/#AtomChat" title="Powered by PHP Atom Chat v<?php echo $ac_make; ?>. Click here to visit the script's homepage and download your own free copy."><img src="<?php echo $ac_host; ?>logo.png" width=16 height=16 alt=""/> Atom Chat</span></a> <span id=ac_live>Online: <?php echo $ac_live_count; ?></span></div>
+    <div id=ac_header><span id=ac_logo><a href="http://phclaus.com/php-scripts/#AtomChat" title="Powered by Atom Chat v<?php echo $ac_make; ?>. Click here to visit the script's homepage and download your own free copy."><img src="<?php echo $ac_host; ?>logo.png" width=16 height=16 alt=""/> Atom Chat</span></a> <span id=ac_live>Online: <?php echo $ac_live_count; ?></span></div>
 <?php
 //** list css themes
 if (isset ($_POST['ac_csst'])) {
@@ -513,9 +514,9 @@ if (isset ($_SESSION['ac_name']) && !empty ($_SESSION['ac_name'])) {
 ?>
     <div id=ac_push>
 <?php
-  //** check existing data file
-  if (file_exists($ac_chat_data) && is_writable($ac_chat_data)) {
-    include ($ac_chat_data);
+  //** check existing log
+  if (file_exists($ac_chat_log) && is_writable($ac_chat_log)) {
+    include ($ac_chat_log);
   } else {
     $ac_info = "Missing log or not writable!";
   }
@@ -541,7 +542,7 @@ if ($ac_css_user === 1) {
 //** check if smart conversion is enabled
 if ($ac_emo_auto === 1) {
 ?>
-          <input name=ac_emos value=Emos title="Click here to review available emo codes" type=submit />
+          <input name=ac_emos value=Emos title="Click here to review all available emo codes" type=submit />
 <?php
 }
 ?>
@@ -582,7 +583,7 @@ if ($ac_emo_auto === 1) {
       <ul>
         <li><strong>How it works</strong>
           <ul>
-            <li>Enter preferred name and click <strong>Login</strong> to start chatting.</li>
+            <li>Enter prefered name and click <strong>Login</strong> to start chatting.</li>
             <li>Names are assigned dynamically first come, first serve.</li>
             <li>Inactive sessions are auto-closed after 30 minutes.</li>
             <li>Smart conversion of smileys, variants or keywords to icons.</li>
@@ -601,7 +602,7 @@ if ($ac_emo_auto === 1) {
       <form action="#LOGIN" method=POST id=ac_login_form accept-charset="UTF-8">
         <div>
           <label for=ac_name>Name <small>(A-Z only)</small></label>
-          <input name=ac_name id=ac_name maxlength=16 title="Type here to enter your preferred user name. Alpha characters A to Z only!"/>
+          <input name=ac_name id=ac_name maxlength=16 title="Type here to enter your prefered user name. Alpha characters A to Z only!"/>
           <input name=ac_login value=Login title="Click here to login" type=submit />
         </div>
       </form>
@@ -649,20 +650,20 @@ if ($ac_emo_auto === 1) {
       ac_rand = Math.floor(Math.random()*10000);
 
       if (ac_http != null) {
-        ac_link = "?"+ac_rand;
+        ac_link = "?" + ac_rand;
         ac_http.open("GET", ac_link, true);
         ac_http.onreadystatechange = ac_set;
         ac_http.send(null);
       }
     }
 
-    //** update data file -- default 2 seconds
+    //** update chat log -- default 2 seconds
     function ac_push() {
       ac_time();
       ac_init = setTimeout("ac_push()", 2000);
     }
 
-    //** make some noise
+    //** output beep
     var ac_beep = (function beep() {
       var ac_snd = new Audio("data:audio/wav;base64,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qJrx4KOQjahZxWbcZgztj2c49nKmkId44S71j0c8eV9yDK6uPRzx5X18eDvjvQ6yKo9ZSS6l//8elePK/Lf//IInrOF/FvDoADYAGBMGb7FtErm5MXMlmPAJQVgWta7Zx2go+8xJ0UiCb8LHHdftWyLJE0QIAIsI+UbXu67dZMjmgDGCGl1H+vpF4NSDckSIkk7Vd+sxEhBQMRU8j/12UIRhzSaUdQ+rQU5kGeFxm+hb1oh6pWWmv3uvmReDl0UnvtapVaIzo1jZbf/pD6ElLqSX+rUmOQNpJFa/r+sa4e/pBlAABoAAAAA3CUgShLdGIxsY7AUABPRrgCABdDuQ5GC7DqPQCgbbJUAoRSUj+NIEig0YfyWUho1VBBBA//uQZB4ABZx5zfMakeAAAAmwAAAAF5F3P0w9GtAAACfAAAAAwLhMDmAYWMgVEG1U0FIGCBgXBXAtfMH10000EEEEEECUBYln03TTTdNBDZopopYvrTTdNa325mImNg3TTPV9q3pmY0xoO6bv3r00y+IDGid/9aaaZTGMuj9mpu9Mpio1dXrr5HERTZSmqU36A3CumzN/9Robv/Xx4v9ijkSRSNLQhAWumap82WRSBUqXStV/YcS+XVLnSS+WLDroqArFkMEsAS+eWmrUzrO0oEmE40RlMZ5+ODIkAyKAGUwZ3mVKmcamcJnMW26MRPgUw6j+LkhyHGVGYjSUUKNpuJUQoOIAyDvEyG8S5yfK6dhZc0Tx1KI/gviKL6qvvFs1+bWtaz58uUNnryq6kt5RzOCkPWlVqVX2a/EEBUdU1KrXLf40GoiiFXK///qpoiDXrOgqDR38JB0bw7SoL+ZB9o1RCkQjQ2CBYZKd/+VJxZRRZlqSkKiws0WFxUyCwsKiMy7hUVFhIaCrNQsKkTIsLivwKKigsj8XYlwt/WKi2N4d//uQRCSAAjURNIHpMZBGYiaQPSYyAAABLAAAAAAAACWAAAAApUF/Mg+0aohSIRobBAsMlO//Kk4soosy1JSFRYWaLC4qZBYWFRGZdwqKiwkNBVmoWFSJkWFxX4FFRQWR+LsS4W/rFRb/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////VEFHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU291bmRib3kuZGUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMjAwNGh0dHA6Ly93d3cuc291bmRib3kuZGUAAAAAAAAAACU=");
 
@@ -671,7 +672,7 @@ if ($ac_emo_auto === 1) {
       }
     })();
 
-    //** rock n roll
+    //** exec functions
     ac_push();
     ac_beep();
     </script>
