@@ -1,5 +1,5 @@
 @@|et|alien
-x(|furious|angry
+x(|mad|angry
 thumbsdown|dislike|bad
 pint|booze|beer
 thumbsup|like|bravo
