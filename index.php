@@ -94,7 +94,7 @@ $_SESSION['ac_test'] = 1;
 if ($_SESSION['ac_test'] !== 1) {
 ?>
 <p>Atom Chat requires session cookies!</p>
-<p>Please modify your browser's cookie settings and then try again.</p>
+<p>Please edit your browser's cookie settings and then try again.</p>
 <?php
   exit;
 } else {
@@ -112,33 +112,46 @@ header('Pragma: no-cache');
 if (!is_dir('log')) {
 
   if (@mkdir('log') === false) {
-    echo "Failed to create log dir!";
+?>
+<p>Failed to create log dir!</p>
+<p>Atom Chat folder must be writeable.</p>
+<?php
     exit;
   }
 }
 
 /*
  * chat log
- * live users name lock
+ * live users names lock
  * live users counter lock
  */
-$ac_chat_log  = "log/chat_" . $_SERVER['HTTP_HOST'] . "_" . date('Ymd') . ".html";
-$ac_lock_name = "lock_name.txt";
-$ac_lock_live = "lock_live.txt";
+$ac_chat_log     = "log/chat_" . $_SERVER['HTTP_HOST'] . "_" . date('Ymd') . ".html";
+$ac_lock_names   = "names.lock";
+$ac_lock_counter = "counter.lock";
+
+//** check names lock
+if (!file_exists($ac_lock_names)) {
+  $ac_lock_hand = fopen($ac_lock_names, "w");
+  fwrite($ac_lock_hand, "");
+  fclose($ac_lock_hand);
+}
+
+//** check counter lock
+if (!file_exists($ac_lock_counter)) {
+  $ac_lock_hand = fopen($ac_lock_counter, "w");
+  fwrite($ac_lock_hand, 0);
+  fclose($ac_lock_hand);
+}
 
 /*
  * css themes list
  * emo keywords list
  */
-$ac_css_list  = "./css/list.txt";
-$ac_emo_list  = "./emo/". $ac_emo_icon . "/list.txt";
+$ac_css_list = "./css/list.txt";
+$ac_emo_list = "./emo/" . $ac_emo_icon . "/list.txt";
 
 //** init counter
-if (!file_exists($ac_lock_name)) {
-  $ac_live_count = 0;
-} else {
-  $ac_live_count = (int) file_get_contents($ac_lock_live);
-}
+$ac_counter  = (int) file_get_contents($ac_lock_counter);
 
 //** expire session
 if (isset ($_SESSION['ac_time']) && !empty ($_SESSION['ac_time']) && 
@@ -148,7 +161,7 @@ if (isset ($_SESSION['ac_time']) && !empty ($_SESSION['ac_time']) &&
 
   if ($ac_diff <= 0) {
     //** update name lock
-    file_put_contents($ac_lock_name, str_replace($_SESSION['ac_name'] . "\n", "", file_get_contents($ac_lock_name)));
+    file_put_contents($ac_lock_names, str_replace($_SESSION['ac_name'] . "\n", "", file_get_contents($ac_lock_names)));
 
     //** update chat log
     $ac_text  = "      <div class=ac_item>" . gmdate('Y-m-d H:i:s') . " Atom Chat &gt; " . $_SESSION['ac_name'] . " left the chat</div>\n";
@@ -160,16 +173,16 @@ if (isset ($_SESSION['ac_time']) && !empty ($_SESSION['ac_time']) &&
     unset ($_SESSION['ac_name']);
 
     //** update counter and load interface
-    $ac_live_data = (int) file_get_contents($ac_lock_live);
-    $ac_live_list = $ac_live_data;
+    $ac_counter_data = (int) file_get_contents($ac_lock_counter);
+    $ac_counter_list = $ac_counter_data;
 
-    if ($ac_live_list <1) {
-      $ac_live_data = 0;
+    if ($ac_counter_list >1) {
+      $ac_counter_data = (int) ($ac_counter_list-1);
     } else {
-      $ac_live_data = (int) ($ac_live_list-1);
+      $ac_counter_data = 0;
     }
 
-    file_put_contents($ac_lock_live, $ac_live_data);
+    file_put_contents($ac_lock_counter, $ac_counter_data);
     header('Location: #SESSION_EXPIRED');
     exit;
   }
@@ -189,15 +202,8 @@ if (isset ($_POST['ac_login'])) {
     exit;
     //** check valid characters
   } elseif (ctype_alpha($ac_name)) {
-
-    if (!file_exists($ac_lock_name)) {
-      $ac_lock_hand = fopen($ac_lock_name, "w");
-      fwrite($ac_lock_hand, 0);
-      fclose($ac_lock_hand);
-    }
-
     //** check if name is available
-    if (stripos(file_get_contents($ac_lock_name), $ac_name) !== false) {
+    if (stripos(file_get_contents($ac_lock_names), $ac_name) !== false) {
       header('Location: #NAME_NOT_AVAILABLE');
       exit;
     } else {
@@ -206,7 +212,7 @@ if (isset ($_POST['ac_login'])) {
       $_SESSION['ac_name'] = $ac_name;
 
       //** lock name
-      file_put_contents($ac_lock_name, $ac_name . "\n", FILE_APPEND);
+      file_put_contents($ac_lock_names, $ac_name . "\n", FILE_APPEND);
 
       //** update chat log
       $ac_text  = "      <div class=ac_item>" . gmdate('Y-m-d H:i:s') . " Atom Chat &gt; " . $_SESSION['ac_name'] . " entered the chat</div>\n";
@@ -217,18 +223,12 @@ if (isset ($_POST['ac_login'])) {
 
       file_put_contents($ac_chat_log, $ac_text);
 
-      if (!file_exists($ac_lock_live)) {
-        $ac_lock_hand = fopen($ac_lock_live, "w");
-        fwrite($ac_lock_hand, 0);
-        fclose($ac_lock_hand);
-      }
-
       //** update counter and reload interface
-      $ac_live_data = file_get_contents($ac_lock_live);
-      $ac_live_list = $ac_live_data;
-      $ac_live_data = ($ac_live_list+1);
+      $ac_counter_data = file_get_contents($ac_lock_counter);
+      $ac_counter_list = $ac_counter_data;
+      $ac_counter_data = ($ac_counter_list+1);
 
-      file_put_contents($ac_lock_live, $ac_live_data);
+      file_put_contents($ac_lock_counter, $ac_counter_data);
       header('Location: #LOGIN');
       exit;
     }
@@ -250,7 +250,7 @@ if (isset ($_POST['ac_save'])) {
 if (isset ($_POST['ac_quit'])) {
 
   //** update name lock
-  file_put_contents($ac_lock_name, str_replace($_SESSION['ac_name'] . "\n", "", file_get_contents($ac_lock_name)));
+  file_put_contents($ac_lock_names, str_replace($_SESSION['ac_name'] . "\n", "", file_get_contents($ac_lock_names)));
 
   //** update chat log
   $ac_text  = "      <div class=ac_item>" . gmdate('Y-m-d H:i:s') . " Atom Chat &gt; " . $_SESSION['ac_name'] . " left the chat</div>\n";
@@ -262,23 +262,23 @@ if (isset ($_POST['ac_quit'])) {
   unset ($_SESSION['ac_name']);
 
   //** update counter and load interface
-  $ac_live_data = file_get_contents($ac_lock_live);
-  $ac_live_list = $ac_live_data;
+  $ac_counter_data = file_get_contents($ac_lock_counter);
+  $ac_counter_list = $ac_counter_data;
 
-  if ($ac_live_list <1) {
-    $ac_live_data = 0;
+  if ($ac_counter_list <1) {
+    $ac_counter_data = 0;
   } else {
-    $ac_live_data = ($ac_live_list-1);
+    $ac_counter_data = ($ac_counter_list-1);
   }
 
-  file_put_contents($ac_lock_live, $ac_live_data);
+  file_put_contents($ac_lock_counter, $ac_counter_data);
   header('Location: #LOGOUT');
   exit;
 }
 
 //** manual update
 if (isset ($_POST['ac_push'])) {
-  header('Location: #FORCE_UPDATE');
+  header('Location: #MANUAL_UPDATE');
   exit;
 }
 
@@ -408,7 +408,7 @@ readfile("./css/" . $ac_css_theme . ".css");
     </style>
   </head>
   <body>
-    <div id=ac_header><span id=ac_logo><a href="http://phclaus.com/php-scripts/#AtomChat" title="Powered by Atom Chat v<?php echo $ac_make; ?>. Click here to visit the script's homepage and download your own free copy."><img src="<?php echo $ac_host; ?>logo.png" width=16 height=16 alt=""/> Atom Chat</span></a> <span id=ac_live>Online: <?php echo $ac_live_count; ?></span></div>
+    <div id=ac_header><span id=ac_logo><a href="http://phclaus.com/php-scripts/#AtomChat" title="Powered by Atom Chat v<?php echo $ac_make; ?>. Click here to visit the script's homepage and download your own free copy."><img src="<?php echo $ac_host; ?>logo.png" width=16 height=16 alt=""/> Atom Chat</span></a> <span id=ac_counter>Online: <?php echo $ac_counter; ?></span></div>
 <?php
 //** list css themes
 if (isset ($_POST['ac_csst'])) {
