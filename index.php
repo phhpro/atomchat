@@ -75,7 +75,7 @@ $ac_kill     = 1800;
  * init info system
  * default protocol
  */
-$ac_make = 20170903;
+$ac_make = 20170905;
 $ac_info = "Powered by Atom Chat v$ac_make";
 $ac_prot = "http";
 
@@ -84,12 +84,8 @@ if (isset ($_SERVER['HTTPS']) && "on" === $_SERVER['HTTPS']) {
   $ac_prot = $ac_prot . "s";
 }
 
-/*
- * get script folder -- filter possible // and re-append trailing /
- * build full url
- */
-$ac_fold = end(explode("/", rtrim(dirname(__FILE__), "/"))) . "/";
-$ac_host = $ac_prot . "://" . $_SERVER['HTTP_HOST'] . "/" . $ac_fold;
+// build full url
+$ac_host = $ac_prot . "://" . $_SERVER['HTTP_HOST'] . str_replace($_SERVER['DOCUMENT_ROOT'], "", realpath(__DIR__)) . "/";
 
 //** init and test session
 session_start();
@@ -114,7 +110,11 @@ header('Pragma: no-cache');
 
 //** check log folder
 if (!is_dir('log')) {
-  mkdir('log');
+
+  if (@mkdir('log') === false) {
+    echo "Failed to create log dir!";
+    exit;
+  }
 }
 
 /*
@@ -137,13 +137,14 @@ $ac_emo_list  = "./emo/". $ac_emo_icon . "/list.txt";
 if (!file_exists($ac_lock_name)) {
   $ac_live_count = 0;
 } else {
-  $ac_live_count = file_get_contents($ac_lock_live);
+  $ac_live_count = (int) file_get_contents($ac_lock_live);
 }
 
 //** expire session
 if (isset ($_SESSION['ac_time']) && !empty ($_SESSION['ac_time']) && 
     isset ($_SESSION['ac_name']) && !empty ($_SESSION['ac_name'])) {
-  $ac_diff = ($ac_kill-(time()-$_SESSION['ac_time']));
+  $ac_time = (time()-(int) $_SESSION['ac_time']);
+  $ac_diff = ($ac_kill-$ac_time);
 
   if ($ac_diff <= 0) {
     //** update name lock
@@ -159,13 +160,13 @@ if (isset ($_SESSION['ac_time']) && !empty ($_SESSION['ac_time']) &&
     unset ($_SESSION['ac_name']);
 
     //** update counter and load interface
-    $ac_live_data = file_get_contents($ac_lock_live);
+    $ac_live_data = (int) file_get_contents($ac_lock_live);
     $ac_live_list = $ac_live_data;
 
     if ($ac_live_list <1) {
       $ac_live_data = 0;
     } else {
-      $ac_live_data = ($ac_live_list-1);
+      $ac_live_data = (int) ($ac_live_list-1);
     }
 
     file_put_contents($ac_lock_live, $ac_live_data);
@@ -189,6 +190,12 @@ if (isset ($_POST['ac_login'])) {
     //** check valid characters
   } elseif (ctype_alpha($ac_name)) {
 
+    if (!file_exists($ac_lock_name)) {
+      $ac_lock_hand = fopen($ac_lock_name, "w");
+      fwrite($ac_lock_hand, 0);
+      fclose($ac_lock_hand);
+    }
+
     //** check if name is available
     if (stripos(file_get_contents($ac_lock_name), $ac_name) !== false) {
       header('Location: #NAME_NOT_AVAILABLE');
@@ -210,10 +217,17 @@ if (isset ($_POST['ac_login'])) {
 
       file_put_contents($ac_chat_log, $ac_text);
 
+      if (!file_exists($ac_lock_live)) {
+        $ac_lock_hand = fopen($ac_lock_live, "w");
+        fwrite($ac_lock_hand, 0);
+        fclose($ac_lock_hand);
+      }
+
       //** update counter and reload interface
       $ac_live_data = file_get_contents($ac_lock_live);
       $ac_live_list = $ac_live_data;
       $ac_live_data = ($ac_live_list+1);
+
       file_put_contents($ac_lock_live, $ac_live_data);
       header('Location: #LOGIN');
       exit;
@@ -286,7 +300,7 @@ if (isset ($_POST['ac_post'])) {
       //** check if list exists
       if (file_exists($ac_emo_list)) {
 
-        //** check empty list -- returns true if file has only BOM or spaces
+        //** check empty list -- true if file has only BOM or spaces
         $ac_emo_trim = file_get_contents($ac_emo_list);
 
         if (filesize($ac_emo_list) <16 && trim($ac_emo_trim) === false) {
@@ -317,13 +331,7 @@ if (isset ($_POST['ac_post'])) {
           $ac_emo_cvar   = $ac_emo_line[1];
           $ac_emo_ckey   = $ac_emo_line[2];
 
-          /*
-           *************************************************************
-           * case insensitve catch all         word -> words -> swords *
-           *************************************************************
-           */
-
-          //** alternate to keyword
+          //** alternate to keyword -- case insensitve catch all -- word -> words -> swords
           if (stripos($ac_text, $ac_emo_calt) !== false) {
               $ac_text = str_replace($ac_emo_calt, $ac_emo_ckey, $ac_text);
           }
@@ -392,11 +400,11 @@ if (isset ($_SESSION['ac_css'])) {
 readfile("./css/" . $ac_css_theme . ".css");
 ?>
 
-    @media screen and (max-width: 800px) {
-      body {
-        font-size: 115%;
-      }
-    }
+@media screen and (max-width: 800px) {
+  body {
+    font-size: 115%;
+  }
+}
     </style>
   </head>
   <body>
@@ -408,7 +416,7 @@ if (isset ($_POST['ac_csst'])) {
   //** check if list exists
   if (file_exists($ac_css_list)) {
 
-    //** check empty list -- returns true if file has only BOM or spaces
+    //** check empty list -- true if file has only BOM or spaces
     $ac_css_trim = file_get_contents($ac_css_list);
 
     if (filesize($ac_css_list) <16 && trim($ac_css_trim) === false) {
@@ -653,7 +661,7 @@ if ($ac_emo_auto === 1) {
       ac_rand = Math.floor(Math.random()*10000);
 
       if (ac_http != null) {
-        ac_link = "?" + ac_rand;
+        ac_link = "?"+ac_rand;
         ac_http.open("GET", ac_link, true);
         ac_http.onreadystatechange = ac_set;
         ac_http.send(null);
