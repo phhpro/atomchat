@@ -26,6 +26,13 @@
 
 
 /*
+ ***********************************************************************
+ *                                                   BEGIN USER CONFIG *
+ ***********************************************************************
+ */
+
+
+/*
  * css default theme
  * css theme selection by user -- 0 off, 1 on
  */
@@ -34,27 +41,30 @@ $ac_css_user = 1;
 
 /*
  * auto-convert emos -- 0 off, 1 on
- *
- * use with caution. this has a good potential to heavily bloat the
- * logs and may also put some considerable extra load on the server!
+ * may bloat logs and put extra load on server
  */
 $ac_emo_auto = 1;
 
 /*
- * emo default icon set
- * emo file type
- *
- * this only applies if $ac_emo_auto = 1
+ * emo default icon set and file type
+ * only applies if $ac_emo_auto = 1
  */
 $ac_emo_icon = "default";
 $ac_emo_type = "png";
 
 /*
  * maximum characters allowed per post
- * auto expire inactive session -- default 1800 = 30 minutes
+ * auto expire inactive sessions -- default 1800 = 30 minutes
  */
 $ac_max_char = 256;
 $ac_kill     = 1800;
+
+
+/*
+ ***********************************************************************
+ *                                                     END USER CONFIG *
+ ***********************************************************************
+ */
 
 
 /*
@@ -73,18 +83,20 @@ $ac_kill     = 1800;
 /*
  * script version
  * init info system
- * default protocol
+ * stop message for invalid settings
  */
-$ac_make = 20170905;
+$ac_make = 20170906;
 $ac_info = "Powered by Atom Chat v$ac_make";
+$ac_stop = "Please check your settings.";
+
+//** protocol
 $ac_prot = "http";
 
-//** check secure protocol
 if (isset ($_SERVER['HTTPS']) && "on" === $_SERVER['HTTPS']) {
   $ac_prot = $ac_prot . "s";
 }
 
-// build full url
+// url reference
 $ac_host = $ac_prot . "://" . $_SERVER['HTTP_HOST'] . str_replace($_SERVER['DOCUMENT_ROOT'], "", realpath(__DIR__)) . "/";
 
 //** init and test session
@@ -111,19 +123,20 @@ header('Pragma: no-cache');
 //** check log folder
 if (!is_dir('log')) {
 
-  if (@mkdir('log') === false) {
+  if (mkdir('log') === false) {
 ?>
 <p>Failed to create log dir!</p>
 <p>Atom Chat folder must be writeable.</p>
+<p><?php echo $ac_stop; ?></p>
 <?php
     exit;
   }
 }
 
 /*
- * chat log
- * live users names lock
- * live users counter lock
+ * log data file
+ * names lock
+ * counter lock
  */
 $ac_chat_log     = "log/chat_" . $_SERVER['HTTP_HOST'] . "_" . date('Ymd') . ".html";
 $ac_lock_names   = "names.lock";
@@ -143,14 +156,46 @@ if (!file_exists($ac_lock_counter)) {
   fclose($ac_lock_hand);
 }
 
-/*
- * css themes list
- * emo keywords list
- */
+//** css themes and emo definitions lists
 $ac_css_list = "./css/list.txt";
 $ac_emo_list = "./emo/" . $ac_emo_icon . "/list.txt";
 
-//** init counter
+//** check css theme
+if (!file_exists("./css/" . $ac_css_main . ".css")) {
+?>
+<p>Missing CSS theme!</p>
+<p><?php echo $ac_stop; ?></p>
+<?php
+  exit;
+}
+
+//** check emo folder
+if (!is_dir("./emo/" . $ac_emo_icon)) {
+?>
+<p>Missing EMO set!</p>
+<p><?php echo $ac_stop; ?></p>
+<?php
+  exit;
+}
+
+//** check emo definitions
+if (!file_exists($ac_emo_list)) {
+?>
+<p>Missing EMO definitions!</p>
+<p><?php echo $ac_stop; ?></p>
+<?php
+  exit;
+}
+
+/*
+ * link emo primary array
+ * link emo secondary array
+ * link emo code
+ * init counter
+ */
+$ac_emo_parr = array ();
+$ac_emo_sarr = array ();
+$ac_emo_code = "";
 $ac_counter  = (int) file_get_contents($ac_lock_counter);
 
 //** expire session
@@ -160,10 +205,10 @@ if (isset ($_SESSION['ac_time']) && !empty ($_SESSION['ac_time']) &&
   $ac_diff = ($ac_kill-$ac_time);
 
   if ($ac_diff <= 0) {
-    //** update name lock
+    //** update names lock
     file_put_contents($ac_lock_names, str_replace($_SESSION['ac_name'] . "\n", "", file_get_contents($ac_lock_names)));
 
-    //** update chat log
+    //** update log
     $ac_text  = "      <div class=ac_item>" . gmdate('Y-m-d H:i:s') . " Atom Chat &gt; " . $_SESSION['ac_name'] . " left the chat</div>\n";
     $ac_text .= file_get_contents($ac_chat_log);
     file_put_contents($ac_chat_log, $ac_text);
@@ -177,7 +222,7 @@ if (isset ($_SESSION['ac_time']) && !empty ($_SESSION['ac_time']) &&
     $ac_counter_list = $ac_counter_data;
 
     if ($ac_counter_list >1) {
-      $ac_counter_data = (int) ($ac_counter_list-1);
+      $ac_counter_data = ($ac_counter_list-1);
     } else {
       $ac_counter_data = 0;
     }
@@ -211,10 +256,8 @@ if (isset ($_POST['ac_login'])) {
       $_SESSION['ac_time'] = time();
       $_SESSION['ac_name'] = $ac_name;
 
-      //** lock name
+      //** lock name and update log
       file_put_contents($ac_lock_names, $ac_name . "\n", FILE_APPEND);
-
-      //** update chat log
       $ac_text  = "      <div class=ac_item>" . gmdate('Y-m-d H:i:s') . " Atom Chat &gt; " . $_SESSION['ac_name'] . " entered the chat</div>\n";
 
       if (file_exists($ac_chat_log)) {
@@ -224,7 +267,7 @@ if (isset ($_POST['ac_login'])) {
       file_put_contents($ac_chat_log, $ac_text);
 
       //** update counter and reload interface
-      $ac_counter_data = file_get_contents($ac_lock_counter);
+      $ac_counter_data = (int) file_get_contents($ac_lock_counter);
       $ac_counter_list = $ac_counter_data;
       $ac_counter_data = ($ac_counter_list+1);
 
@@ -238,7 +281,7 @@ if (isset ($_POST['ac_login'])) {
   }
 }
 
-//** save chat log
+//** save log
 if (isset ($_POST['ac_save'])) {
   header('Content-type: text/html');
   header('Content-Disposition: attachment; filename="' . str_replace("log/", "", $ac_chat_log) . '"');
@@ -249,10 +292,10 @@ if (isset ($_POST['ac_save'])) {
 //** quit session
 if (isset ($_POST['ac_quit'])) {
 
-  //** update name lock
+  //** update names lock
   file_put_contents($ac_lock_names, str_replace($_SESSION['ac_name'] . "\n", "", file_get_contents($ac_lock_names)));
 
-  //** update chat log
+  //** update log
   $ac_text  = "      <div class=ac_item>" . gmdate('Y-m-d H:i:s') . " Atom Chat &gt; " . $_SESSION['ac_name'] . " left the chat</div>\n";
   $ac_text .= file_get_contents($ac_chat_log);
   file_put_contents($ac_chat_log, $ac_text);
@@ -262,7 +305,7 @@ if (isset ($_POST['ac_quit'])) {
   unset ($_SESSION['ac_name']);
 
   //** update counter and load interface
-  $ac_counter_data = file_get_contents($ac_lock_counter);
+  $ac_counter_data = (int) file_get_contents($ac_lock_counter);
   $ac_counter_list = $ac_counter_data;
 
   if ($ac_counter_list <1) {
@@ -294,67 +337,60 @@ if (isset ($_POST['ac_post'])) {
       file_put_contents($ac_chat_log, $ac_link);
     }
 
-    //** check if smart conversion is enabled
+    //** check smart conversion
     if ($ac_emo_auto === 1) {
 
-      //** check if list exists
-      if (file_exists($ac_emo_list)) {
+      //** check empty list -- true if file has only BOM or spaces
+      $ac_emo_trim = file_get_contents($ac_emo_list);
 
-        //** check empty list -- true if file has only BOM or spaces
-        $ac_emo_trim = file_get_contents($ac_emo_list);
-
-        if (filesize($ac_emo_list) <16 && trim($ac_emo_trim) === false) {
-          $ac_info = "Empty EMO definitions!";
-        } else {
-          //** link primary array and list
-          $ac_emo_parr = array ();
-          $ac_emo_open = fopen($ac_emo_list, "r");
-
-          //** parse list
-          while (!feof($ac_emo_open)) {
-            $ac_emo_line   = fgets($ac_emo_open);
-            $ac_emo_line   = trim($ac_emo_line);
-            $ac_emo_parr[] = $ac_emo_line;
-          }
-
-          fclose($ac_emo_open);
-        }
-
-        //** link secondary array
-        $ac_emo_sarr = array ();
-
-        //** parse lines and split values
-        foreach ($ac_emo_parr as $ac_emo_code) {
-          $ac_emo_line   = explode("|", $ac_emo_code);
-          $ac_emo_sarr[] = $ac_emo_line;
-          $ac_emo_calt   = $ac_emo_line[0];
-          $ac_emo_cvar   = $ac_emo_line[1];
-          $ac_emo_ckey   = $ac_emo_line[2];
-
-          //** alternate to keyword -- case insensitve catch all -- word -> words -> swords
-          if (stripos($ac_text, $ac_emo_calt) !== false) {
-              $ac_text = str_replace($ac_emo_calt, $ac_emo_ckey, $ac_text);
-          }
-
-          //** variant to keyword
-          if (stripos($ac_text, $ac_emo_cvar) !== false) {
-            $ac_text = str_replace($ac_emo_cvar, $ac_emo_ckey, $ac_text);
-          }
-
-          //** keyword to icon
-          if (stripos($ac_text, $ac_emo_ckey) !== false) {
-            $ac_text = str_replace($ac_emo_ckey, '<img src="' . $ac_host . 'emo/' . $ac_emo_icon . '/' . $ac_emo_ckey . '.' . $ac_emo_type . '" width=24 height=24 alt="' . $ac_emo_ckey . '"/>', $ac_text);
-          }
-        }
-
-        //** reset code
-        unset ($ac_emo_code);
+      if (filesize($ac_emo_list) <16 && trim($ac_emo_trim) === false) {
+        $ac_info = "Empty EMO definitions!";
       } else {
-        $ac_info = "Missing EMO definitions!";
+        //** link primary array and list
+        $ac_emo_open = fopen($ac_emo_list, "r");
+
+        //** parse list
+        while (!feof($ac_emo_open)) {
+          $ac_emo_line   = fgets($ac_emo_open);
+          $ac_emo_line   = trim($ac_emo_line);
+          $ac_emo_parr[] = $ac_emo_line;
+        }
+
+        fclose($ac_emo_open);
       }
+
+      //** link secondary array
+      $ac_emo_sarr = array ();
+
+      //** parse lines and split values
+      foreach ($ac_emo_parr as $ac_emo_code) {
+        $ac_emo_line   = explode("|", $ac_emo_code);
+        $ac_emo_sarr[] = $ac_emo_line;
+        $ac_emo_calt   = $ac_emo_line[0];
+        $ac_emo_cvar   = $ac_emo_line[1];
+        $ac_emo_ckey   = $ac_emo_line[2];
+
+        //** alternate to keyword -- case insensitve catch all -- word -> words -> swords
+        if (stripos($ac_text, $ac_emo_calt) !== false) {
+            $ac_text = str_replace($ac_emo_calt, $ac_emo_ckey, $ac_text);
+        }
+
+        //** variant to keyword
+        if (stripos($ac_text, $ac_emo_cvar) !== false) {
+          $ac_text = str_replace($ac_emo_cvar, $ac_emo_ckey, $ac_text);
+        }
+
+        //** keyword to icon
+        if (stripos($ac_text, $ac_emo_ckey) !== false) {
+          $ac_text = str_replace($ac_emo_ckey, '<img src="' . $ac_host . 'emo/' . $ac_emo_icon . '/' . $ac_emo_ckey . '.' . $ac_emo_type . '" width=24 height=24 alt="' . $ac_emo_ckey . '"/>', $ac_text);
+        }
+      }
+
+      //** reset code
+      unset ($ac_emo_code);
     }
 
-    //** update chat log
+    //** update log
     $ac_text  = '      <div id="' . gethostbyaddr($_SERVER['REMOTE_ADDR']) . '_' . gmdate('Ymd-His') . '_' . $ac_name . '" class=ac_item>' . gmdate('Y-m-d H:i:s') . " " . $ac_name . " &gt; " . str_replace("&#13;&#10;", "", $ac_text) . "</div>\n";
     $ac_text .= file_get_contents($ac_chat_log);
     file_put_contents($ac_chat_log, $ac_text);
@@ -380,7 +416,7 @@ if (isset ($_POST['ac_css_apply'])) {
 if (isset ($_SESSION['ac_css'])) {
   $ac_css_theme = $_SESSION['ac_css'];
 } else {
-  //** apply default theme
+  //** default theme
   $ac_css_theme = $ac_css_main;
 }
 ?>
@@ -412,39 +448,38 @@ readfile("./css/" . $ac_css_theme . ".css");
 <?php
 //** list css themes
 if (isset ($_POST['ac_csst'])) {
+  $ac_css_trim = file_get_contents($ac_css_list);
 
-  //** check if list exists
-  if (file_exists($ac_css_list)) {
-
-    //** check empty list -- true if file has only BOM or spaces
-    $ac_css_trim = file_get_contents($ac_css_list);
-
-    if (filesize($ac_css_list) <16 && trim($ac_css_trim) === false) {
-      $ac_info = "Empty CSS definitions! (Not checking empty lines)";
-    } else {
-      //** link lines
-      $ac_css_line = file($ac_css_list);
+  //** check empty list -- true if file has only BOM or spaces
+  if (filesize($ac_css_list) <16 && trim($ac_css_trim) === false) {
+    $ac_info = "Empty CSS definitions! (Not checking empty lines)";
+  } else {
+    //** link lines
+    $ac_css_line = file($ac_css_list);
 ?>
     <div id=ac_sub>
       <form action="#CHAT" id=ac_css_form method=POST accept-charset="UTF-8">
         <div>
           <select name=ac_css_list>
 <?php
-      //** parse list and print items
-      foreach ($ac_css_line as $ac_css_item) {
-        $ac_css_item = trim($ac_css_item);
-        echo '            <option value="' . $ac_css_item . '" title="Click here to select the ' . ucwords($ac_css_item) . ' theme">' . ucwords($ac_css_item);
+    //** init item
+    $ac_css_item = "";
 
-        //** flag current theme
-        if (isset ($_SESSION['ac_css']) && $ac_css_item === $_SESSION['ac_css']) {
-          echo " [x]";
-        }
+    //** parse list and print items
+    foreach ($ac_css_line as $ac_css_item) {
+      $ac_css_item = trim($ac_css_item);
+      echo '            <option value="' . $ac_css_item . '" title="Click here to select the ' . ucwords($ac_css_item) . ' theme">' . ucwords($ac_css_item);
 
-        echo "</option>\n";
+      //** flag current theme
+      if (isset ($_SESSION['ac_css']) && $ac_css_item === $_SESSION['ac_css']) {
+        echo " [x]";
       }
 
-      //** reset item
-      unset ($ac_css_item);
+      echo "</option>\n";
+    }
+
+    //** reset item
+    unset ($ac_css_item);
 ?>
           </select>
           <input name=ac_css_apply value=Apply title="Click here to apply the selected theme" type=submit />
@@ -453,58 +488,48 @@ if (isset ($_POST['ac_csst'])) {
       </form>
     </div>
 <?php
-    }
-  } else {
-    $ac_info = "Missing CSS definitions!";
   }
 }
 
 //** list emo conversion
 if (isset ($_POST['ac_emos'])) {
+  $ac_emo_trim = file_get_contents($ac_emo_list);
 
-  //** check if list exists
-  if (file_exists($ac_emo_list)) {
+  //** check empty list -- true if file has only BOM or spaces
+  if (filesize($ac_emo_list) <16 && trim($ac_emo_trim) === false) {
+    $ac_info = "Empty EMO definitions! (Not checking empty lines)";
+  } else {
+    //** link primary array and list
+    $ac_emo_parr = array ();
+    $ac_emo_open = fopen($ac_emo_list, "r");
 
-    //** check empty list -- returns true if file has only BOM or spaces
-    $ac_emo_trim = file_get_contents($ac_emo_list);
-
-    if (filesize($ac_emo_list) <16 && trim($ac_emo_trim) === false) {
-      $ac_info = "Empty EMO definitions! (Not checking empty lines)";
-    } else {
-      //** link primary array and list
-      $ac_emo_parr = array ();
-      $ac_emo_open = fopen($ac_emo_list, "r");
-
-      //** parse list
-      while (!feof($ac_emo_open)) {
-        $ac_emo_line   = fgets($ac_emo_open);
-        $ac_emo_line   = trim($ac_emo_line);
-        $ac_emo_parr[] = $ac_emo_line;
-      }
-
-      fclose($ac_emo_open);
+    //** parse list
+    while (!feof($ac_emo_open)) {
+      $ac_emo_line   = fgets($ac_emo_open);
+      $ac_emo_line   = trim($ac_emo_line);
+      $ac_emo_parr[] = $ac_emo_line;
     }
 
-    //** link secondary array
-    $ac_emo_sarr = array ();
+    fclose($ac_emo_open);
+  }
 ?>
     <div id=ac_sub>
       <h1>Emoticon Smart Conversion</h1>
       <p>The following icons are auto-converted for every match of their associated smiley alternative, variant spelling, or natural keyword. Spelling is case insensitive, e.g. ABC, Abc, or abc all match.</p>
       <pre>
 <?php
-    //** print list
-    foreach ($ac_emo_parr as $ac_emo_code) {
-      $ac_emo_line   = explode("|", $ac_emo_code);
-      $ac_emo_sarr[] = $ac_emo_line;
-      $ac_emo_calt   = $ac_emo_line[0];
-      $ac_emo_cvar   = $ac_emo_line[1];
-      $ac_emo_ckey   = $ac_emo_line[2];
-      echo '<img src="' . $ac_host . 'emo/' . $ac_emo_icon . '/' . $ac_emo_ckey . '.' . $ac_emo_type . '" width=24 height=24 alt=""/> == ' . "$ac_emo_calt -&gt; $ac_emo_cvar -&gt; $ac_emo_ckey\n";
-    }
+  //** print list
+  foreach ($ac_emo_parr as $ac_emo_code) {
+    $ac_emo_line   = explode("|", $ac_emo_code);
+    $ac_emo_sarr[] = $ac_emo_line;
+    $ac_emo_calt   = $ac_emo_line[0];
+    $ac_emo_cvar   = $ac_emo_line[1];
+    $ac_emo_ckey   = $ac_emo_line[2];
+    echo '<img src="' . $ac_host . 'emo/' . $ac_emo_icon . '/' . $ac_emo_ckey . '.' . $ac_emo_type . '" width=24 height=24 alt=""/> == ' . "$ac_emo_calt -&gt; $ac_emo_cvar -&gt; $ac_emo_ckey\n";
+  }
 
-    //** reset code
-    unset ($ac_emo_code);
+  //** reset code
+  unset ($ac_emo_code);
 ?>
       </pre>
       <p><strong>Examples</strong></p>
@@ -515,9 +540,6 @@ if (isset ($_POST['ac_emos'])) {
       </form>
     </div>
 <?php
-  } else {
-    $ac_info = "Missing EMO definitions!";
-  }
 }
 
 //** check name session
@@ -543,14 +565,14 @@ if (isset ($_SESSION['ac_name']) && !empty ($_SESSION['ac_name'])) {
           <input name=ac_name value="<?php echo $_SESSION['ac_name']; ?>" type=hidden />
           <input name=ac_quit value=Quit title="Click here to quit the current session" type=submit />
 <?php
-//** check if css user selection is enabled
+//** check css user selection
 if ($ac_css_user === 1) {
 ?>
           <input name=ac_csst value=Theme title="Click here to change the current theme" type=submit />
 <?php
 }
 
-//** check if smart conversion is enabled
+//** check smart conversion
 if ($ac_emo_auto === 1) {
 ?>
           <input name=ac_emos value=Emos title="Click here to review all available emo codes" type=submit />
