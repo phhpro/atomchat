@@ -7,7 +7,7 @@ body {
   overflow: hidden;
 }
 
-#ac_header {
+#ac_head {
   background-color: #fff;
   color: #000;
   font-weight: bold;
@@ -69,13 +69,13 @@ img {
   margin-top: -1px;
 }
 
-#ac_counter {
+#ac_live {
   float: right;
   font-weight: normal;
   margin: 2px 4px 2px 2px;
 }
 
-#ac_footer {
+#ac_foot {
   font-size: small;
 }
 

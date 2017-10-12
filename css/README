@@ -1,9 +1,6 @@
-Edit list.txt to add or remove CSS themes. Make sure there are no
-trailing lines at the end of the file to prevent invalid options.
+Edit __config.txt to add or remove CSS themes. Make sure the file has
+no trailing lines at the end of the file to prevent invalid options.
 
 Each line must match the filename on disk, e.g. if your stylesheet is
 called mytheme.css the line must read mytheme without the extension.
 Then edit $ac_css_main = "mytheme" to set the new default.
-
-You may want to have a look at one of the demo themes to see which
-classes and ID's are used before creating your own.
