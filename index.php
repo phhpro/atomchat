@@ -335,7 +335,7 @@ if (isset ($_POST['ac_post'])) {
     //** check smart conversion
     if ($ac_emo_auto === 1) {
 
-      //** check empty list -- true if file has only BOM or spaces
+      //** check empty config -- true if file has only BOM or spaces
       $ac_emo_trim = file_get_contents($ac_emo_conf);
 
       if (filesize($ac_emo_conf) <16 && trim($ac_emo_trim) === false) {
@@ -445,7 +445,7 @@ readfile("./css/" . $ac_css_theme . ".css");
 if (isset ($_POST['ac_csst'])) {
   $ac_css_trim = file_get_contents($ac_css_conf);
 
-  //** check empty configuration -- true if file has only BOM or spaces
+  //** check empty config -- true if file has only BOM or spaces
   if (filesize($ac_css_conf) <16 && trim($ac_css_trim) === false) {
     $ac_info = "Empty CSS configuration! (Not checking empty lines)";
   } else {
@@ -490,7 +490,7 @@ if (isset ($_POST['ac_csst'])) {
 if (isset ($_POST['ac_emos'])) {
   $ac_emo_trim = file_get_contents($ac_emo_conf);
 
-  //** check empty configuration -- true if file has only BOM or spaces
+  //** check empty config -- true if file has only BOM or spaces
   if (filesize($ac_emo_conf) <16 && trim($ac_emo_trim) === false) {
     $ac_info = "Empty EMO configuration! (Not checking empty lines)";
   } else {
