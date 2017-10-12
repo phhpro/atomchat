@@ -130,14 +130,14 @@ if (!is_dir('log')) {
 
 /*
  * log data file
- * names lock
+ * user name lock
  * live counter lock
  */
 $ac_chat_data = "log/chat_" . $_SERVER['HTTP_HOST'] . "_" . date('Ymd') . ".html";
 $ac_lock_name = "name.lock";
 $ac_lock_live = "live.lock";
 
-//** check names lock
+//** check name lock
 if (!file_exists($ac_lock_name)) {
   $ac_lock_hand = fopen($ac_lock_name, "w");
   fwrite($ac_lock_hand, "");
@@ -151,7 +151,7 @@ if (!file_exists($ac_lock_live)) {
   fclose($ac_lock_hand);
 }
 
-//** css themes and emo configurations
+//** css and emo config
 $ac_css_conf = "./css/__config.txt";
 $ac_emo_conf = "./emo/" . $ac_emo_icon . "/__config.txt";
 
@@ -173,7 +173,7 @@ if (!is_dir("./emo/" . $ac_emo_icon)) {
   exit;
 }
 
-//** check emo configuration
+//** check emo config
 if (!file_exists($ac_emo_conf)) {
 ?>
 <p>Missing EMO configuration!</p>
@@ -200,10 +200,10 @@ if (isset ($_SESSION['ac_time']) && !empty ($_SESSION['ac_time']) &&
   $ac_diff = ($ac_kill-$ac_time);
 
   if ($ac_diff <= 0) {
-    //** update names lock
+    //** update user name lock
     file_put_contents($ac_lock_name, str_replace($_SESSION['ac_name'] . "\n", "", file_get_contents($ac_lock_name)));
 
-    //** update log
+    //** update data file
     $ac_text  = "      <div class=ac_item>" . gmdate('Y-m-d H:i:s') . " Atom Chat &gt; " . $_SESSION['ac_name'] . " left the chat</div>\n";
     $ac_text .= file_get_contents($ac_chat_data);
     file_put_contents($ac_chat_data, $ac_text);
@@ -212,7 +212,7 @@ if (isset ($_SESSION['ac_time']) && !empty ($_SESSION['ac_time']) &&
     unset ($_SESSION['ac_time']);
     unset ($_SESSION['ac_name']);
 
-    //** update counter and load interface
+    //** update live counter and load interface
     $ac_live_data = (int) file_get_contents($ac_lock_live);
     $ac_live_list = $ac_live_data;
 
@@ -233,16 +233,16 @@ if (isset ($_SESSION['ac_time']) && !empty ($_SESSION['ac_time']) &&
 //** login
 if (isset ($_POST['ac_login'])) {
 
-  //** link name
+  //** link user name
   $ac_name = htmlentities($_POST['ac_name'], ENT_QUOTES, "UTF-8");
 
-  //** check missing name
+  //** check missing user name
   if ($ac_name === "") {
     header('Location: #MISSING_NAME');
     exit;
     //** check valid characters
   } elseif (ctype_alpha($ac_name)) {
-    //** check if name is available
+    //** check if user name is available
     if (stripos(file_get_contents($ac_lock_name), $ac_name) !== false) {
       header('Location: #NAME_NOT_AVAILABLE');
       exit;
@@ -251,7 +251,7 @@ if (isset ($_POST['ac_login'])) {
       $_SESSION['ac_time'] = time();
       $_SESSION['ac_name'] = $ac_name;
 
-      //** lock name and update log
+      //** lock user name and update data file
       file_put_contents($ac_lock_name, $ac_name . "\n", FILE_APPEND);
       $ac_text  = "      <div class=ac_item>" . gmdate('Y-m-d H:i:s') . " Atom Chat &gt; " . $_SESSION['ac_name'] . " entered the chat</div>\n";
 
@@ -261,7 +261,7 @@ if (isset ($_POST['ac_login'])) {
 
       file_put_contents($ac_chat_data, $ac_text);
 
-      //** update counter and reload interface
+      //** update live counter and reload interface
       $ac_live_data = (int) file_get_contents($ac_lock_live);
       $ac_live_list = $ac_live_data;
       $ac_live_data = ($ac_live_list+1);
@@ -276,7 +276,7 @@ if (isset ($_POST['ac_login'])) {
   }
 }
 
-//** save log
+//** save data file
 if (isset ($_POST['ac_save'])) {
   header('Content-type: text/html');
   header('Content-Disposition: attachment; filename="' . str_replace("log/", "", $ac_chat_data) . '"');
@@ -287,10 +287,10 @@ if (isset ($_POST['ac_save'])) {
 //** quit session
 if (isset ($_POST['ac_quit'])) {
 
-  //** update names lock
+  //** update user name lock
   file_put_contents($ac_lock_name, str_replace($_SESSION['ac_name'] . "\n", "", file_get_contents($ac_lock_name)));
 
-  //** update log
+  //** update data file
   $ac_text  = "      <div class=ac_item>" . gmdate('Y-m-d H:i:s') . " Atom Chat &gt; " . $_SESSION['ac_name'] . " left the chat</div>\n";
   $ac_text .= file_get_contents($ac_chat_data);
   file_put_contents($ac_chat_data, $ac_text);
@@ -341,10 +341,10 @@ if (isset ($_POST['ac_post'])) {
       if (filesize($ac_emo_conf) <16 && trim($ac_emo_trim) === false) {
         $ac_info = "Empty EMO configuration!";
       } else {
-        //** link primary array and list
+        //** link primary array and config
         $ac_emo_open = fopen($ac_emo_conf, "r");
 
-        //** parse list
+        //** parse config
         while (!feof($ac_emo_open)) {
           $ac_emo_line   = fgets($ac_emo_open);
           $ac_emo_line   = trim($ac_emo_line);
@@ -385,7 +385,7 @@ if (isset ($_POST['ac_post'])) {
       unset ($ac_emo_code);
     }
 
-    //** update log
+    //** update data file
     $ac_text  = '      <div id="' . gethostbyaddr($_SERVER['REMOTE_ADDR']) . '_' . gmdate('Ymd-His') . '_' . $ac_name . '" class=ac_item>' . gmdate('Y-m-d H:i:s') . " " . $ac_name . " &gt; " . str_replace("&#13;&#10;", "", $ac_text) . "</div>\n";
     $ac_text .= file_get_contents($ac_chat_data);
     file_put_contents($ac_chat_data, $ac_text);
@@ -494,7 +494,7 @@ if (isset ($_POST['ac_emos'])) {
   if (filesize($ac_emo_conf) <16 && trim($ac_emo_trim) === false) {
     $ac_info = "Empty EMO configuration! (Not checking empty lines)";
   } else {
-    //** link primary array and list
+    //** link primary array and config
     $ac_emo_parr = array ();
     $ac_emo_open = fopen($ac_emo_conf, "r");
 
@@ -537,7 +537,7 @@ if (isset ($_POST['ac_emos'])) {
 <?php
 }
 
-//** check name session
+//** check user name session
 if (isset ($_SESSION['ac_name']) && !empty ($_SESSION['ac_name'])) {
 ?>
     <div id=ac_push>
