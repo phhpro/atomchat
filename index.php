@@ -684,7 +684,7 @@ if ($ac_emo_auto === 1) {
       }
     }
 
-    //** update chat log -- default 2 seconds
+    //** update data file -- default 2 seconds
     function ac_push() {
       ac_time();
       ac_init = setTimeout("ac_push()", 2000);
