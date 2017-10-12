@@ -592,10 +592,9 @@ if ($ac_emo_auto === 1) {
       <ul>
         <li><strong>What it is</strong>
           <ul>
-            <li>Completely anonymous no thrills IRC like chat script.</li>
-            <li>Self-contained set it and forget it upload and done.</li>
-            <li>Zero data tracking and no passwords ever.</li>
-            <li>Fully themeable responsive cross-browser design.</li>
+            <li>Completely anonymous no passwords ever.</li>
+            <li>Self-contained set it and forget it.</li>
+            <li>Themeable responsive cross-browser design.</li>
           </ul>
         </li>
       </ul>
