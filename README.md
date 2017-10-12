@@ -3,10 +3,9 @@
 **Free IRC like PHP chat script** with minimal bloat for low volume and personal sites.
 
 - **What it is**
-    - Completely anonymous no thrills IRC like chat script.
-    - Self-contained set it and forget it upload and done.
-    - Zero data tracking and no passwords ever.
-    - Fully themeable responsive cross-browser design.
+    - Completely anonymous no passwords ever.
+    - Self-contained set it and forget it.
+    - Themeable responsive cross-browser design.
 - **What it is not**
     - Fancy hyperbole gadget with more bells than whistles.
     - Resources leeching dependency stricken database voodoo.
