@@ -1,5 +1,5 @@
 Edit __config.txt to add or remove CSS themes. Make sure the file has
-no trailing lines at the end of the file to prevent invalid options.
+no trailing lines to prevent invalid options.
 
 Each line must match the filename on disk, e.g. if your stylesheet is
 called mytheme.css the line must read mytheme without the extension.
