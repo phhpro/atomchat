@@ -37,7 +37,7 @@
  * css default theme
  * css theme selection by user -- 0 off, 1 on
  */
-$ac_css_main = "white";
+$ac_css_main = "grey";
 $ac_css_user = 1;
 
 /*
