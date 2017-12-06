@@ -40,21 +40,26 @@
 
 
 /**
+ * Script folder
+ */
+$ac_fold     = "atomchat";
+
+/**
  * CSS default theme
  * CSS theme selection by user -- 0 off, 1 on
  */
-$ac_css_main = "white";
+$ac_css_main = "grey";
 $ac_css_user = 1;
 
 /**
  * Auto-convert emos -- 0 off, 1 on
  * May bloat logs and put extra load on server
  */
-$ac_emo_auto = 1;
+$ac_emo_conv = 1;
 
 /**
  * EMO default icon set and file type
- * Only applies if $ac_emo_auto = 1
+ * Only applies if $ac_emo_conv = 1
  */
 $ac_emo_icon = "default";
 $ac_emo_type = "png";
@@ -91,8 +96,7 @@ if (isset($_SERVER['HTTPS']) && "on" === $_SERVER['HTTPS']) {
 }
 
 //** URL reference
-$ac_host = $ac_prot . "://" . $_SERVER['HTTP_HOST'] . 
-           str_replace($_SERVER['DOCUMENT_ROOT'], "", realpath(__DIR__)) . "/";
+$ac_host = $ac_prot . "://" . $_SERVER['HTTP_HOST'] . "/" . $ac_fold . "/";
 
 //** Init and test session
 session_start();
@@ -122,7 +126,6 @@ if (!is_dir('log')) {
 ?>
 <p>Failed to create log dir!</p>
 <p>Please make sure the script folder is writeable.</p>
-<p><?php echo $ac_stop; ?></p>
 <?php
     exit;
     }
@@ -151,7 +154,7 @@ if (!file_exists($ac_lock_live)) {
     fclose($ac_lock_hand);
 }
 
-//** CSS and EMO config
+//** Link CSS and EMO config
 $ac_css_conf = "./css/__config.txt";
 $ac_emo_conf = "./emo/" . $ac_emo_icon . "/__config.txt";
 
@@ -240,7 +243,6 @@ if (isset($_SESSION['ac_time']) && !empty($_SESSION['ac_time'])
 
 //** Login
 if (isset($_POST['ac_login'])) {
-
     //** Link user name
     $ac_name = htmlentities($_POST['ac_name'], ENT_QUOTES, "UTF-8");
 
@@ -352,8 +354,8 @@ if (isset($_POST['ac_post'])) {
             file_put_contents($ac_chat_data, $ac_link);
         }
 
-        //** Check smart conversion
-        if ($ac_emo_auto === 1) {
+        //** Check EMO conversion
+        if ($ac_emo_conv === 1) {
 
             //** Check empty config -- true if file has only BOM or spaces
             $ac_emo_trim = file_get_contents($ac_emo_conf);
@@ -406,7 +408,7 @@ if (isset($_POST['ac_post'])) {
                 }
             }
 
-            //** Reset code
+            //** Reset EMO code
             unset($ac_emo_code);
         }
 
@@ -431,17 +433,17 @@ if (isset($_POST['ac_post'])) {
 if (isset($_POST['ac_css_apply'])) {
     $ac_css_conf = htmlentities($_POST['ac_css_list'], ENT_QUOTES, "UTF-8");
 
-    //** Link selection
+    //** Link selected theme
     if ($ac_css_conf !== "") {
         $_SESSION['ac_css'] = $ac_css_conf;
     }
 }
 
-//** Check CSS session and apply selected theme
+//** Check CSS session and apply theme
 if (isset($_SESSION['ac_css'])) {
     $ac_css_theme = $_SESSION['ac_css'];
 } else {
-    //** Default theme
+    //** Default CSS theme
     $ac_css_theme = $ac_css_main;
 }
 ?>
@@ -487,7 +489,7 @@ if (isset($_POST['ac_csst'])) {
         <div>
           <select name=ac_css_list>
 <?php
-    //** Init item
+    //** Init CSS item
     $ac_css_item = "";
 
     //** Parse list and print items
@@ -505,7 +507,7 @@ foreach ($ac_css_line as $ac_css_item) {
     echo "</option>\n";
 }
 
-    //** Reset item
+    //** Reset CSS item
     unset($ac_css_item);
 ?>
           </select>
@@ -541,8 +543,8 @@ if (isset($_POST['ac_emos'])) {
     }
 ?>
     <div id=ac_sub>
-      <h1>Emoticon Smart Conversion</h1>
-      <p>The following icons are auto-converted for every match of their associated smiley alternative, variant spelling, or natural keyword. Spelling is case insensitive, e.g. ABC, Abc, or abc all match.</p>
+      <h1>Emoticon Conversion Table</h1>
+      <p>The following icons are auto-converted for every match of their associated text smiley alternative, variant spelling, or natural keyword. Spelling is case insensitive, e.g. ABC, Abc, or abc all match.</p>
       <pre>
 <?php
   //** Print list
@@ -601,8 +603,8 @@ if ($ac_css_user === 1) {
 <?php
 }
 
-//** Check smart conversion
-if ($ac_emo_auto === 1) {
+//** Check EMO conversion
+if ($ac_emo_conv === 1) {
 ?>
           <input name=ac_emos value=Emos title="Click here to review all available emo codes" type=submit />
 <?php
@@ -626,7 +628,7 @@ if ($ac_emo_auto === 1) {
       <ul>
         <li><strong>What it is</strong>
           <ul>
-            <li>Completely anonymous no passwords ever.</li>
+            <li>Completely anonymous. No passwords ever.</li>
             <li>Self-contained set it and forget it.</li>
             <li>Themeable responsive cross-browser design.</li>
           </ul>
@@ -637,17 +639,17 @@ if ($ac_emo_auto === 1) {
           <ul>
             <li>Fancy hyperbole gadget with more bells than whistles.</li>
             <li>Resources leeching dependency stricken database voodoo.</li>
-            <li>Neither a pink jellyfish nor Santa Claus on steroids.</li>
+            <li>Neither a pink jellyfish nor Santa on steroids.</li>
           </ul>
         </li>
       </ul>
       <ul>
         <li><strong>How it works</strong>
           <ul>
-            <li>Enter prefered name and click <strong>Login</strong> to start chatting.</li>
-            <li>Names are assigned dynamically first come, first serve.</li>
+            <li>Enter prefered name and press the <strong>Login</strong> button.</li>
+            <li>Names are assigned dynamically. First come, first serve.</li>
             <li>Inactive sessions are auto-closed after 30 minutes.</li>
-            <li>Smart conversion of smileys, variants or keywords to icons.</li>
+            <li>Optional smart conversion of text to icons.</li>
           </ul>
         </li>
       </ul>
@@ -683,7 +685,6 @@ if ($ac_emo_auto === 1) {
 
     //** Configure object
     function ac_obj() {
-
         if (window.ActiveXObject) {
             return new ActiveXObject("Microsoft.XMLHTTP");
         } else if (window.XMLHttpRequest) {
@@ -696,7 +697,6 @@ if ($ac_emo_auto === 1) {
 
     //** Container state
     function ac_set() {
-
         if (ac_http.readyState == 4) {
             ac_res           = ac_http.responseText;
             ac_div           = document.getElementById("ac_push");
@@ -724,7 +724,7 @@ if ($ac_emo_auto === 1) {
         ac_init = setTimeout("ac_push()", 2000);
     }
 
-    //** Output beep
+    //** Output beep if supported
     function ac_beep() {
         var ac_snd = new Audio("data:audio/wav;base64,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qJrx4KOQjahZxWbcZgztj2c49nKmkId44S71j0c8eV9yDK6uPRzx5X18eDvjvQ6yKo9ZSS6l//8elePK/Lf//IInrOF/FvDoADYAGBMGb7FtErm5MXMlmPAJQVgWta7Zx2go+8xJ0UiCb8LHHdftWyLJE0QIAIsI+UbXu67dZMjmgDGCGl1H+vpF4NSDckSIkk7Vd+sxEhBQMRU8j/12UIRhzSaUdQ+rQU5kGeFxm+hb1oh6pWWmv3uvmReDl0UnvtapVaIzo1jZbf/pD6ElLqSX+rUmOQNpJFa/r+sa4e/pBlAABoAAAAA3CUgShLdGIxsY7AUABPRrgCABdDuQ5GC7DqPQCgbbJUAoRSUj+NIEig0YfyWUho1VBBBA//uQZB4ABZx5zfMakeAAAAmwAAAAF5F3P0w9GtAAACfAAAAAwLhMDmAYWMgVEG1U0FIGCBgXBXAtfMH10000EEEEEECUBYln03TTTdNBDZopopYvrTTdNa325mImNg3TTPV9q3pmY0xoO6bv3r00y+IDGid/9aaaZTGMuj9mpu9Mpio1dXrr5HERTZSmqU36A3CumzN/9Robv/Xx4v9ijkSRSNLQhAWumap82WRSBUqXStV/YcS+XVLnSS+WLDroqArFkMEsAS+eWmrUzrO0oEmE40RlMZ5+ODIkAyKAGUwZ3mVKmcamcJnMW26MRPgUw6j+LkhyHGVGYjSUUKNpuJUQoOIAyDvEyG8S5yfK6dhZc0Tx1KI/gviKL6qvvFs1+bWtaz58uUNnryq6kt5RzOCkPWlVqVX2a/EEBUdU1KrXLf40GoiiFXK///qpoiDXrOgqDR38JB0bw7SoL+ZB9o1RCkQjQ2CBYZKd/+VJxZRRZlqSkKiws0WFxUyCwsKiMy7hUVFhIaCrNQsKkTIsLivwKKigsj8XYlwt/WKi2N4d//uQRCSAAjURNIHpMZBGYiaQPSYyAAABLAAAAAAAACWAAAAApUF/Mg+0aohSIRobBAsMlO//Kk4soosy1JSFRYWaLC4qZBYWFRGZdwqKiwkNBVmoWFSJkWFxX4FFRQWR+LsS4W/rFRb/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////VEFHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU291bmRib3kuZGUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMjAwNGh0dHA6Ly93d3cuc291bmRib3kuZGUAAAAAAAAAACU=");
         ac_snd.play();
