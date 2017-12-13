@@ -42,7 +42,7 @@
 /**
  * Script folder
  */
-$ac_fold     = "atomchat";
+$ac_fold     = "demo/atomchat";
 
 /**
  * CSS default theme
@@ -82,9 +82,9 @@ $ac_kill     = 1800;
 /**
  * Script version
  * Init info system
- * Stop message for invalid settings
+ * Stop message to check settings
  */
-$ac_make = 20171206;
+$ac_make = 20171213;
 $ac_info = "Powered by Atom Chat v$ac_make";
 $ac_stop = "Please check your settings.";
 
@@ -136,7 +136,7 @@ if (!is_dir('log')) {
  * User name lock
  * Live counter lock
  */
-$ac_chat_data = "log/chat_" . $_SERVER['HTTP_HOST'] . "_" . date('Ymd') . ".html";
+$ac_chat_data = "./log/chat_" . $_SERVER['HTTP_HOST'] . "_" . date('Ymd') . ".html";
 $ac_lock_name = "name.lock";
 $ac_lock_live = "live.lock";
 
@@ -458,17 +458,7 @@ if (isset($_SESSION['ac_css'])) {
     <meta name=robots content="noodp, noydir"/>
     <meta name=viewport content="width=device-width, height=device-height, initial-scale=1"/>
     <link rel=icon href="<?php echo $ac_host; ?>logo.png" type="image/png"/>
-    <style>
-<?php
-readfile("./css/" . $ac_css_theme . ".css");
-?>
-
-@media screen and (max-width: 800px) {
-  body {
-    font-size: 115%;
-  }
-}
-    </style>
+    <link rel=stylesheet href="<?php echo $ac_host . 'css/' . $ac_css_theme; ?>.css" type="text/css"/>
   </head>
   <body>
     <div id=ac_head><span id=ac_logo><a href="https://github.com/phhpro/atomchat" title="Powered by Atom Chat. Click here to get it."><img src="<?php echo $ac_host; ?>logo.png" width=16 height=16 alt=""/> Atom Chat</a></span> <span id=ac_live>Online: <?php echo $ac_live; ?></span></div>
@@ -579,10 +569,10 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
     <div id=ac_push>
 <?php
   //** Check existing data file
-if (file_exists($ac_chat_data) && is_writable($ac_chat_data)) {
-    include $ac_chat_data;
+if (file_exists($ac_chat_data)) {
+    include ($ac_chat_data);
 } else {
-    $ac_info = "Missing log or not writable!";
+    $ac_info = "Empty log file!";
 }
 ?>
     </div>
