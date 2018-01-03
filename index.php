@@ -2,18 +2,13 @@
 /**
  * PHP Version 5 and above
  *
- * Atom Chat is a free PHP IRC like chat script with minimal bloat.
- *
- * Chat logs are stored in plain text files.
- * No database required.
- * Good to go using defaults.
- *
- * @category PHP_Chat_Scripts
- * @package  PHP_Atom_Chat
- * @author   P H Claus <phhpro@gmail.com>
- * @license  https://www.gnu.org/licenses/gpl-3.0.en.html GPLv3
- * @version  GIT: 20171220
- * @link     https://github.com/phhpro/atomchat
+ * @category  PHP_Chat_Scripts
+ * @package   PHP_Atom_Chat
+ * @author    P H Claus <phhpro@gmail.com>
+ * @copyright 2016 - 2018 P H Claus
+ * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GPLv3
+ * @version   GIT: Latest
+ * @link      https://github.com/phhpro/atomchat
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +24,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301, USA.
+ *
+ *
+ * Atom Chat is a free PHP IRC like chat script. No database required.
  */
 
 
@@ -48,13 +46,13 @@ $ac_iscr     = "intro.html";
 
 /**
  * CSS default theme
- * CSS theme selection by user -- 0 off, 1 on
+ * CSS theme selection by user -- 0 NO, 1 YES
  */
 $ac_css_main = "grey";
 $ac_css_user = 1;
 
 /**
- * Auto-convert emos -- 0 off, 1 on
+ * Auto-convert emos -- 0 NO, 1 YES
  * May bloat logs and put extra load on server
  */
 $ac_emo_conv = 1;
@@ -76,7 +74,7 @@ $ac_kill     = 1800;
 /**
  * Update screen every n seconds -- default 2 = 2000 ms
  * 3 to 5 seconds may be more suitable to reduce server load but
- * likely to confuse users because of visible lag after posting
+ * likely to confuse users because of visible lag after posting.
  */
 $ac_push = 2000;
 
@@ -90,11 +88,19 @@ $ac_push = 2000;
 
 /**
  * Script version
+ * Script download
+ */
+$ac_make = "20180103";
+$ac_down = '        <div id=ac_down>Powered by ' .
+           '<a href="https://github.com/phhpro/atomchat" ' .
+           'title="Click here to get a free copy of this script">' .
+           'PHP Atom Chat v' . $ac_make . "</a></div>\n";
+
+/**
  * Init info text
  * Stop message to check settings
  */
-$ac_make = "20171220";
-$ac_info = "Powered by Atom Chat v$ac_make";
+$ac_info = "";
 $ac_stop = "Please check your settings.";
 
 //** Protocol
@@ -112,8 +118,8 @@ session_start();
 $_SESSION['ac_test'] = 1;
 
 if ($_SESSION['ac_test'] !== 1) {
-    echo "<p>Atom Chat requires session cookies!</p>\n";
-    echo "<p>Please edit your browser's cookie settings and then try again.</p>\n";
+    echo "<p>Atom Chat requires session cookies!</p>\n" .
+         "<p>Please edit your browser's cookie settings and then try again.</p>\n";
     exit;
 } else {
     unset($_SESSION['ac_test']);
@@ -130,8 +136,8 @@ header('Pragma: no-cache');
 if (!is_dir('log')) {
 
     if (mkdir('log') === false) {
-        echo "<p>Failed to create log dir!</p>\n";
-        echo "<p>Please make sure the script folder is writeable.</p>\n";
+        echo "<p>Failed to create log dir!</p>\n" .
+             "<p>Please make sure the script folder is writeable.</p>\n";
         exit;
     }
 }
@@ -165,22 +171,22 @@ $ac_emo_conf = "./emo/" . $ac_emo_icon . "/__config.txt";
 
 //** Check CSS theme
 if (!file_exists("./css/" . $ac_css_main . ".css")) {
-    echo "<p>Missing CSS theme!</p>\n";
-    echo "<p>$ac_stop</p>\n";
+    echo "<p>Missing CSS theme!</p>\n" .
+         "<p>$ac_stop</p>\n";
     exit;
 }
 
 //** Check EMO folder
 if (!is_dir("./emo/" . $ac_emo_icon)) {
-    echo "<p>Missing EMO icon set!</p>\n";
-    echo "<p>$ac_stop</p>\n";
+    echo "<p>Missing EMO icon set!</p>\n" .
+         "<p>$ac_stop</p>\n";
     exit;
 }
 
 //** Check EMO config
 if (!file_exists($ac_emo_conf)) {
-    echo "<p>Missing EMO configuration!</p>\n";
-    echo "<p>$ac_stop</p>\n";
+    echo "<p>Missing EMO configuration!</p>\n" .
+         "<p>$ac_stop</p>\n";
     exit;
 }
 
@@ -193,14 +199,14 @@ if (!file_exists($ac_emo_conf)) {
 $ac_emo_parr = array();
 $ac_emo_sarr = array();
 $ac_emo_code = "";
-$ac_live     = (int) file_get_contents($ac_lock_live);
+$ac_live     = (int)file_get_contents($ac_lock_live);
 
 //** Expire session
 if (isset($_SESSION['ac_time']) && !empty($_SESSION['ac_time']) 
     && isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])
 ) {
-    $ac_time = (time()-(int) $_SESSION['ac_time']);
-    $ac_diff = ($ac_kill-$ac_time);
+    $ac_time = (time()-(int)$_SESSION['ac_time']);
+    $ac_diff = ((int)$ac_kill-(int)$ac_time);
 
     if ($ac_diff <= 0) {
         //** Update user name lock
@@ -223,11 +229,11 @@ if (isset($_SESSION['ac_time']) && !empty($_SESSION['ac_time'])
         unset($_SESSION['ac_name']);
 
         //** Update live counter and load interface
-        $ac_live_data = (int) file_get_contents($ac_lock_live);
+        $ac_live_data = (int)file_get_contents($ac_lock_live);
         $ac_live_list = $ac_live_data;
 
         if ($ac_live_list >1) {
-            $ac_live_data = ($ac_live_list-1);
+            $ac_live_data = ((int)$ac_live_list-1);
         } else {
             $ac_live_data = 0;
         }
@@ -249,39 +255,33 @@ if (isset($_POST['ac_login'])) {
     if ($ac_name === "") {
         header('Location: #MISSING_NAME');
         exit;
-        //** Check valid characters
-    } elseif (ctype_alpha($ac_name)) {
         //** Check if user name is available
-        if (stripos(file_get_contents($ac_lock_name), $ac_name) !== false) {
-            header('Location: #NAME_NOT_AVAILABLE');
-            exit;
-        } else {
-            //** Init session
-            $_SESSION['ac_time'] = time();
-            $_SESSION['ac_name'] = $ac_name;
-
-            //** Lock user name and update data file
-            file_put_contents($ac_lock_name, $ac_name . "\n", FILE_APPEND);
-            $ac_text  = "      <div class=ac_item>" . gmdate('Y-m-d H:i:s') . 
-                        " Atom Chat &#62; " . $_SESSION['ac_name'] . 
-                        " entered the chat</div>\n";
-
-            if (file_exists($ac_chat_data)) {
-                $ac_text .= file_get_contents($ac_chat_data);
-            }
-
-            file_put_contents($ac_chat_data, $ac_text);
-
-            //** Update live counter and reload interface
-            $ac_live_data = (int) file_get_contents($ac_lock_live);
-            $ac_live_list = $ac_live_data;
-            $ac_live_data = ($ac_live_list+1);
-            file_put_contents($ac_lock_live, $ac_live_data);
-            header('Location: #LOGIN');
-            exit;
-        }
+    } elseif (stripos(file_get_contents($ac_lock_name), $ac_name) !== false) {
+        header('Location: #NAME_NOT_AVAILABLE');
+        exit;
     } else {
-        header('Location: #INVALID_NAME');
+        //** Init session
+        $_SESSION['ac_time'] = time();
+        $_SESSION['ac_name'] = $ac_name;
+
+        //** Lock user name and update data file
+        file_put_contents($ac_lock_name, $ac_name . "\n", FILE_APPEND);
+        $ac_text  = "      <div class=ac_item>" . gmdate('Y-m-d H:i:s') . 
+                    " Atom Chat &#62; " . $_SESSION['ac_name'] . 
+                    " entered the chat</div>\n";
+
+        if (file_exists($ac_chat_data)) {
+            $ac_text .= file_get_contents($ac_chat_data);
+        }
+
+        file_put_contents($ac_chat_data, $ac_text);
+
+        //** Update live counter and reload interface
+        $ac_live_data = (int)file_get_contents($ac_lock_live);
+        $ac_live_list = $ac_live_data;
+        $ac_live_data = ((int)$ac_live_list+1);
+        file_put_contents($ac_lock_live, $ac_live_data);
+        header('Location: #LOGIN');
         exit;
     }
 }
@@ -320,13 +320,13 @@ if (isset($_POST['ac_quit'])) {
     unset($_SESSION['ac_name']);
 
     //** Update live counter and load interface
-    $ac_live_data = (int) file_get_contents($ac_lock_live);
+    $ac_live_data = (int)file_get_contents($ac_lock_live);
     $ac_live_list = $ac_live_data;
 
     if ($ac_live_list <1) {
         $ac_live_data = 0;
     } else {
-        $ac_live_data = ($ac_live_list-1);
+        $ac_live_data = ((int)$ac_live_list-1);
     }
 
     file_put_contents($ac_lock_live, $ac_live_data);
@@ -445,29 +445,30 @@ if (isset($_SESSION['ac_css'])) {
 }
 
 //** Print header
-echo "<!DOCTYPE html>\n";
-echo '<html lang="en-GB">' . "\n";
-echo "  <head>\n";
-echo "    <title>Atom Chat - " . $_SERVER['HTTP_HOST'] . "</title>\n";
-echo '    <meta charset="UTF-8"/>' . "\n";
-echo '    <meta name=language content="en-GB"/>' . "\n";
-echo '    <meta name=description ' .
-     'content="Atom Chat is a free PHP IRC like chat script"/>' . "\n";
-echo '    <meta name=keywords ' .
-     'content="PHP Atom Chat,free PHP chat scripts"/>' . "\n";
-echo '    <meta name=robots content="noodp, noydir"/>' . "\n";
-echo '    <meta name=viewport ' .
-     'content="width=device-width, height=device-height, initial-scale=1"/>' . "\n";
-echo '    <link rel=icon href="' . $ac_host . 'logo.png" type="image/png"/>' . "\n";
-echo '    <link rel=stylesheet ' .
-     'href="' . $ac_host . 'css/' . $ac_css_theme . '.css" type="text/css"/>' . "\n";
-echo "  </head>\n";
-echo "  <body>\n";
-echo '    <div id=ac_head><span id=ac_logo><a ' .
-     'href="https://github.com/phhpro/atomchat" title="Powered by Atom Chat. ' .
-     'Click here to get it."><img src="' . $ac_host . 'logo.png" ' .
-     'width=16 height=16 alt=""/> Atom Chat</a></span> <span id=ac_live>' .
-     'Online: ' . $ac_live . '</span></div>' . "\n";
+echo "<!DOCTYPE html>\n" .
+     '<html lang="en-GB">' . "\n" .
+     "  <head>\n" .
+     "    <title>Atom Chat - " . $_SERVER['HTTP_HOST'] . "</title>\n" .
+     '    <meta charset="UTF-8"/>' . "\n" .
+     '    <meta name=language content="en-GB"/>' . "\n" .
+     '    <meta name=description ' .
+     'content="Atom Chat is a free PHP IRC like chat script"/>' . "\n" .
+     '    <meta name=keywords ' .
+     'content="PHP Atom Chat,free PHP chat scripts"/>' . "\n" .
+     '    <meta name=robots content="noodp, noydir"/>' . "\n" .
+     '    <meta name=viewport ' .
+     'content="width=device-width, height=device-height, ' .
+     'initial-scale=1"/>' . "\n" .
+     '    <link rel=icon href="' . $ac_host . 'logo.png" ' .
+     'type="image/png"/>' . "\n" .
+     '    <link rel=stylesheet ' .
+     'href="' . $ac_host . 'css/' . $ac_css_theme . '.css" ' .
+     'type="text/css"/>' . "\n" .
+     "  </head>\n" .
+     "  <body>\n" .
+     '    <div id=ac_head><span id=ac_logo><img src="' . $ac_host .
+     'logo.png" width=16 height=16 alt=""/> Atom Chat</span> ' .
+     '<span id=ac_live> Live: ' . $ac_live . '</span></div>' . "\n";
 
 //** List CSS themes
 if (isset($_POST['ac_csst'])) {
@@ -478,11 +479,11 @@ if (isset($_POST['ac_csst'])) {
         $ac_info = "Empty CSS configuration! (Not checking empty lines)";
     } else {
         $ac_css_line = file($ac_css_conf);
-        echo "    <div id=ac_sub>\n";
-        echo '      <form action="#CHAT" id=ac_css_form method=POST ' .
-             'accept-charset="UTF-8">' . "\n";
-        echo "        <div>\n";
-        echo "          <select name=ac_css_list>\n";
+        echo "    <div id=ac_sub>\n" .
+             '      <form action="#CHAT" id=ac_css_form method=POST ' .
+             'accept-charset="UTF-8">' . "\n" .
+             "        <div>\n" .
+             "          <select name=ac_css_list>\n";
 
         //** Init CSS item
         $ac_css_item = "";
@@ -495,7 +496,9 @@ if (isset($_POST['ac_csst'])) {
             ucwords($ac_css_item) . ' theme">' . ucwords($ac_css_item);
 
             //** Flag current theme
-            if (isset($_SESSION['ac_css']) && $ac_css_item === $_SESSION['ac_css']) {
+            if (isset($_SESSION['ac_css'])
+                && $ac_css_item === $_SESSION['ac_css']
+            ) {
                 echo " [x]";
             }
 
@@ -503,14 +506,14 @@ if (isset($_POST['ac_csst'])) {
         }
 
         unset($ac_css_item);
-        echo "          </select>\n";
-        echo '          <input type=submit name=ac_css_apply value=Apply ' .
-             'title="Click here to apply the selected theme"/>' . "\n";
-        echo '          <input type=submit name=ac_css_close value=Close ' .
-             'title="Click here to close this window"/>' . "\n";
-        echo "        </div>\n";
-        echo "      </form>\n";
-        echo "    </div>\n";
+        echo "          </select>\n" .
+             '          <input type=submit name=ac_css_apply value=Apply ' .
+             'title="Click here to apply the selected theme"/>' . "\n" .
+             '          <input type=submit name=ac_css_close value=Close ' .
+             'title="Click here to close this window"/>' . "\n" .
+             "        </div>\n" .
+             "      </form>\n" .
+             "    </div>\n";
     }
 }
 
@@ -536,12 +539,12 @@ if (isset($_POST['ac_emos'])) {
         fclose($ac_emo_open);
     }
 
-    echo "    <div id=ac_sub>\n";
-    echo "      <h1>Emoticon Conversion Table</h1>\n";
-    echo "      <p>The following text alternatives, variants, and keywords " .
-         "are converted to icons. Spelling is case insensitive, e.g. ABC, " .
-         "Abc, or abc all match.</p>\n";
-    echo "      <pre>\n";
+    echo "    <div id=ac_sub>\n" .
+         "      <h1>Emoticon Conversion Table</h1>\n" .
+         "      <p>The following text alternatives, variants, and " .
+         "keywords are converted to icons. Spelling is case " .
+         "insensitive, e.g. ABC, Abc, or abc all match.</p>\n" .
+         "      <pre>\n";
 
     //** Print list
     foreach ($ac_emo_parr as $ac_emo_code) {
@@ -557,34 +560,34 @@ if (isset($_POST['ac_emos'])) {
     }
 
     unset($ac_emo_code);
-    echo "      </pre>\n";
-    echo "      <p><strong>Examples</strong></p>\n";
-    echo "      <p>\n";
-    echo "        <code>psst santa has a gift for you :)</code><br/>\n";
-    echo '        <img src="' . $ac_host . 'emo/' . $ac_emo_icon . '/psst.' .
+    echo "      </pre>\n" .
+         "      <p><strong>Examples</strong></p>\n" .
+         "      <p>\n" .
+         "        <code>psst santa has a gift for you :)</code><br/>\n" .
+         '        <img src="' . $ac_host . 'emo/' . $ac_emo_icon . '/psst.' .
          $ac_emo_type . '" width=24 height=24 alt=""/> <img src="' .
          $ac_host . 'emo/' . $ac_emo_icon . '/santa.' . $ac_emo_type .
          '" width=24 height=24 alt=""/> has a <img src="' . $ac_host .
          'emo/' . $ac_emo_icon . '/gift.' . $ac_emo_type .
          '" width=24 height=24 alt=""/> for you <img src="' . $ac_host .
          'emo/' . $ac_emo_icon . '/smile.' . $ac_emo_type .
-         '" width=24 height=24 alt=""/>' . "\n";
-    echo "      </p>\n";
-    echo "      <p>\n";
-    echo "        <code>i am so :( i want to :*</code><br/>\n";
-    echo '        i am so <img src="' . $ac_host . 'emo/' . $ac_emo_icon .
+         '" width=24 height=24 alt=""/>' . "\n" .
+         "      </p>\n" .
+         "      <p>\n" .
+         "        <code>i am so :( i want to :*</code><br/>\n" .
+         '        i am so <img src="' . $ac_host . 'emo/' . $ac_emo_icon .
          '/sad.' . $ac_emo_type . '" width=24 height=24 alt=""/> i want to ' .
          '<img src="' . $ac_host . 'emo/' . $ac_emo_icon . '/cry.' .
-         $ac_emo_type . '" width=24 height=24 alt=""/>' . "\n";
-    echo "      </p>\n";
-    echo '      <form action="#CHAT" id=ac_emo_form method=POST ' .
-         'accept-charset="UTF-8">' . "\n";
-    echo "        <div>\n";
-    echo '          <input type=submit name=ac_emo_close value=Close ' .
-         'title="Click here to close this window"/>' . "\n";
-    echo "        </div>\n";
-    echo "      </form>\n";
-    echo "    </div>\n";
+         $ac_emo_type . '" width=24 height=24 alt=""/>' . "\n" .
+         "      </p>\n" .
+         '      <form action="#CHAT" id=ac_emo_form method=POST ' .
+         'accept-charset="UTF-8">' . "\n" .
+         "        <div>\n" .
+         '          <input type=submit name=ac_emo_close value=Close ' .
+         'title="Click here to close this window"/>' . "\n" .
+         "        </div>\n" .
+         "      </form>\n" .
+         "    </div>\n";
 }
 
 //** Check user name session
@@ -598,21 +601,21 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
         $ac_info = "Empty log file!";
     }
 
-    echo "    </div>\n";
-    echo "    <div id=ac_menu>\n";
-    echo '      <form action="#CHAT" method=POST id=ac_chat_form ' .
-         'accept-charset="UTF-8">' . "\n";
-    echo "        <div id=ac_char>Text " .
-         "<small>($ac_max_char characters)</small></div>\n";
-    echo "        <div>\n";
-    echo '          <textarea name=ac_text id=ac_text rows=4 cols=60 ' .
+    echo "    </div>\n" .
+         "    <div id=ac_menu>\n" .
+         '      <form action="#CHAT" method=POST id=ac_chat_form ' .
+         'accept-charset="UTF-8">' . "\n" .
+         "        <div id=ac_char>Text " .
+         "<small>($ac_max_char characters)</small></div>\n" .
+         "        <div>\n" .
+         '          <textarea name=ac_text id=ac_text rows=4 cols=60 ' .
          'maxlength=' . $ac_max_char .
-         ' title="Type here to enter your message"></textarea>' . "\n";
-    echo "        </div>\n";
-    echo "        <div>\n";
-    echo '          <input type=hidden name=ac_name ' .
-         'value="' . $_SESSION['ac_name'] . '"/>' . "\n";
-    echo "          <input type=submit name=ac_quit value=Quit " .
+         ' title="Type here to enter your message"></textarea>' . "\n" .
+         "        </div>\n" .
+         "        <div>\n" .
+         '          <input type=hidden name=ac_name ' .
+         'value="' . $_SESSION['ac_name'] . '"/>' . "\n" .
+         "          <input type=submit name=ac_quit value=Quit " .
          'title="Click here to quit the session"/>' . "\n";
 
     //** Check CSS user selection
@@ -628,18 +631,19 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
     }
 
     echo '          <input type=submit name=ac_save value=Save ' .
-         'title="Click here to save the session"/>' . "\n";
-    echo '          <input type=submit name=ac_push value=Push ' .
-         'title="Click here to manually update the session"/>' . "\n";
-    echo '          <input type=submit name=ac_post value=Post ' .
-         'title="Click here to post your message"/>' . "\n";
-    echo "        </div>\n";
-    echo "      </form>\n";
-    echo "      <div id=ac_info>\n";
-    echo "        $ac_info<br/>\n";
-    echo "        <noscript>JavaScript disabled or not available!</noscript>\n";
-    echo "      </div>\n";
-    echo "    </div>\n";
+         'title="Click here to save the session"/>' . "\n" .
+        '          <input type=submit name=ac_push value=Push ' .
+         'title="Click here to manually update the session"/>' . "\n" .
+         '          <input type=submit name=ac_post value=Post ' .
+         'title="Click here to post your message"/>' . "\n" .
+        "        </div>\n" .
+        $ac_down . 
+        "      </form>\n" .
+        "      <div id=ac_info>\n" .
+        "        $ac_info<br/>\n" .
+        "        <noscript>JavaScript disabled or not available!</noscript>\n" .
+        "      </div>\n" .
+        "    </div>\n";
 } else {
 
     //** Load intro screen
@@ -648,24 +652,25 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
         include "./" . $ac_iscr;
     }
 
-    echo "    <div id=ac_menu>\n";
-    echo '      <form action="#LOGIN" method=POST id=ac_login_form ' .
-         'accept-charset="UTF-8">' . "\n";
-    echo "        <div>\n";
-    echo "          <label for=ac_name>Name <small>(A-Z only)</small></label>\n";
-    echo "          <input name=ac_name id=ac_name maxlength=16 " .
-         'title="Type here to enter a user name. Letters A to Z only!"/>' . "\n";
-    echo "          <input type=submit name=ac_login value=Login " .
-         'title="Click here to login"/>' . "\n";
-    echo "        </div>\n";
-    echo "      </form>\n";
-    echo "      <div id=ac_info>\n";
-    echo "        $ac_info<br/>\n";
-    echo "        <noscript>JavaScript disabled or not available!</noscript>\n";
-    echo "      </div>\n";
-    echo "    </div>\n";
+    echo "    <div id=ac_menu>\n" .
+         '      <form action="#LOGIN" method=POST id=ac_login_form ' .
+         'accept-charset="UTF-8">' . "\n" .
+         "        <div>\n" .
+         "          <label for=ac_name>Name</label>\n" .
+         "          <input name=ac_name id=ac_name maxlength=16 " .
+         'title="Type here to enter your user name."/>' . "\n" .
+         "          <input type=submit name=ac_login value=Login " .
+         'title="Click here to login"/>' . "\n" .
+         "        </div>\n" .
+         $ac_down . 
+         "      </form>\n" .
+         "      <div id=ac_info>\n" .
+         "        $ac_info<br/>\n" .
+         "        <noscript>JavaScript disabled or not available!</noscript>\n" .
+         "      </div>\n" .
+         "    </div>\n";
 }
 
-echo '    <script src="atomchat.js"></script>' . "\n";
-echo "  </body>\n";
-echo "</html>\n";
+echo '    <script src="atomchat.js"></script>' . "\n" .
+     "  </body>\n" .
+     "</html>\n";
