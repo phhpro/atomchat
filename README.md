@@ -11,9 +11,7 @@
     - Resources leeching dependency stricken database voodoo.
     - Neither a pink jellyfish nor Santa on steroids.
 - **How it works**
-    - Enter prefered name and press the **Login** button.
+    - Enter preferred name and press the **Login** button.
     - Names are assigned dynamically. First come, first serve.
     - Inactive sessions are auto-closed after 30 minutes.
-    - Optional smart conversion of text to icons.
-- **What it does**
-    - Chat, chat, **Atom Chat**!
+    - Auto-conversion of emojis without using a single image.
