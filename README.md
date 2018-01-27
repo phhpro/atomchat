@@ -15,3 +15,5 @@
     - Names are assigned dynamically. First come, first serve.
     - Inactive sessions are auto-closed after 30 minutes.
     - Auto-conversion of emojis without using a single image.
+
+Follow this link to run a [http://phclaus.com/ddemo/atomchat/](brief demo)
