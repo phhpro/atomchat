@@ -1,13 +1,12 @@
+@charset "UTF-8";
+
 body {
     background-color: #300;
     color: #990;
     font-family: "Droid Sans", Arial, sans-serif;
-    font-size: 100%;
-    font-weight: normal;
-    overflow: hidden;
 }
 
-#ac_head {
+header {
     background-color: #300;
     color: #990;
     font-weight: bold;
@@ -18,13 +17,13 @@ body {
     left: 0;
 }
 
-#ac_sub {
+article {
     background-color: #300;
     color: #990;
     position: fixed;
     top: 28px;
     right: 0;
-    bottom: 175px;
+    bottom: 205px;
     left: 0;
     overflow: auto;
     padding: 0 8px;
@@ -39,10 +38,11 @@ body {
     bottom: 175px;
     left: 0;
     overflow: auto;
+    margin-bottom: 5px;
     padding: 8px;
 }
 
-#ac_menu {
+nav {
     background-color: #300;
     color: #990;
     text-align: center;
@@ -53,18 +53,25 @@ body {
     left: 0;
 }
 
-#ac_down {
+#ac_stat {
     font-size: 85%;
+    font-weight: bold;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+}
+
+footer {
+    position: fixed;
+    right: 25%;
+    bottom: 0;
+    left: 25%;
+    font-size: 85%;
+    text-align: center;
+    padding: 6px;
 }
 
 h1 {
     margin-top: 8px;
-}
-
-img {
-    border: 0;
-    vertical-align: text-bottom;
-    font-size: 75%;
 }
 
 #ac_logo {
@@ -73,24 +80,14 @@ img {
 }
 
 #ac_logo img {
-    vertical-align: text-top;
-    margin-top: -1px;
+    border-radius: 50%;
+    vertical-align: top;
 }
 
 #ac_live {
     float: right;
     font-weight: normal;
     margin: 2px 4px 2px 2px;
-}
-
-#ac_foot {
-    font-size: small;
-}
-
-#ac_info {
-    font-size: 75%;
-    font-weight: bold;
-    padding-bottom: 8px;
 }
 
 label {
@@ -102,6 +99,7 @@ input {
     color: #300;
     border: 1px outset #660;
     font-size: 100%;
+    padding: 2px 4px;
 }
 
 input:hover {
@@ -113,7 +111,6 @@ input:hover {
 input[type=submit] {
     font-weight: bold;
     margin: 16px;
-    padding: 3px 7px 4px 6px;
 }
 
 input[type=submit]:hover {
@@ -123,6 +120,7 @@ input[type=submit]:hover {
 textarea {
     background-color: #300;
     color: #660;
+    font-size: 105%;
     border: 1px solid #660;
     width: 99%;
 }
@@ -130,13 +128,15 @@ textarea {
 textarea:hover {
     background-color: #660;
     color: #300;
-    border: 1px inset #330;
+    border: 1px outset #660;
 }
 
 select {
     background-color: #660;
     color: #300;
     font-size: 105%;
+    border: 1px inset #660;
+    padding: 2px 4px;
 }
 
 select:hover {
@@ -154,6 +154,24 @@ select:hover {
     color: #300;
 }
 
+@keyframes latest {
+    0% {
+        background-color: #660;
+    }
+
+    100% {
+        background-color: transparent;
+    }
+}
+
+.latest {
+    animation: latest 5s ease-in-out;
+}
+
+.latest:hover {
+    animation: none;
+}
+
 a {
     background-color: transparent;
     color: #cc0;
@@ -163,6 +181,23 @@ a {
 a:hover {
     background-color: transparent;
     color: #990;
+}
+
+code {
+    font-family: monospace;
+    font-size: 115%;
+    font-weight: bold;
+    background-color: #660;
+    color: #300;
+    padding: 0 4px;
+}
+
+.emo {
+    font-size: 135%;
+}
+
+pre .emo {
+    font-size: 185%;
 }
 
 @media screen and (max-width: 800px) {
