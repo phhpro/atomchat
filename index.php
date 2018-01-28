@@ -12,7 +12,7 @@
  *
  *
  * Default index to prevent accidental pre-loading.
- * May be used to prepend or append additional specifics.
+ * May be used for access control, maintenance redirect, etc.
  */
 
 
