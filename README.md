@@ -16,4 +16,4 @@
     - Inactive sessions are auto-closed after 30 minutes.
     - Auto-conversion of emojis without using a single image.
 
-Follow this link to run a [brief demo](http://phclaus.com/ddemo/atomchat/)
+Follow this link to run a [brief demo](http://phclaus.com/demo/atomchat/)
