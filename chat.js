@@ -1,12 +1,11 @@
 // Push helper
-var ac_dlay = 5000;
+var ac_wait = 5000;
 var ac_http = null;
 var ac_init = 0;
 var ac_link, ac_rand, ac_res, ac_div = "";
 
 // Configure AJAX object
-function ac_obj() {
-
+function acAjax() {
     if (window.ActiveXObject) {
         return new ActiveXObject("Microsoft.XMLHTTP");
     } else if (window.XMLHttpRequest) {
@@ -18,8 +17,7 @@ function ac_obj() {
 }
 
 // Container state
-function ac_set() {
-
+function acHttp() {
     if (ac_http.readyState == 4) {
         ac_res           = ac_http.responseText;
         ac_div           = document.getElementById("ac_push");
@@ -29,27 +27,27 @@ function ac_set() {
 }
 
 // Configure timer
-function ac_time() {
-    ac_http = ac_obj();
+function acTime() {
+    ac_http = acAjax();
     ac_rand = Math.floor(Math.random()*10000);
 
     if (ac_http != null) {
         ac_link = "?"+ac_rand;
         ac_http.open("GET", ac_link, true);
-        ac_http.onreadystatechange = ac_set;
+        ac_http.onreadystatechange = acHttp;
         ac_http.send(null);
     }
 }
 
 // Update screen
-function ac_push() {
-    ac_time();
-    ac_init = setTimeout('ac_push()', ac_dlay);
+function acPush() {
+    acTime();
+    ac_init = setTimeout('acPush()', ac_wait);
 }
 
 // Output beep if supported
-function ac_beep() {
-    var ac_snd = new Audio("data:audio/wav;base64,"+
+function acBeep() {
+    var ac_beep = new Audio("data:audio/wav;base64,"+
 "//uQRAAAAWMSLwUIYAAsYkXgoQwAEaYLWfkWgAI0wWs/ItAAAGDgYtAgAyN+QWaAAihw"+
 "MWm4G8QQRDiMcCBcH3Cc+CDv/7xA4Tvh9Rz/y8QADBwMWgQAZG/ILNAARQ4GLTcDeIII"+
 "hxGOBAuD7hOfBB3/94gcJ3w+o5/5eIAIAAAVwWgQAVQ2ORaIQwEMAJiDg95G4nQL7mQV"+
@@ -110,9 +108,9 @@ function ac_beep() {
 "////////////////VEFHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU291bmRi"+
 "b3kuZGUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"+
 "AAAAMjAwNGh0dHA6Ly93d3cuc291bmRib3kuZGUAAAAAAAAAACU=");
-    ac_snd.play();
+    ac_beep.play();
 }
 
 // Init functions
-ac_push();
-ac_beep();
+acPush();
+acBeep();

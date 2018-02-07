@@ -2,12 +2,15 @@
 /**
  * PHP Version 5 and above
  *
- * @category PHP_Chat_Scripts
- * @package  PHP_Atom_Chat
- * @author   P H Claus <phhpro@gmail.com>
- * @license  https://www.gnu.org/licenses/gpl-3.0.en.html GPLv3
- * @version  GIT: Latest
- * @link     https://github.com/phhpro/atomchat
+ * Main script and configuration
+ *
+ * @category  PHP_Chat_Scripts
+ * @package   PHP_Atom_Chat
+ * @author    P H Claus <phhpro@gmail.com>
+ * @copyright 2015 - 2018 P H Claus
+ * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GPLv3
+ * @version   GIT: Latest
+ * @link      https://github.com/phhpro/atomchat
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,9 +26,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301, USA.
- *
- *
- * Main script and configuration
  */
 
 
@@ -52,7 +52,7 @@ $ac_init     = "init.php";
  */
 
 $ac_title    = "PHP Atom Chat";
-$ac_image    = '<img src=favicon.png width=16 height=16 alt=""/>';
+$ac_image    = '<img src=atomchat.png width=16 height=16 alt=""/>';
 
 /**
  * Maximum characters allowed per post
@@ -88,7 +88,7 @@ $ac_emo_auto = 1;
  * Query string
  * Init status text
  */
-$ac_version  = "20180127";
+$ac_make  = "20180207";
 $ac_query = $_SERVER['QUERY_STRING'];
 $ac_stat  = "";
 
@@ -121,9 +121,8 @@ if (file_exists($ac_lang_data) && file_exists($ac_lang_conf)) {
     include $ac_lang_data;
 } else {
     //** Static because no language file is available
-    echo "<p>Missing or invalid language data file or " .
-         "selector configuration!</p>\n" .
-         "<p>Please check your settings.</p>\n";
+    echo "<p>Missing or invalid language file or " .
+         "selector configuration!</p>\n";
     exit;
 }
 
@@ -488,7 +487,8 @@ echo "<!DOCTYPE html>\n" .
      "    <head>\n" .
      "        <title>" . $ac_title . "</title>\n" .
      '        <meta charset="UTF-8"/>' . "\n" .
-     '        <meta name=language content="' . $ac_lang_mime . '"/>' . "\n" .
+     '        <meta name=language content="' . $ac_lang_mime .
+     '"/>' . "\n" .
      '        <meta name=description content="PHP Atom Chat is a ' .
      'free PHP IRC like chat script. No database required."/>' . "\n" .
      '        <meta name=keywords ' .
@@ -496,10 +496,9 @@ echo "<!DOCTYPE html>\n" .
      '        <meta name=robots content="noodp, noydir"/>' . "\n" .
      '        <meta name=viewport content="width=device-width, ' .
      'height=device-height, initial-scale=1"/>' . "\n" .
-     '        <link rel=icon href="favicon.ico" ' .
-     'type="image/vnd.microsoft.icon"/>' . "\n" .
+     '        <link rel=icon href="atomchat.ico"/>' . "\n" .
      '        <link rel=stylesheet href="css/' . $ac_css_sel .
-     '.css" type="text/css"/>' . "\n" .
+     '.css"/>' . "\n" .
      "    </head>\n" .
      "    <body>\n" .
      "        <header>\n" .
@@ -714,7 +713,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
 //** Footer
 echo '        <footer><a href="https://github.com/phhpro/atomchat" ' .
      'title="' . $ac_lang['external'] . '">' .
-     $ac_lang['powered_by'] . " PHP Atom Chat v$ac_version</a></footer>\n" .
-     '        <script src="chat.js"></script>' . "\n" .
+     $ac_lang['powered_by'] . " PHP Atom Chat v$ac_make</a></footer>\n" .
+     '        <script src="chat.js"></script>' . "\n";
      "    </body>\n" .
      "</html>\n";
