@@ -12,9 +12,19 @@
  * @version   GIT: Latest
  * @link      https://github.com/phhpro/atomchat
  */
-?>
-                <small>
-                    <a href="?lang_de" lang="de" title="Klicken Sie hier um nach Deutsch zu wechseln">DE</a>
-                    <a href="?lang_en" lang="en" title="Click here to switch to English">EN</a>
-                    <a href="?lang_es" lang="es" title="Haga clic aquí para cambiar al Español">ES</a>
-                </small>
+
+
+echo "                    <input type=submit name=de " .
+     'value="Deutsch" ' .
+     'title="Klicken Sie hier um Deutsch zu wählen"/>' . "\n" .
+
+     "                    <input type=submit name=en " .
+     'value="English" ' .
+     'title="Click here to select English"/>' . "\n" .
+
+     "                    <input type=submit name=es " .
+     'value="Español" ' .
+     'title="Haga clic aquí para seleccionar al Español"/>' . "\n" .
+
+     //** Keep this line intact!
+     "";
