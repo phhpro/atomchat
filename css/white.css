@@ -3,91 +3,85 @@
 body {
     background-color: #fff;
     color: #000;
-    font-family: "Droid Sans", Arial, sans-serif;
+    font-family: "DejaVu Sans", Arial, sans-serif;
 }
 
 header {
     background-color: #fff;
     color: #000;
-    font-weight: bold;
-    padding: 2px;
+    margin: 0 12px;
     position: fixed;
     top: 0;
     right: 0;
+    bottom: 35px;
     left: 0;
+}
+
+h1 {
+    font-size: 95%;
+}
+
+h1 img {
+    border-radius: 50%;
+    vertical-align: top;
+}
+
+#push {
+    background-color: #fff;
+    color: #000;
+    position: fixed;
+    top: 35px;
+    right: 12px;
+    bottom: 240px;
+    left: 12px;
+    overflow: auto;
+    font-size: 95%;
 }
 
 article {
     background-color: #fff;
     color: #000;
     position: fixed;
-    top: 28px;
-    right: 0;
-    bottom: 205px;
-    left: 0;
+    top: 35px;
+    right: 4px;
+    bottom: 240px;
+    left: 12px;
     overflow: auto;
-    padding: 0 8px;
     z-index: 1000;
-    font-size: 115%;
-}
-
-#ac_push {
-    position: fixed;
-    top: 28px;
-    right: 0;
-    bottom: 175px;
-    left: 0;
-    overflow: auto;
-    margin-bottom: 5px;
+    margin: 0 8px;
     padding: 8px;
+    font-size: 95%;
 }
 
 nav {
     background-color: #fff;
     color: #000;
+    font-size: 95%;
     text-align: center;
-    padding: 2px;
+    padding: 4px;
     position: fixed;
-    bottom: 0;
     right: 0;
+    bottom: 0;
     left: 0;
+    max-height: 260px;
+    overflow: auto;
 }
 
-#ac_stat {
+#stat {
     font-size: 85%;
     font-weight: bold;
-    margin-bottom: 16px;
-    padding-bottom: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 24px;
 }
 
-footer {
-    position: fixed;
-    right: 25%;
-    bottom: 0;
-    left: 25%;
+#by {
     font-size: 85%;
-    text-align: center;
-    padding: 6px;
+    margin-top: -40px;
 }
 
-h1 {
-    margin-top: 8px;
-}
-
-#ac_logo {
-    float: left;
-    margin: 2px 2px 2px 4px;
-}
-
-#ac_logo img {
-    border-radius: 50%;
-    vertical-align: top;
-}
-
-#ac_live {
-    float: right;
-    font-weight: normal;
-    margin: 2px 4px 2px 2px;
+h2 {
+    font-size: 115%;
+    margin: 0;
 }
 
 label {
@@ -95,17 +89,17 @@ label {
 }
 
 input {
-    background-color: #fff;
-    color: #000;
+    background-color: #ccc;
+    color: #333;
     border: 1px outset #ccc;
     font-size: 100%;
-    padding: 2px 4px;
+    padding: 4px;
 }
 
 input:hover {
-    background-color: #ccc;
+    background-color: #999;
     color: #000;
-    border: 1px inset #ccc;
+    border: 1px inset #999;
 }
 
 input[type=submit] {
@@ -117,60 +111,77 @@ input[type=submit]:hover {
     transform: scale(0.9);
 }
 
+#lang input[type=submit] {
+    margin: 0;
+}
+
 textarea {
     background-color: #fff;
     color: #000;
     font-size: 105%;
     border: 1px solid #ccc;
-    width: 99%;
+    padding: 4px;
+    width: 96%;
 }
 
 textarea:hover {
     background-color: #ccc;
     color: #000;
-    border: 1px inset #999;
-}
-
-select {
-    background-color: #fff;
-    color: #000;
-    font-size: 105%;
-    border: 1px outset #ccc;
-    padding: 2px 4px;
-}
-
-select:hover {
-    background-color: #ccc;
-    color: #000;
     border: 1px inset #ccc;
 }
 
-.ac_item {
-    border-bottom: 1px solid #ccc;
-    padding: 8px;
+select {
+    background-color: #ccc;
+    color: #333;
+    font-size: 105%;
+    border: 1px outset #ccc;
+    padding: 2px;
 }
 
-.ac_item:hover {
+select:hover {
+    background-color: #999;
+    color: #000;
+    border: 1px inset #999;
+}
+
+.item {
+    border: 1px solid #ccc;
+    margin: 8px 8px 16px 8px;
+}
+
+.item:hover {
     background-color: #ccc;
     color: #000;
+    border: 1px solid #ccc;
 }
 
-@keyframes latest {
-    0% {
-        background-color: #ccc;
-    }
-
-    100% {
-        background-color: transparent;
-    }
+.item_log {
+    padding: 4px 10px;
 }
 
-.latest {
-    animation: latest 5s ease-in-out;
+.item_head {
+    background-color: #ccc;
+    color: #000;
+    padding: 4px;
+    border-bottom: 1px solid #ccc;
 }
 
-.latest:hover {
-    animation: none;
+.item:hover .item_head {
+    background-color: #666;
+    color: #ccc;
+}
+
+.item_date {
+    float: left;
+}
+
+.item_name {
+    text-align: right;
+}
+
+.item_text {
+    white-space: pre-wrap;
+    padding: 4px;
 }
 
 a {
@@ -184,26 +195,48 @@ a:hover {
     color: #666;
 }
 
-code {
-    font-family: monospace;
-    font-size: 115%;
+#emo {
+    font-size: 135%;
     font-weight: bold;
-    background-color: #ccc;
-    color: #000;
-    padding: 0 4px;
 }
 
 .emo {
     font-size: 135%;
 }
 
-pre .emo {
-    font-size: 185%;
-}
+@media screen and (max-width: 700px) {
+    header {
+        bottom: 40px;
+    }
 
-@media screen and (max-width: 800px) {
-    body {
-        font-size: 115%;
+    #push, article {
+        top: 40px;
     }
 }
-                
+
+@media screen and (max-width: 600px) {
+    #stat {
+        margin-bottom: 24px;
+        padding-bottom: 24px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    header {
+        bottom: 45px;
+    }
+
+    #push, article {
+        top: 45px;
+    }
+}
+
+@media screen and (max-width: 300px) {
+    header {
+        bottom: 50px;
+    }
+
+    #push, article {
+        top: 50px;
+    }
+}

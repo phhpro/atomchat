@@ -1,5 +1,4 @@
 black
 coldfire
 grey
-retro
 white
