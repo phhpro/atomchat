@@ -1,0 +1,41 @@
+CSS Themes
+----------
+
+Edit __config.txt in the css folder to add or remove themes and make
+sure it doesn't contain any trailing lines to prevent orphan list items.
+
+Each line must match the exact filename on disk without extension, e.g.
+for a stylesheet named MyTheme.css, the corresponding line must read
+MyTheme. You can make MyTheme the default per $ac_css_def = "MyTheme"
+
+
+Emoji Table
+-----------
+
+Due to poor Unicode support outside of Firefox currently only a reduced
+subset of emojis can be savely converted. In addition, the appearance of
+the icons differs greatly between browsers and platforms. YMMV.
+
+Should you decide to edit the definitions in emojis.txt, make sure the
+file does not contain any trailing lines to prevent orphan list items.
+
+A good starting point to check common icons and their Unicode values is
+at https://en.wikipedia.org/wiki/Emoji -- though at least for the time
+being only Firefox actually supports and renders them as expected.
+
+
+Translations
+------------
+
+Make a copy of en.php in the lang folder and save it as xx.php, where
+xx represents the language code identifier, e.g. fr for French, it for
+Italian, and so on.
+
+Visit https://www.loc.gov/standards/iso639-2/php/code_list.php to lookup
+your language code ID if you don't already know it.
+
+Edit xx.php and mail a copy to @author given in en.php
+
+Subject: Lang_XX_PHP_Atomchat
+Body   : @author Your Name <yourmail@server.com>
+Attach : xx.php

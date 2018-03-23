@@ -41,39 +41,34 @@
 
 /**
  * Script folder
- * Initial screen
  */
-$ac_fold     = "atomchat";
-$ac_init     = "init.php";
+$fold     = "atomchat";
 
 /**
  * Chat title
- * Chat image -- leave empty if not needed
+ * Chat image -- $image = "" if not needed
  */
-
-$ac_title    = "PHP Atom Chat";
-$ac_image    = '<img src=atomchat.png width=16 height=16 alt=""/>';
+$title    = "PHP Atom Chat";
+$image    = '<img src=favicon.png width=16 height=16 alt=""/>';
 
 /**
  * Maximum characters allowed per post
- * Expire inactive session -- n * 60 = s (30 m * 60 s = 1800 s)
  */
-$ac_max_char = 256;
-$ac_expire   = 1800;
+$max_char = 256;
 
 /**
- * Default style
- * User style selection
+ * Default theme
+ * User theme selection
  */
-$ac_css_def  = "grey";
-$ac_css_usr  = 1;
+$css_def  = "grey";
+$css_usr  = 1;
 
 /**
  * Default language
- * Convert emoji icons -- https://en.wikipedia.org/wiki/Emoji
+ * Convert emojis
  */
-$ac_lang_def = "en";
-$ac_emo_auto = 1;
+$lang_def = "en";
+$emo_auto = 1;
 
 
 /**
@@ -83,85 +78,303 @@ $ac_emo_auto = 1;
  */
 
 
-/**
- * Script version
- * Query string
- * Init status text
- */
-$ac_make  = "20180207";
-$ac_query = $_SERVER['QUERY_STRING'];
-$ac_stat  = "";
+//** Script version
+$make     = "20180323";
+
+//** Check protocol
+if (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS']) {
+    $prot = "s";
+} else {
+    $prot = "";    
+}
+
+//** Build URL reference
+$host     = "http" . $prot . "://" . $_SERVER['HTTP_HOST'] .
+            "/" . $fold . "/";
+
+//** Initial screen and status
+$init      = "./init.php";
+$stat      = "";
+
+//** Link logfile and themes config
+$chat_data = "log/" . date('Y-m-d') . ".html";
+$css_conf  = "css/__config.txt";
+
+//** Link emoji config, arrays, and code
+$emo_conf  = "emoji.txt";
+$emo_parr  = array();
+$emo_sarr  = array();
+$emo_code  = "";
 
 //** Init session
 session_start();
-$_SESSION['ac_test'] = 1;
+$_SESSION['test'] = 1;
 
-//** Test session -- static because no language file is available
-if ($_SESSION['ac_test'] !== 1) {
+//** Test session
+if ($_SESSION['test'] !== 1) {
     echo "<p>Missing session cookie!</p>\n" .
          "<p>Please edit your browser's cookie " .
          "settings and then try again.</p>\n";
     exit;
 } else {
-    unset($_SESSION['ac_test']);
+    unset($_SESSION['test']);
 }
 
-//** Link language data file and selector config
-$ac_lang_data = './lang/' . $ac_lang_def . '.php';
-$ac_lang_conf = './lang/__config.php';
+//** Check language selection
+if (isset($_POST['de'])) {
+    $_SESSION['lang'] = "de";
+}
 
-/**
- * Check language file
- *
- * This tests only if the file exist.
- * It will fail if it does but is empty or else invalid!
- */
-if (file_exists($ac_lang_data) && file_exists($ac_lang_conf)) {
-    $ac_lang_mime = $ac_lang_def;
-    include $ac_lang_data;
-} else {
-    //** Static because no language file is available
-    echo "<p>Missing or invalid language file or " .
-         "selector configuration!</p>\n";
+if (isset($_POST['en'])) {
+    $_SESSION['lang'] = "en";
+}
+
+if (isset($_POST['es'])) {
+    $_SESSION['lang'] = "es";
+}
+
+//** Default language session
+if (!isset($_SESSION['lang'])) {
+    $_SESSION['lang'] = $lang_def;
+}
+
+$lang_id = $_SESSION['lang'];
+
+//** Link language config and data
+$lang_conf = "./lang/__config.php";
+$lang_data = "./lang/" . $lang_id . ".php";
+
+//** Check log folder
+if (!is_dir('log')) {
+
+    if (mkdir('log') === false) {
+        echo "Cannot write logfile!";
+        exit;
+    }
+}
+
+//** Check language folder
+if (!is_dir('lang')) {
+    echo "Missing language folder!";
     exit;
 }
 
-//** Build language reference
-if (isset($ac_query) && strpos($ac_query, "lang_") !== false) {
-    $ac_lang_id = str_replace("lang_", "", $ac_query);
-} else {
-    //** Use default if selected file is missing
-    $ac_lang_id = $ac_lang_def;
-}
+//** Check if file exists and is valid
+if (
+    file_exists($lang_data)
+    || file_exists($lang_conf)
+    || file_exists($css_conf)
+    || $emo_auto === 1
+) {
 
-//** Link language user selection
-$ac_lang_user = 'lang/' . $ac_lang_id . '.php';
+    if (file_exists($lang_data)) {
+        $file_data = $lang_data;
+        $file_text = "language file";
+    }
 
-//** Check selected language data file
-if (file_exists($ac_lang_user)) {
-    $ac_lang_mime = $ac_lang_id;
-    include $ac_lang_user;
-} else {
+    if (file_exists($lang_conf)) {
+        $file_data = $lang_conf;
+        $file_text = "language configuration";
+    }
+
+    if (file_exists($css_conf)) {
+        $file_data = $css_conf;
+        $file_text = "theme configuration";
+    }
+
+    if ($emo_auto === 1) {
+        $file_data = $emo_conf;
+        $file_text = "emoji configuration";
+    }
+
+    $file_trim = file_get_contents($file_data);
     /**
-     * There should now be a valid language file so drop
-     * static text and use translation strings instead.
+     * Check valid file -- returns true if file contains only the BOM
+     * (byte order mark) or empty lines, in which case the test failed.
      */
-    $ac_stat = $ac_lang['lang_def'];
-}
-
-//** Stop message
-$ac_stop = $ac_lang['stop'];
-
-//** Check protocol
-if (isset($_SERVER['HTTPS']) && "on" === $_SERVER['HTTPS']) {
-    $ac_prot = "s";
+    if (filesize($file_data) <16
+        && trim($file_trim) === false
+    ) {
+        echo "Invalid $file_text!";
+        exit;
+    }
 } else {
-    $ac_prot = "";    
+    echo "Missing $file_text!";
+    exit;
 }
 
-//** Build URL reference
-$ac_host = "http" . $ac_prot .
-           "://" . $_SERVER['HTTP_HOST'] . "/" . $ac_fold . "/";
+//** Link default language ID and load config
+$lang_mime = $lang_def;
+require $lang_data;
+
+//** Link selected language
+$lang_id   = $_SESSION['lang'];
+$lang_user = "lang/" . $lang_id . ".php";
+
+//** Check selected language
+if (file_exists($lang_user)) {
+    $lang_mime = $lang_id;
+    include $lang_user;
+} else {
+    $stat = $lang['nolang'];
+}
+
+//** Check theme -- renders plain if missing
+if (!file_exists("css/" . $css_def . ".css")) {
+    $stat = $lang['css_missing'];
+}
+
+//** Login
+if (isset($_POST['login'])) {
+
+    //** Link name
+    $name = htmlentities($_POST['name'], ENT_QUOTES, "UTF-8");
+
+    //** Check name
+    if ($name === "") {
+        header('Location: #MISSING_NAME');
+        exit;
+    } else {
+
+        //** Init name session -- mt_rand() to prevent dupes
+        $_SESSION['name'] = $name . "_" . mt_rand();
+
+        //** Build entry and update data file
+        $text  = "            <div class=item_log>" .
+                 date('Y-m-d H:i:s') . " " . $_SESSION['name'] .
+                 " " . $lang['chat_enter'] . "</div>\n";
+
+        if (file_exists($chat_data)) {
+            $text .= file_get_contents($chat_data);
+        }
+
+        $stat = "";
+        file_put_contents($chat_data, $text);
+        header('Location: #LOGIN');
+        exit;
+    }
+}
+
+//** Save data file
+if (isset($_POST['save'])) {
+    header('Content-type: text/html');
+    header(
+        'Content-Disposition: attachment; ' .
+        'filename="' . str_replace('log/', '', $chat_data) . '"'
+    );
+
+    readfile($chat_data);
+    exit;
+}
+
+//** Logout
+if (isset($_POST['quit'])) {
+
+    //** Update data file and clear session
+    $text  = "            <div class=item_log>" .
+             date('Y-m-d H:i:s') . " " . $_SESSION['name'] .
+             " " . $lang['chat_leave'] . "</div>\n";
+    $text .= file_get_contents($chat_data);
+
+    file_put_contents($chat_data, $text);
+
+    unset($_SESSION['name']);
+    header('Location: #LOGOUT');
+    exit;
+}
+
+//** Manual update
+if (isset($_POST['push'])) {
+    header('Location: #PUSH');
+    exit;
+}
+
+//** Post new entry
+if (isset($_POST['post'])) {
+    $name = htmlentities($_POST['name'], ENT_QUOTES, "UTF-8");
+    $text = htmlentities($_POST['text'], ENT_QUOTES, "UTF-8");
+
+    //** Check empty text
+    if (!empty($text)) {
+
+        //** Check emoji conversion
+        if ($emo_auto === 1) {
+
+            //** Link primary array
+            $emo_open = fopen($emo_conf, 'r');
+
+            //** Parse config
+            while (!feof($emo_open)) {
+                $emo_line   = fgets($emo_open);
+                $emo_line   = trim($emo_line);
+                $emo_parr[] = $emo_line;
+            }
+
+            fclose($emo_open);
+
+            //** Link secondary array
+            $emo_sarr = array();
+
+            //** Parse primary array and split values
+            foreach ($emo_parr as $emo_code) {
+                $emo_line   = explode('|', $emo_code);
+                $emo_sarr[] = $emo_line;
+                $emo_calt   = $emo_line[0];
+                $emo_ckey   = $emo_line[1];
+
+                //** Convert emoji
+                if (strpos($text, $emo_calt) !== false) {
+                    $text = trim(
+                        str_replace(
+                            $emo_calt, "<span class=emo>" .
+                            $emo_ckey ."</span>", $text
+                        )
+                    );
+                }
+            }
+
+            unset($emo_code);
+        }
+
+        //** Build entry and update data file
+        $text  = "            <div class=item " . 'id="pid' .
+                 date('_Y-m-d_H-i-s_') . $_SESSION['name'] . '">' .
+                 "\n                <div class=item_head>" .
+                 "<div class=item_date>" .
+                 date('Y-m-d H:i:s') . "</div> " .
+                 "<div class=item_name>" .
+                 $_SESSION['name'] . "</div>" .
+                 "</div>\n" .
+                 "                <div class=item_text>$text</div>\n" .
+                 "            </div>\n";
+
+        $text .= file_get_contents($chat_data);
+
+        file_put_contents($chat_data, $text);
+        header('Location: #POST');
+        exit;
+    } else {
+        header('Location: #EMPTY_POST');
+        exit;
+    }
+}
+
+//** Link selected theme
+if (isset($_POST['css_apply'])) {
+    $css_conf = htmlentities($_POST['css_list'], ENT_QUOTES, "UTF-8");
+
+    if ($css_conf !== "") {
+        $_SESSION['theme'] = $css_conf;
+    }
+}
+
+//** Check theme session and apply stylesheet
+if (isset($_SESSION['theme'])) {
+    $css_sel = $_SESSION['theme'];
+} else {
+    $css_sel           = $css_def;
+    $_SESSION['theme'] = $css_sel;
+}
 
 //** Try to prevent caching
 header('Expires: on, 01 Jan 1970 00:00:00 GMT');
@@ -170,550 +383,249 @@ header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Cache-Control: post-check=0, pre-check=0', false);
 header('Pragma: no-cache');
 
-//** Check log folder
-if (!is_dir('log')) {
-
-    if (mkdir('log') === false) {
-        echo "<p>" . $ac_lang['fail_log_dir'] . "</p>\n" .
-             "<p>" . $ac_lang['folder_write'] . "</p>\n";
-        exit;
-    }
-}
-
-/**
- * Log data file
- * User name lock
- * Live counter lock
- */
-$ac_chat_data = "log/" . date('Ymd') . ".html";
-$ac_lock_name = "name.lock";
-$ac_lock_live = "live.lock";
-
-//** Check name lock
-if (!file_exists($ac_lock_name)) {
-    $ac_lock_hand = fopen($ac_lock_name, 'w');
-    fwrite($ac_lock_hand, "");
-    fclose($ac_lock_hand);
-}
-
-//** Check live counter lock
-if (!file_exists($ac_lock_live)) {
-    $ac_lock_hand = fopen($ac_lock_live, 'w');
-    fwrite($ac_lock_hand, 0);
-    fclose($ac_lock_hand);
-}
-
-//** Link styles and emoji config
-$ac_css_conf = "css/__config.txt";
-$ac_emo_conf = "emoji.txt";
-
-
-//** Check style
-if (!file_exists("css/" . $ac_css_def . ".css")) {
-    echo "<p>" . $ac_lang['miss_css_style'] . "</p>\n" .
-         "<p>$ac_stop</p>\n";
-    exit;
-}
-
-//** Check emoji config
-if ($ac_emo_auto === 1) {
-
-    if (!file_exists($ac_emo_conf)) {
-        echo "<p>" . $ac_lang['miss_emo_conf'] . "</p>\n" .
-             "<p>$ac_stop</p>\n";
-        exit;
-    }
-}
-
-/**
- * Link emoji primary array
- * Link emoji secondary array
- * Link emoji code
- * Init live counter
- */
-$ac_emo_parr = array();
-$ac_emo_sarr = array();
-$ac_emo_code = "";
-$ac_live     = (int)file_get_contents($ac_lock_live);
-
-//** Expire session
-if (isset($_SESSION['ac_time']) && !empty($_SESSION['ac_time']) 
-    && isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])
-) {
-    $ac_time = (time()-(int)$_SESSION['ac_time']);
-    $ac_diff = ($ac_expire-$ac_time);
-
-    if ($ac_diff <= 0) {
-        //** Update user name lock
-        file_put_contents(
-            $ac_lock_name, str_replace(
-                $_SESSION['ac_name'] . 
-                "\n", "", file_get_contents($ac_lock_name)
-            )
-        );
-
-        //** Update data file
-        $ac_text  = "            <div class=ac_item>" .
-                    gmdate('Y-m-d H:i:s') . " " . $_SESSION['ac_name'] .
-                    " " . $ac_lang['chat_leave'] . "</div>\n";
-        $ac_text .= file_get_contents($ac_chat_data);
-
-        file_put_contents($ac_chat_data, $ac_text);
-
-        //** Clear session
-        unset($_SESSION['ac_time']);
-        unset($_SESSION['ac_name']);
-
-        //** Update live counter and load interface
-        $ac_live_data = (int)file_get_contents($ac_lock_live);
-        $ac_live_list = $ac_live_data;
-
-        if ($ac_live_list >1) {
-            $ac_live_data = ($ac_live_list-1);
-        } else {
-            $ac_live_data = 0;
-        }
-
-        file_put_contents($ac_lock_live, $ac_live_data);
-        header('Location: #SESSION_EXPIRED');
-        exit;
-    }
-} else {
-    $_SESSION['ac_time'] = time();
-}
-
-//** Login
-if (isset($_POST['ac_login'])) {
-    //** Link user name
-    $ac_name = htmlentities($_POST['ac_name'], ENT_QUOTES, "UTF-8");
-
-    //** Check name
-    if ($ac_name === "") {
-        header('Location: #MISSING_NAME');
-        exit;
-    } elseif (stripos(file_get_contents($ac_lock_name), $ac_name) !== false) {
-        header('Location: #NAME_NOT_AVAILABLE');
-        exit;
-    } else {
-        //** Init session
-        $_SESSION['ac_time'] = time();
-        $_SESSION['ac_name'] = $ac_name;
-
-        //** Lock user name and update data file
-        file_put_contents($ac_lock_name, $ac_name . "\n", FILE_APPEND);
-
-        $ac_text  = "            <div class=ac_item>" .
-                    gmdate('Y-m-d H:i:s') . " " . $_SESSION['ac_name'] .
-                    " " . $ac_lang['chat_enter'] . "</div>\n";
-
-        if (file_exists($ac_chat_data)) {
-            $ac_text .= file_get_contents($ac_chat_data);
-        }
-
-        file_put_contents($ac_chat_data, $ac_text);
-
-        //** Update live counter and reload interface
-        $ac_live_data = (int)file_get_contents($ac_lock_live);
-        $ac_live_list = $ac_live_data;
-        $ac_live_data = ($ac_live_list+1);
-
-        file_put_contents($ac_lock_live, $ac_live_data);
-        header('Location: #LOGIN');
-        exit;
-    }
-}
-
-//** Save data file
-if (isset($_POST['ac_save'])) {
-    header('Content-type: text/html');
-    header(
-        'Content-Disposition: attachment; filename="' . 
-        str_replace("log/", "", $ac_chat_data) . '"'
-    );
-
-    readfile($ac_chat_data);
-    exit;
-}
-
-//** Quit session
-if (isset($_POST['ac_quit'])) {
-
-    //** Update user name lock
-    file_put_contents(
-        $ac_lock_name, str_replace(
-            $_SESSION['ac_name'] .
-            "\n", "", file_get_contents($ac_lock_name)
-        )
-    );
-
-    //** Update data file
-    $ac_text  = "            <div class=ac_item>" .
-                gmdate('Y-m-d H:i:s') . " " . $_SESSION['ac_name'] .
-                " " . $ac_lang['chat_leave'] . "</div>\n";
-    $ac_text .= file_get_contents($ac_chat_data);
-
-    file_put_contents($ac_chat_data, $ac_text);
-
-    //** Clear session
-    unset($_SESSION['ac_time']);
-    unset($_SESSION['ac_name']);
-
-    //** Update live counter and load interface
-    $ac_live_data = (int)file_get_contents($ac_lock_live);
-    $ac_live_list = $ac_live_data;
-
-    if ($ac_live_list <1) {
-        $ac_live_data = 0;
-    } else {
-        $ac_live_data = ($ac_live_list-1);
-    }
-
-    file_put_contents($ac_lock_live, $ac_live_data);
-    header('Location: #LOGOUT');
-    exit;
-}
-
-//** Push manual update
-if (isset($_POST['ac_push'])) {
-    header('Location: #PUSH_UPDATE');
-    exit;
-}
-
-//** New entry
-if (isset($_POST['ac_post'])) {
-    $ac_name = htmlentities($_POST['ac_name'], ENT_QUOTES, "UTF-8");
-    $ac_text = filter_var($_POST['ac_text'], FILTER_SANITIZE_SPECIAL_CHARS);
-
-    //** Skip empty post
-    if (!empty($ac_text)) {
-
-        if (!file_exists($ac_chat_data)) {
-            file_put_contents($ac_chat_data, $ac_link);
-        }
-
-        //** Check emoji conversion
-        if ($ac_emo_auto === 1) {
-
-            //** Check empty config -- true if file has only BOM or spaces
-            $ac_emo_trim = file_get_contents($ac_emo_conf);
-
-            if (filesize($ac_emo_conf) <16 && trim($ac_emo_trim) === false) {
-                $ac_stat = $ac_lang['emo_empty'];
-            } else {
-                //** Link primary array and config
-                $ac_emo_open = fopen($ac_emo_conf, 'r');
-
-                //** Parse config
-                while (!feof($ac_emo_open)) {
-                    $ac_emo_line   = fgets($ac_emo_open);
-                    $ac_emo_line   = trim($ac_emo_line);
-                    $ac_emo_parr[] = $ac_emo_line;
-                }
-
-                fclose($ac_emo_open);
-            }
-
-            //** Link secondary array
-            $ac_emo_sarr = array();
-
-            //** Parse lines and split values
-            foreach ($ac_emo_parr as $ac_emo_code) {
-                $ac_emo_line   = explode("|", $ac_emo_code);
-                $ac_emo_sarr[] = $ac_emo_line;
-                $ac_emo_calt   = $ac_emo_line[0];
-                $ac_emo_ckey   = $ac_emo_line[1];
-
-                //** Convert alternative to emoji
-                if (stripos($ac_text, $ac_emo_calt) !== false) {
-                    $ac_text = str_replace($ac_emo_calt, "<span class=emo>" . $ac_emo_ckey ."</span>", $ac_text);
-                }
-            }
-
-            unset($ac_emo_code);
-        }
-
-        //** Check latest flag
-        $ac_latest = file_get_contents($ac_chat_data);
-
-        //** Strip existing latest flag
-        if (strpos($ac_latest, "ac_item latest") !== false) {
-            $ac_tatest = str_replace(
-                '"ac_item latest"', 'ac_item', $ac_latest
-            );
-
-            file_put_contents($ac_chat_data, $ac_tatest);
-        }
-
-        //** Update data file and set new latest flag
-        $ac_text  = '            <div class="ac_item latest" ' .
-            'id="ac_' . gmdate('YmdHis') . '_' . $_SESSION['ac_name'] .
-            '">' . gmdate('Y-m-d H:i:s') . " " . "<strong>" .
-            $_SESSION['ac_name'] . " &#62;</strong> " . 
-            str_replace("&#13;&#10;", "", $ac_text) . "</div>\n";
-
-        $ac_text .= file_get_contents($ac_chat_data);
-
-        file_put_contents($ac_chat_data, $ac_text);
-        header('Location: #NEW_POST');
-        exit;
-    } else {
-        header('Location: #EMPTY_POST');
-        exit;
-    }
-}
-
-//** Check current style
-if (isset($_POST['ac_css_apply'])) {
-    $ac_css_conf = htmlentities($_POST['ac_css_list'], ENT_QUOTES, "UTF-8");
-
-    //** Link selected style
-    if ($ac_css_conf !== "") {
-        $_SESSION['ac_css'] = $ac_css_conf;
-    }
-}
-
-//** Check style session and apply theme
-if (isset($_SESSION['ac_css'])) {
-    $ac_css_sel = $_SESSION['ac_css'];
-} else {
-    //** Link default style
-    $ac_css_sel = $ac_css_def;
-    $_SESSION['ac_css'] = $ac_css_sel;
-}
-
 //** Header
 echo "<!DOCTYPE html>\n" .
-     '<html lang="' . $ac_lang_mime . '">' . "\n" .
+     '<html lang="' . $lang_mime . '">' . "\n" .
      "    <head>\n" .
-     "        <title>" . $ac_title . "</title>\n" .
+     "        <title>" . $title . "</title>\n" .
      '        <meta charset="UTF-8"/>' . "\n" .
-     '        <meta name=language content="' . $ac_lang_mime .
+     '        <meta name=language content="' . $lang_mime .
      '"/>' . "\n" .
-     '        <meta name=description content="PHP Atom Chat is a ' .
-     'free PHP IRC like chat script. No database required."/>' . "\n" .
+     '        <meta name=description content="PHP Atom Chat free ' .
+     'PHP chat script. No database required."/>' . "\n" .
      '        <meta name=keywords ' .
      'content="PHP Atom Chat,free PHP chat scripts"/>' . "\n" .
      '        <meta name=robots content="noodp, noydir"/>' . "\n" .
      '        <meta name=viewport content="width=device-width, ' .
      'height=device-height, initial-scale=1"/>' . "\n" .
-     '        <link rel=icon href="atomchat.ico"/>' . "\n" .
-     '        <link rel=stylesheet href="css/' . $ac_css_sel .
+     '        <link rel=icon href="favicon.ico"/>' . "\n" .
+     '        <link rel=stylesheet href="css/' . $css_sel .
      '.css"/>' . "\n" .
      "    </head>\n" .
      "    <body>\n" .
      "        <header>\n" .
-     "            <span id=ac_logo>$ac_image $ac_title</span>\n" .
-     "            <span id=ac_live>\n";
-
-//** Language selector
-require $ac_lang_conf;
-
-echo "                " . $ac_lang['online'] . " " . $ac_live . "\n" .
-     "            </span>\n" .
+     "            <h1>$image $title</h1>\n" .
      "        </header>\n";
 
-//** List styles
-if (isset($_POST['ac_css_sel'])) {
-    $ac_css_trim = file_get_contents($ac_css_conf);
+//** List languages
+if (isset($_POST['lang'])) {
+    echo "        <article>\n" .
+         "            <h2>" . $lang['lang_header'] . "</h2>\n" .
+         '            <form action="#CHAT" method=POST ' .
+         'accept-charset="UTF-8">' . "\n" .
+         "                <div>\n";
 
-    //** Check empty config -- true if file has only BOM or spaces
-    if (filesize($ac_css_conf) <16 && trim($ac_css_trim) === false) {
-        $ac_stat = $ac_lang['css_empty'];
-    } else {
-        $ac_css_line = file($ac_css_conf);
-        echo "        <article>\n" .
-             "            <h1>" . $ac_lang['css_sel_head'] . "</h1>\n" .
-             "            <p>" . $ac_lang['css_sel_text'] .
-             " " . $ac_lang['win_close'] . "</p>\n" .
-             '            <form action="#CHAT" id=ac_css_form ' .
-             'method=POST accept-charset="UTF-8">' . "\n" .
-             "                <div>\n" .
-             "                    <select name=ac_css_list>\n";
+    include $lang_conf;
 
-        //** Init styles item
-        $ac_css_item = "";
-
-        //** Parse list and print items
-        foreach ($ac_css_line as $ac_css_item) {
-            $ac_css_item = trim($ac_css_item);
-
-            echo '                        <option value="' . $ac_css_item . 
-                 '" title="' . $ac_lang['select_style'] . ' ' .
-                 ucwords($ac_css_item) . '">' . ucwords($ac_css_item);
-
-            //** Flag current style
-            if (isset($_SESSION['ac_css'])
-                && $ac_css_item === $_SESSION['ac_css']
-            ) {
-                echo " [x]";
-            }
-
-            echo "</option>\n";
-        }
-
-        unset($ac_css_item);
-
-        //** Function buttons
-        echo "                    </select>\n" .
-             '                    <input type=submit name=ac_css_apply ' .
-             'value="' . $ac_lang['apply'] . '" title="' .
-             $ac_lang['apply_title'] . '"/>' . "\n" .
-             '                    <input type=submit name=ac_css_close ' .
-             'value="' . $ac_lang['close'] . '" title="' .
-             $ac_lang['close_title'] . '"/>' . "\n" .
-             "                </div>\n" .
-             "            </form>\n" .
-             "        </article>\n";
-    }
+    echo "                </div>\n" .
+         "            </form>\n" .
+         "        </article>\n";
 }
 
-//** List emoji conversion table
-if (isset($_POST['ac_emo_codes'])) {
-    $ac_emo_trim = file_get_contents($ac_emo_conf);
-
-    //** Check empty config -- true if file has only BOM or spaces
-    if (filesize($ac_emo_conf) <16 && trim($ac_emo_trim) === false) {
-        $ac_stat = $ac_lang['emo_empty'];
-    } else {
-        //** Link primary array and config
-        $ac_emo_parr = array();
-        $ac_emo_open = fopen($ac_emo_conf, 'r');
-
-        //** Parse list
-        while (!feof($ac_emo_open)) {
-            $ac_emo_line   = fgets($ac_emo_open);
-            $ac_emo_line   = trim($ac_emo_line);
-            $ac_emo_parr[] = $ac_emo_line;
-        }
-
-        fclose($ac_emo_open);
-    }
+//** List themes
+if (isset($_POST['css_sel'])) {
+    $css_line = file($css_conf);
 
     echo "        <article>\n" .
-         "            <h1>" . $ac_lang['emo_table'] ."</h1>\n" .
-         "            <p>" . $ac_lang['emo_table_text'] .
-         " " . $ac_lang['win_close'] . "</p>\n" .
-         '            <form action="#CHAT" id=ac_css_form ' .
-         'method=POST accept-charset="UTF-8">' . "\n" .
-         "                <pre>\n";
+         "            <h2>" . $lang['css_header'] . "</h2>\n" .
+         '            <form action="#CHAT" method=POST ' .
+         'accept-charset="UTF-8">' . "\n" .
+         "                <div>\n" .
+         "                    <select name=css_list>\n";
 
-    //** Print list
-    foreach ($ac_emo_parr as $ac_emo_code) {
-        $ac_emo_line   = explode("|", $ac_emo_code);
-        $ac_emo_sarr[] = $ac_emo_line;
-        $ac_emo_calt   = htmlentities($ac_emo_line[0]);
-        $ac_emo_ckey   = $ac_emo_line[1];
+    //** Parse list and print items
+    foreach ($css_line as $css_item) {
+        $css_item = trim($css_item);
 
-        echo "$ac_emo_calt == <span class=emo>$ac_emo_ckey</span>\n";
+        echo "                        <option " .
+             'value="' . $css_item . '" ' .
+             'title="' . $lang['css_select'] . ' ' .
+             ucwords($css_item) . '">' . ucwords($css_item);
+
+        //** Flag current theme
+        if (isset($_SESSION['theme'])
+            && $css_item === $_SESSION['theme']
+        ) {
+            echo " [x]";
+        }
+
+        echo "</option>\n";
     }
 
-    unset($ac_emo_code);
+    unset($css_item);
 
-    echo "                </pre>\n" .
-         "                <div>\n" . 
-         '                    <input type=submit name=ac_emo_close ' .
-         'value="' . $ac_lang['close'] . '" title="' .
-         $ac_lang['close_title'] . '"/>' . "\n" .
+    //** Function buttons
+    echo "                    </select>\n" .
+         "                    <input type=submit " .
+         'name=css_apply value="' . $lang['apply'] . '" ' .
+         'title="' . $lang['apply_title'] . '"/>' . "\n" .
+         "                    <input type=submit " .
+         'name=css_close value="' . $lang['close'] . '" ' .
+         'title="' . $lang['close_title'] . '"/>' . "\n" .
          "                </div>\n" .
          "            </form>\n" .
          "        </article>\n";
 }
 
-//** Check user name session
-if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
-    echo "        <div id=ac_push>\n";
+//** List emoji table
+if (isset($_POST['emo_codes'])) {
 
-    //** Check existing data file
-    if (file_exists($ac_chat_data)) {
-        include $ac_chat_data;
-    } else {
-        $ac_stat = $ac_lang['log_empty'];
+    //** Link primary array and config
+    $emo_parr = array();
+    $emo_open = fopen($emo_conf, 'r');
+
+    //** Parse list
+    while (!feof($emo_open)) {
+        $emo_line   = fgets($emo_open);
+        $emo_line   = trim($emo_line);
+        $emo_parr[] = $emo_line;
     }
 
-    //** Function buttons
+    fclose($emo_open);
+
+    echo "        <article>\n" .
+         "            <h2>" . $lang['emo_header'] ."</h2>\n" .
+         '            <form action="#CHAT" method=POST ' .
+         'accept-charset="UTF-8">' . "\n" .
+         "                <pre id=emo>\n";
+
+    //** Print list
+    foreach ($emo_parr as $emo_code) {
+        $emo_line   = explode('|', $emo_code);
+        $emo_sarr[] = $emo_line;
+        $emo_calt   = $emo_line[0];
+        $emo_ckey   = $emo_line[1];
+
+        echo "$emo_calt <span class=emo>$emo_ckey</span>\n";
+    }
+
+    unset($emo_code);
+
+    echo "                </pre>\n" .
+         "                <div>\n" .
+         "                    <input type=submit " .
+         'name=emo_close value="' . $lang['close'] . '" ' .
+         'title="' . $lang['close_title'] . '"/>' . "\n" .
+         "                </div>\n" .
+         "            </form>\n" .
+         "        </article>\n";
+}
+
+//** Check name session
+if (isset($_SESSION['name']) && !empty($_SESSION['name'])) {
+    echo "        <div id=push>\n";
+
+    //** Check existing data file
+    if (file_exists($chat_data)) {
+        include $chat_data;
+    } else {
+        $stat = $lang['first'];
+    }
+
+    //** Navigation
     echo "        </div>\n" .
          "        <nav>\n" .
          '            <form action="#CHAT" method=POST ' .
-         'id=ac_chat_form accept-charset="UTF-8">' . "\n" .
-         '                <div id=ac_char>' . $ac_lang['text'] . ' ' .
-         "<small>(" . $ac_max_char . " " . $ac_lang['characters'] .
+         'accept-charset="UTF-8">' . "\n" .
+         "                <div id=char>" . $lang['text'] . " " .
+         "<small>(" . $max_char . " " . $lang['characters'] .
          ")</small></div>\n" .
-         '                <textarea name=ac_text id=ac_text ' .
-         'rows=4 cols=60 maxlength=' . $ac_max_char .
-         ' title="' . $ac_lang['text_title'] . '"></textarea>' . "\n" .
+
+         //** Text
+         "                <textarea name=text id=text " .
+         "rows=3 cols=40 maxlength=$max_char " .
+         'title="' . $lang['text_title'] . '"></textarea>' . "\n" .
          "                <div>\n" .
-         '                    <input type=hidden name=ac_name ' .
-         'value="' . $_SESSION['ac_name'] . '"/>' . "\n" .
-         '                    <input type=submit name=ac_quit ' .
-         'value="' . $ac_lang['quit'] . '" title="' .
-         $ac_lang['quit_title'] . '"/>' . "\n";
 
-    //** Check style user selection
-    if ($ac_css_usr === 1) {
+         //** Name -- hidden
+         "                    <input type=hidden " .
+         'name=name value="' . $_SESSION['name'] . '"/>' . "\n" .
+
+         //** Quit
+         "                    <input type=submit " .
+         'name=quit value="' . $lang['quit'] . '" ' .
+         'title="' . $lang['quit_title'] . '"/>' . "\n" .
+
+         //** Language
+         "                    <input type=submit " .
+         'name=lang value="' . $lang['lang'] . '" ' .
+         'title="' . $lang['lang_title'] . '"/>' . "\n";
+
+    //** Theme
+    if ($css_usr === 1) {
         echo '                    <input type=submit ' .
-             'name=ac_css_sel value="' . $ac_lang['style'] . '" ' .
-             'title="' . $ac_lang['style_title'] . '"/>' . "\n";
+             'name=css_sel value="' . $lang['theme'] . '" ' .
+             'title="' . $lang['theme_title'] . '"/>' . "\n";
     }
 
-    //** Check emoji conversion
-    if ($ac_emo_auto === 1) {
-        echo '                    <input type=submit ' .
-             'name=ac_emo_codes value="' . $ac_lang['emos'] . '" ' .
-             'title="' . $ac_lang['emos_title'] . '"/>' . "\n";
+    //** Emoji
+    if ($emo_auto === 1) {
+        echo "                    <input type=submit " .
+             'name=emo_codes value="' . $lang['emo'] . '" ' .
+             'title="' . $lang['emo_title'] . '"/>' . "\n";
     }
 
-    //** Core navigation
-    echo '                    <input type=submit name=ac_save ' .
-         'value="' . $ac_lang['save'] . '" ' .
-         'title="' . $ac_lang['save_title'] . '"/>' . "\n" .
-         '                    <input type=submit name=ac_push ' .
-         'value="' . $ac_lang['push'] . '" ' .
-         'title="' . $ac_lang['push_title'] . '"/>' . "\n" .
-         '                    <input type=submit name=ac_post ' .
-         'value="' . $ac_lang['post'] . '" ' .
-         'title="' . $ac_lang['post_title'] . '"/>' . "\n" .
+    //** Save
+    echo "                    <input type=submit " .
+         'name=save value="' . $lang['save'] . '" ' .
+         'title="' . $lang['save_title'] . '"/>' . "\n" .
+
+         //** Push
+         "                    <input type=submit " .
+         'name=push value="' . $lang['push'] . '" ' .
+         'title="' . $lang['push_title'] . '"/>' . "\n" .
+
+         //** Post
+         "                    <input type=submit " .
+         'name=post value="' . $lang['post'] . '" ' .
+         'title="' . $lang['post_title'] . '"/>' . "\n" .
+
          "                </div>\n" .
          "            </form>\n" .
-         "            <div id=ac_stat>\n" .
-         "                <div>$ac_stat</div>\n" .
-         "                <noscript>" . $ac_lang['noscript'] .
+         "            <div id=stat>\n" .
+         "                <div>$stat</div>\n" .
+         "                <noscript>" . $lang['noscript'] .
          "</noscript>\n" .
-         "            </div>\n" .
-         "        </nav>\n";
+         "            </div>\n";
 } else {
-    //** Check initial screen
-    if (file_exists($ac_init)) {
-        echo "        <div id=ac_push>\n";
-        include "./" . $ac_init;
+
+    //** Load initial screen
+    if (file_exists($init)) {
+        echo "        <article>\n";
+        include $init;
     }
 
     //** Login
-    echo "        </div>\n" .
+    $stat = $lang['login_info'];
+
+    echo "        </article>\n" .
          "        <nav>\n" .
          '            <form action="#LOGIN" method=POST ' .
-         'id=ac_login_form accept-charset="UTF-8">' . "\n" .
+         'accept-charset="UTF-8">' . "\n" .
          "                <div>\n" .
-         "                    <label for=ac_name>" . $ac_lang['name'] .
-         "</label>\n" .
-         '                    <input name=ac_name id=ac_name ' .
-         'maxlength=16 title="' . $ac_lang['name_title'] . '"/>' . "\n" .
-         '                    <input type=submit name=ac_login ' .
-         'value="' . $ac_lang['login'] . '" title="' .
-         $ac_lang['login_title'] . '"/>' . "\n" .
+         "                    <label for=name>" .
+         $lang['name'] . "</label>\n" .
+         '                    <input name=name id=name ' .
+         'maxlength=16 ' .
+         'title="' . $lang['name_title'] . '"/>' . "\n" .
+         '                    <input type=submit name=login ' .
+         'value="' . $lang['login'] . '" ' .
+         'title="' . $lang['login_title'] . '"/>' . "\n" .
          "                </div>\n" .
          "            </form>\n" .
-         "            <div id=ac_stat>\n" .
-         "                <div>$ac_stat</div>\n" .
-         "                <noscript>" . $ac_lang['noscript'] .
-         "</noscript>\n" .
-         "            </div>\n" .
-         "        </nav>\n";
+         "            <div id=stat>\n" .
+         "                <div>$stat</div>\n" .
+         "                <noscript>" .
+         $lang['noscript'] . "</noscript>\n" .
+         "            </div>\n";
 }
 
 //** Footer
-echo '        <footer><a href="https://github.com/phhpro/atomchat" ' .
-     'title="' . $ac_lang['external'] . '">' .
-     $ac_lang['powered_by'] . " PHP Atom Chat v$ac_make</a></footer>\n" .
-     '        <script src="chat.js"></script>' . "\n";
+echo "            <p id=by>" .
+     '<a href="https://github.com/phhpro/atomchat" ' .
+     'title="' . $lang['get'] . '">' . $lang['by'] .
+     " PHP Atom Chat v$make</a></p>\n" .
+     "        </nav>\n" .
+     '        <script src="chat.js"></script>' . "\n" .
      "    </body>\n" .
      "</html>\n";

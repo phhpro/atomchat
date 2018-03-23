@@ -2,8 +2,8 @@
 /**
  * PHP Version 5 and above
  *
- * Default index
- * May be used for additional access control, maintenance, etc.
+ * Preloader -- may contain custom prerequisites, like access control,
+ *              or serve as a maintenance reminder, etc.
  *
  * @category  PHP_Chat_Scripts
  * @package   PHP_Atom_Chat
@@ -14,5 +14,9 @@
  * @link      https://github.com/phhpro/atomchat
  */
 
-//** Load script
+
+//** Bypass headers already sent warning -- just in case
+ob_start();
+
+//** Load script -- ok to change chat.php to restrict spoofing
 require './chat.php';

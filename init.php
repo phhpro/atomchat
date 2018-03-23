@@ -13,32 +13,12 @@
  * @link      https://github.com/phhpro/atomchat
  */
 ?>
-            <h1>Welcome to <strong>PHP Atom Chat</strong></h1>
+            <h2>About</h2>
+            <p><strong>PHP Atom Chat</strong> is a <strong>free PHP chat script</strong> for low volume sites or individual homepages, e.g. P2P chat.</p>
             <ul>
-                <li><strong>What it is</strong>
-                    <ul>
-                        <li>Self-contained set it and forget it IRC like chat script.</li>
-                        <li>Completely anonymous. No passwords ever.</li>
-                        <li>Themeable and responsive cross-browser design.</li>
-                    </ul>
-                </li>
-            </ul>
-            <ul>
-                <li><strong>What it is <em>not</em></strong>
-                    <ul>
-                        <li>Fancy hyperbole gadget with more bells than whistles.</li>
-                        <li>Resources leeching dependency stricken database voodoo.</li>
-                        <li>Neither a pink jellyfish nor Santa on steroids.</li>
-                    </ul>
-                </li>
-            </ul>
-            <ul>
-                <li><strong>How it works</strong>
-                    <ul>
-                        <li>Enter preferred name and press the <code>Login</code> button.</li>
-                        <li>Names are assigned dynamically. First come, first serve.</li>
-                        <li>Inactive sessions are auto-closed after 30 minutes.</li>
-                        <li>Auto-conversion of emojis without using a single image.</li>
-                    </ul>
-                </li>
+                <li>Usage is completely anonymous.</li>
+                <li>No registration or passwords ever.</li>
+                <li>Auto-conversion of basic emojis.</li>
+                <li>Multi-lingual user interface.</li>
+                <li>No database required.</li>
             </ul>

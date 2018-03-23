@@ -1,11 +1,10 @@
-// Push helper
-var ac_wait = 5000;
-var ac_http = null;
-var ac_init = 0;
-var ac_link, ac_rand, ac_res, ac_div = "";
+// Push helper -- default timeout are 2 seconds (2000 ms)
+var wait = 2000;
+var http = null;
+var init = 0;
 
-// Configure AJAX object
-function acAjax() {
+// AJAX object
+function object() {
     if (window.ActiveXObject) {
         return new ActiveXObject("Microsoft.XMLHTTP");
     } else if (window.XMLHttpRequest) {
@@ -16,38 +15,37 @@ function acAjax() {
     }
 }
 
-// Container state
-function acHttp() {
-    if (ac_http.readyState == 4) {
-        ac_res           = ac_http.responseText;
-        ac_div           = document.getElementById("ac_push");
-        ac_div.innerHTML = ac_res;
-        ac_div.scrollTop = ac_div.scrollHeight;
+// Container status
+function status() {
+    if (http.readyState == 4) {
+        var div       = document.getElementById("push");
+        div.innerHTML = http.responseText;
+//        div.scrollTop = div.scrollHeight;
     }
 }
 
-// Configure timer
-function acTime() {
-    ac_http = acAjax();
-    ac_rand = Math.floor(Math.random()*10000);
+// Timer settings
+function timer() {
+    http = object();
+    var rand = Math.floor(Math.random()*10000);
 
-    if (ac_http != null) {
-        ac_link = "?"+ac_rand;
-        ac_http.open("GET", ac_link, true);
-        ac_http.onreadystatechange = acHttp;
-        ac_http.send(null);
+    if (http != null) {
+        var link = "?"+rand;
+        http.open("GET", link, true);
+        http.onreadystatechange = status;
+        http.send(null);
     }
 }
 
 // Update screen
-function acPush() {
-    acTime();
-    ac_init = setTimeout('acPush()', ac_wait);
+function update() {
+    timer();
+    init = setTimeout('update()', wait);
 }
 
-// Output beep if supported
-function acBeep() {
-    var ac_beep = new Audio("data:audio/wav;base64,"+
+// Beep on new post -- where supported
+function bell() {
+    var beep = new Audio("data:audio/wav;base64,"+
 "//uQRAAAAWMSLwUIYAAsYkXgoQwAEaYLWfkWgAI0wWs/ItAAAGDgYtAgAyN+QWaAAihw"+
 "MWm4G8QQRDiMcCBcH3Cc+CDv/7xA4Tvh9Rz/y8QADBwMWgQAZG/ILNAARQ4GLTcDeIII"+
 "hxGOBAuD7hOfBB3/94gcJ3w+o5/5eIAIAAAVwWgQAVQ2ORaIQwEMAJiDg95G4nQL7mQV"+
@@ -108,9 +106,9 @@ function acBeep() {
 "////////////////VEFHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU291bmRi"+
 "b3kuZGUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"+
 "AAAAMjAwNGh0dHA6Ly93d3cuc291bmRib3kuZGUAAAAAAAAAACU=");
-    ac_beep.play();
+    beep.play();
 }
 
-// Init functions
-acPush();
-acBeep();
+// Init
+update();
+bell();

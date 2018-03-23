@@ -1,21 +1,13 @@
 # PHP Atom Chat
 
-**PHP Atom Chat** is a **free IRC like PHP chat script** with minimal bloat for low volume and personal sites.
+**PHP Atom Chat** is a **free PHP chat script** for low volume sites or individual homepages, e.g. P2P chat.
 
-- **What it is**
-    - Completely anonymous. No passwords ever.
-    - Self-contained set it and forget it.
-    - Themeable responsive cross-browser design.
-
-- **What it is not**
-    - Fancy hyperbole gadget with more bells than whistles.
-    - Resources leeching dependency stricken database voodoo.
-    - Neither a pink jellyfish nor Santa on steroids.
-
-- **How it works**
-    - Enter preferred name and press the **Login** button.
-    - Names are assigned dynamically. First come, first serve.
-    - Inactive sessions are auto-closed after 30 minutes.
-    - Auto-conversion of emojis without using a single image.
+- Usage is completely anonymous.
+- No registration or passwords ever.
+- Auto-conversion of basic emojis.
+- Multi-lingual user interface.
+- No database required.
+- Enter preferred name and press the **Login** button.
+- Random name suffix prevents double logins.
 
 Follow this link to [try the demo](http://phclaus.com/atomchat/)
