@@ -1,8 +1,0 @@
-Edit __config.txt to add or remove themes and make sure it
-has no trailing lines to prevent invalid options.
-
-Each line must match the filename on disk without extension,
-e.g. for mytheme.css the line must read mytheme.
-
-Edit $ac_css_def = "mytheme" if you want to set mytheme as
-the new default.
