@@ -18,41 +18,42 @@ $lang = array();
 
 //** Strings
 $lang['apply']       = "Aplicar";
-$lang['apply_title'] = "Haga clic aquí para aplicar el estilo seleccionado";
+$lang['apply_title'] = "Haga clic aquí para aplicar la seleccion";
 
 $lang['by']          = "Desarrollado por";
 
 $lang['characters']  = "caracteres";
+
 $lang['chat_enter']  = "ingresó al chat";
 $lang['chat_leave']  = "dejó el chat";
+
 $lang['close']       = "Cerrar";
 $lang['close_title'] = "Haga clic aquí para cerrar esta ventana";
-$lang['css_header']  = "Selección de tema";
-$lang['css_missing'] = "¡Falta la definición del estilo!";
-$lang['css_select']  = "Haga clic aquí para seleccionar el estilo:";
 
 $lang['emo']         = "Emoji";
-$lang['emo_header']  = "Tabla de conversión Emoji";
-$lang['emo_title']   = "Haga clic aquí para ver los códigos Emoji";
 
 $lang['first']       = "Parece que el primer mensaje es todo suja.";
 
 $lang['get']         = "Haga clic aquí para obtener una copia gratuita de este script";
 
+$lang['info']        = "Info";
+
 $lang['lang']        = "Idioma";
-$lang['lang_header'] = "Selector De Idioma";
 $lang['lang_title']  = "Haga clic aquí para seleccionar un idioma";
+
 $lang['login']       = "Iniciar";
-$lang['login_info']  = "Ingrese el nombre preferido y presione Iniciar.";
 $lang['login_title'] = "Haga clic aquí para iniciar sesión";
 
 $lang['name']        = "Nombre";
 $lang['name_title']  = "Escribe aquí para ingresar su nombre";
+$lang['name_info']   = "Ingrese el nombre preferido y presione Iniciar.";
+
 $lang['nolang']      = "¡Falta el archivo de idioma!";
 $lang['noscript']    = "¡Falta JavaScript! Algunas funciones no disponibles.";
 
 $lang['post']        = "Publicar";
 $lang['post_title']  = "Haga clic aquí para publicar su mensaje";
+
 $lang['push']        = "Actualizar";
 $lang['push_title']  = "Haga clic aquí para actualizar manualmente la sesión";
 
@@ -61,8 +62,13 @@ $lang['quit_title']  = "Haga clic aquí para salir de la sesión";
 
 $lang['save']        = "Guardar";
 $lang['save_title']  = "Haga clic aquí para guardar la sesión";
+
+$lang['set']         = "Ajustes";
+$lang['set_title']   = "Haga clic aquí para cambiar la configuración";
+
 $lang['theme']       = "Tema";
-$lang['theme_title'] = "Haga clic aquí para cambiar el tema";
+$lang['theme_title'] = "Haga clic aquí para seleccionar un tema";
+$lang['theme_miss']  = "¡Falta la definición del tema!";
 
 $lang['text']        = "Texto";
 $lang['text_title']  = "Escribe aquí para ingresar su mensaje";

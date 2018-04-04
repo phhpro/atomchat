@@ -14,17 +14,17 @@
  */
 
 
-echo "                    <input type=submit name=de " .
-     'value="Deutsch" ' .
-     'title="Klicken Sie hier um Deutsch zu wählen"/>' . "\n" .
+echo '                        <option value=de ' .
+     'title="Klicken Sie hier um Deutsch zu wählen">' .
+     'Deutsch</option>' . "\n" .
 
-     "                    <input type=submit name=en " .
-     'value="English" ' .
-     'title="Click here to select English"/>' . "\n" .
+     '                        <option value=en ' .
+     'title="Click here to select English">' .
+     'English</option>' . "\n" .
 
-     "                    <input type=submit name=es " .
-     'value="Español" ' .
-     'title="Haga clic aquí para seleccionar al Español"/>' . "\n" .
+     '                        <option value=es ' .
+     'title="Haga click aquí para seleccionar al Español">' .
+     'Español</option>' . "\n" .
 
-     //** Keep this line intact!
+     //** Keep this line
      "";
