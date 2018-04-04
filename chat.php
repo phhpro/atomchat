@@ -54,7 +54,7 @@ $image    = '<img src=favicon.png width=16 height=16 alt=""/>';
 /**
  * Maximum characters allowed per post
  */
-$max_char = 256;
+$max_char = 1024;
 
 /**
  * Default theme
@@ -79,7 +79,7 @@ $emo_auto = 1;
 
 
 //** Script version
-$make     = "20180323";
+$make     = "20180404";
 
 //** Check protocol
 if (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS']) {
@@ -121,26 +121,17 @@ if ($_SESSION['test'] !== 1) {
 }
 
 //** Check language selection
-if (isset($_POST['de'])) {
-    $_SESSION['lang'] = "de";
+if (isset($_POST['lang_apply'])) {
+    $_SESSION['lang'] = $_POST['lang_id'];    
 }
 
-if (isset($_POST['en'])) {
-    $_SESSION['lang'] = "en";
-}
-
-if (isset($_POST['es'])) {
-    $_SESSION['lang'] = "es";
-}
-
-//** Default language session
+//** Fallback default language
 if (!isset($_SESSION['lang'])) {
     $_SESSION['lang'] = $lang_def;
 }
 
-$lang_id = $_SESSION['lang'];
-
-//** Link language config and data
+//** Link language ID, config, and data
+$lang_id   = $_SESSION['lang'];
 $lang_conf = "./lang/__config.php";
 $lang_data = "./lang/" . $lang_id . ".php";
 
@@ -203,7 +194,7 @@ if (
     exit;
 }
 
-//** Link default language ID and load config
+//** Link default language and load config
 $lang_mime = $lang_def;
 require $lang_data;
 
@@ -221,7 +212,7 @@ if (file_exists($lang_user)) {
 
 //** Check theme -- renders plain if missing
 if (!file_exists("css/" . $css_def . ".css")) {
-    $stat = $lang['css_missing'];
+    $stat = $lang['theme_miss'];
 }
 
 //** Login
@@ -361,7 +352,7 @@ if (isset($_POST['post'])) {
 
 //** Link selected theme
 if (isset($_POST['css_apply'])) {
-    $css_conf = htmlentities($_POST['css_list'], ENT_QUOTES, "UTF-8");
+    $css_conf = htmlentities($_POST['css_id'], ENT_QUOTES, "UTF-8");
 
     if ($css_conf !== "") {
         $_SESSION['theme'] = $css_conf;
@@ -407,105 +398,127 @@ echo "<!DOCTYPE html>\n" .
      "            <h1>$image $title</h1>\n" .
      "        </header>\n";
 
-//** List languages
-if (isset($_POST['lang'])) {
+//** Settings
+if (isset($_POST['settings'])) {
     echo "        <article>\n" .
-         "            <h2>" . $lang['lang_header'] . "</h2>\n" .
+         "            <h2>" . $lang['set'] . "</h2>\n" .
          '            <form action="#CHAT" method=POST ' .
          'accept-charset="UTF-8">' . "\n" .
-         "                <div>\n";
+
+    //** Language
+         "                <div>\n" .
+         "                    <p><strong>" . $lang['lang'] .
+         "</strong></p>\n" .
+         "                    <select name=lang_id " .
+         'title="' . $lang['lang_title']. '">' . "\n";
 
     include $lang_conf;
 
-    echo "                </div>\n" .
-         "            </form>\n" .
-         "        </article>\n";
-}
-
-//** List themes
-if (isset($_POST['css_sel'])) {
-    $css_line = file($css_conf);
-
-    echo "        <article>\n" .
-         "            <h2>" . $lang['css_header'] . "</h2>\n" .
-         '            <form action="#CHAT" method=POST ' .
-         'accept-charset="UTF-8">' . "\n" .
-         "                <div>\n" .
-         "                    <select name=css_list>\n";
-
-    //** Parse list and print items
-    foreach ($css_line as $css_item) {
-        $css_item = trim($css_item);
-
-        echo "                        <option " .
-             'value="' . $css_item . '" ' .
-             'title="' . $lang['css_select'] . ' ' .
-             ucwords($css_item) . '">' . ucwords($css_item);
-
-        //** Flag current theme
-        if (isset($_SESSION['theme'])
-            && $css_item === $_SESSION['theme']
-        ) {
-            echo " [x]";
-        }
-
-        echo "</option>\n";
-    }
-
-    unset($css_item);
-
-    //** Function buttons
     echo "                    </select>\n" .
          "                    <input type=submit " .
-         'name=css_apply value="' . $lang['apply'] . '" ' .
+         'name=lang_apply value="' . $lang['apply'] . '" ' .
          'title="' . $lang['apply_title'] . '"/>' . "\n" .
-         "                    <input type=submit " .
-         'name=css_close value="' . $lang['close'] . '" ' .
-         'title="' . $lang['close_title'] . '"/>' . "\n" .
-         "                </div>\n" .
-         "            </form>\n" .
-         "        </article>\n";
-}
+         "                </div>\n";
 
-//** List emoji table
-if (isset($_POST['emo_codes'])) {
+    //** Theme
+    if ($css_usr === 1) {
+        echo "                <div>\n" .
+             "                    <p><strong>" . $lang['theme'] .
+             "</strong></p>\n" .
+             "                    <select name=css_id " .
+             'title="' . $lang['theme_title'] . '">' . "\n";
 
-    //** Link primary array and config
-    $emo_parr = array();
-    $emo_open = fopen($emo_conf, 'r');
+        //** Link and parse theme folder
+        if ($css_fold = opendir('./css/')) {
 
-    //** Parse list
-    while (!feof($emo_open)) {
-        $emo_line   = fgets($emo_open);
-        $emo_line   = trim($emo_line);
-        $emo_parr[] = $emo_line;
+            while (false !== ($css_list = readdir($css_fold))) {
+
+                //** Exclude filters
+                if ($css_list !== "."
+                    && $css_list !== ".."
+                ) {
+                    // Strip extension
+                    $css_list = str_replace(".css", "", $css_list);
+
+                    //** Print list
+                    echo "                        <option " .
+                         'value="' . $css_list . '" ' .
+                         'title="' . $lang['theme_title'] . ' ' .
+                         ucwords($css_list) . '">' . ucwords($css_list);
+
+                    //** Flag current
+                    if (isset($_SESSION['theme'])
+                        && $css_item === $_SESSION['theme']
+                    ) {
+                        echo " [x]";
+                    }
+
+                    echo "</option>\n";
+                }
+            }
+
+            closedir($css_dir);
+        }
+
+        echo "                    </select>\n" .
+             "                    <input type=submit " .
+             'name=css_apply value="' . $lang['apply'] . '" ' .
+             'title="' . $lang['apply_title'] . '"/>' . "\n" .
+             "                </div>\n";
     }
 
-    fclose($emo_open);
+    //** Emoji
+    if ($emo_auto === 1) {
 
-    echo "        <article>\n" .
-         "            <h2>" . $lang['emo_header'] ."</h2>\n" .
-         '            <form action="#CHAT" method=POST ' .
-         'accept-charset="UTF-8">' . "\n" .
-         "                <pre id=emo>\n";
+        //** Link primary array and config
+        $emo_parr = array();
+        $emo_open = fopen($emo_conf, 'r');
 
-    //** Print list
-    foreach ($emo_parr as $emo_code) {
-        $emo_line   = explode('|', $emo_code);
-        $emo_sarr[] = $emo_line;
-        $emo_calt   = $emo_line[0];
-        $emo_ckey   = $emo_line[1];
+        //** Parse list
+        while (!feof($emo_open)) {
+            $emo_line   = fgets($emo_open);
+            $emo_line   = trim($emo_line);
+            $emo_parr[] = $emo_line;
+        }
 
-        echo "$emo_calt <span class=emo>$emo_ckey</span>\n";
+        fclose($emo_open);
+
+        echo "                <p><strong>" . $lang['emo'] .
+             "</strong></p>\n" .
+             "                <pre id=emo>\n";
+
+        //** Print list
+        foreach ($emo_parr as $emo_code) {
+ 
+            if ($emo_code !== "") { 
+                $emo_line   = explode('|', $emo_code);
+                $emo_sarr[] = $emo_line;
+                $emo_calt   = $emo_line[0];
+                $emo_ckey   = $emo_line[1];
+
+                echo "$emo_calt <span class=emo>$emo_ckey</span>\n";
+            }
+        }
+
+        unset($emo_code);
+
+        echo "                </pre>\n";
     }
 
-    unset($emo_code);
+    //** Info
+    echo "               <p><strong>" . $lang['info'] .
+         "</strong></p>\n" .
+         "               <pre>\n";
 
-    echo "                </pre>\n" .
-         "                <div>\n" .
+    include './HOWTO';
+
+    echo "               </pre>\n";
+
+    //** Close settings
+    echo "                <div id=close>\n" .
          "                    <input type=submit " .
-         'name=emo_close value="' . $lang['close'] . '" ' .
-         'title="' . $lang['close_title'] . '"/>' . "\n" .
+             'value="' . $lang['close'] . '" ' .
+             'title="' . $lang['close_title'] . '"/>' . "\n" .
          "                </div>\n" .
          "            </form>\n" .
          "        </article>\n";
@@ -546,27 +559,13 @@ if (isset($_SESSION['name']) && !empty($_SESSION['name'])) {
          'name=quit value="' . $lang['quit'] . '" ' .
          'title="' . $lang['quit_title'] . '"/>' . "\n" .
 
-         //** Language
+         //** Settings
          "                    <input type=submit " .
-         'name=lang value="' . $lang['lang'] . '" ' .
-         'title="' . $lang['lang_title'] . '"/>' . "\n";
+         'name=settings value="' . $lang['set'] . '" ' .
+         'title="' . $lang['set_title'] . '"/>' . "\n" .
 
-    //** Theme
-    if ($css_usr === 1) {
-        echo '                    <input type=submit ' .
-             'name=css_sel value="' . $lang['theme'] . '" ' .
-             'title="' . $lang['theme_title'] . '"/>' . "\n";
-    }
-
-    //** Emoji
-    if ($emo_auto === 1) {
-        echo "                    <input type=submit " .
-             'name=emo_codes value="' . $lang['emo'] . '" ' .
-             'title="' . $lang['emo_title'] . '"/>' . "\n";
-    }
-
-    //** Save
-    echo "                    <input type=submit " .
+         //** Save
+         "                    <input type=submit " .
          'name=save value="' . $lang['save'] . '" ' .
          'title="' . $lang['save_title'] . '"/>' . "\n" .
 
@@ -596,7 +595,7 @@ if (isset($_SESSION['name']) && !empty($_SESSION['name'])) {
     }
 
     //** Login
-    $stat = $lang['login_info'];
+    $stat = $lang['name_info'];
 
     echo "        </article>\n" .
          "        <nav>\n" .
