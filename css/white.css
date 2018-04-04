@@ -49,7 +49,7 @@ article {
     overflow: auto;
     z-index: 1000;
     margin: 0 8px;
-    padding: 8px;
+    padding: 4px;
     font-size: 95%;
 }
 
@@ -195,6 +195,10 @@ a:hover {
     color: #666;
 }
 
+pre {
+    font-size: 115%;
+}
+
 #emo {
     font-size: 135%;
     font-weight: bold;
@@ -204,6 +208,12 @@ a:hover {
     font-size: 135%;
 }
 
+#close {
+    position: fixed;
+    top: 24px;
+    right: 16px;
+}
+
 @media screen and (max-width: 700px) {
     header {
         bottom: 40px;
@@ -211,6 +221,10 @@ a:hover {
 
     #push, article {
         top: 40px;
+    }
+
+    #close {
+        top: 32px;
     }
 }
 
@@ -238,5 +252,9 @@ a:hover {
 
     #push, article {
         top: 50px;
+    }
+
+    #close {
+        top: 40px;
     }
 }
