@@ -32,7 +32,7 @@ h1 img {
     position: fixed;
     top: 35px;
     right: 12px;
-    bottom: 240px;
+    bottom: 210px;
     left: 12px;
     overflow: auto;
     font-size: 95%;
@@ -44,7 +44,7 @@ article {
     position: fixed;
     top: 35px;
     right: 4px;
-    bottom: 240px;
+    bottom: 210px;
     left: 12px;
     overflow: auto;
     z-index: 1000;
@@ -63,8 +63,6 @@ nav {
     right: 0;
     bottom: 0;
     left: 0;
-    max-height: 260px;
-    overflow: auto;
 }
 
 #stat {
@@ -189,10 +187,6 @@ a {
 a:hover {
     background-color: transparent;
     color: #000;
-}
-
-pre {
-    font-size: 115%;
 }
 
 #emo {
