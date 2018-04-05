@@ -11,10 +11,20 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GPLv3
  * @version   GIT: Latest
  * @link      https://github.com/phhpro/atomchat
+ *
+ *
+ * DO NOT CHANGE THE LAYOUT OF THIS FILE !!!
  */
+
 
 //** Init array
 $lang = array();
+
+
+//** Name and text
+$lang['__name__']    = "Deutsch";
+$lang['__text__']    = "Klicken Sie hier um Deutsch zu wählen";
+
 
 //** Strings
 $lang['apply']       = "Anwenden";
@@ -39,7 +49,7 @@ $lang['get']         = "Klicken Sie hier um eine kostenlose Kopie dieses Skripte
 $lang['info']        = "Info";
 
 $lang['lang']        = "Sprache";
-$lang['lang_title']  = "Klicken Sie hier um eine Sprache zu wählen";
+$lang['lang_title']  = "Klicken Sie hier um Sprache zu wählen";
 
 $lang['login']       = "Anmelden";
 $lang['login_title'] = "Klicken Sie hier um sich anzumelden";
@@ -67,7 +77,7 @@ $lang['set']         = "Einstellungen";
 $lang['set_title']   = "Klicken Sie hier um Einstellungen zu ändern";
 
 $lang['theme']       = "Thema";
-$lang['theme_title'] = "Klicken Sie hier um ein Thema zu wählen";
+$lang['theme_title'] = "Klicken Sie hier um Thema zu wählen";
 $lang['theme_miss']  = "Fehlende Thema Definition!";
 
 $lang['text']        = "Text";
