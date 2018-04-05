@@ -42,33 +42,33 @@
 /**
  * Script folder
  */
-$fold     = "atomchat";
+$fold       = "atomchat";
 
 /**
  * Chat title
- * Chat image -- $image = "" if not needed
+ * Chat image -- $image = ""; if not needed -- recommended 16x16 pixel
  */
-$title    = "PHP Atom Chat";
-$image    = '<img src=favicon.png width=16 height=16 alt=""/>';
+$title      = "PHP Atom Chat";
+$image      = '<img src=favicon.png width=16 height=16 alt=""/>';
 
 /**
  * Maximum characters allowed per post
  */
-$max_char = 1024;
+$max_char   = 1024;
 
 /**
  * Default theme
  * User theme selection
  */
-$css_def  = "grey";
-$css_usr  = 1;
+$css_def    = "grey";
+$css_usr    = 1;
 
 /**
  * Default language
  * Convert emojis
  */
-$lang_def = "en";
-$emo_auto = 1;
+$lang_def   = "en";
+$emo_auto   = 1;
 
 
 /**
@@ -79,9 +79,9 @@ $emo_auto = 1;
 
 
 //** Script version
-$make     = "20180404";
+$make       = "20180405";
 
-//** Check protocol
+//** Link protocol
 if (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS']) {
     $prot = "s";
 } else {
@@ -89,22 +89,19 @@ if (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS']) {
 }
 
 //** Build URL reference
-$host     = "http" . $prot . "://" . $_SERVER['HTTP_HOST'] .
-            "/" . $fold . "/";
+$host       = "http" . $prot . "://" . $_SERVER['HTTP_HOST'] .
+              "/" . $fold . "/";
 
-//** Initial screen and status
-$init      = "./init.php";
-$stat      = "";
-
-//** Link logfile and themes config
-$chat_data = "log/" . date('Y-m-d') . ".html";
-$css_conf  = "css/__config.txt";
+//** Logfile, initial screen, and status
+$chat_data  = "log/" . date('Y-m-d') . ".html";
+$init       = "./init.php";
+$stat       = "";
 
 //** Link emoji config, arrays, and code
-$emo_conf  = "emoji.txt";
-$emo_parr  = array();
-$emo_sarr  = array();
-$emo_code  = "";
+$emo_conf   = "emoji.txt";
+$emo_parr   = array();
+$emo_sarr   = array();
+$emo_code   = "";
 
 //** Init session
 session_start();
@@ -122,7 +119,8 @@ if ($_SESSION['test'] !== 1) {
 
 //** Check language selection
 if (isset($_POST['lang_apply'])) {
-    $_SESSION['lang'] = $_POST['lang_id'];    
+    $_SESSION['lang']
+        = htmlentities($_POST['lang_id'], ENT_QUOTES, "UTF-8");
 }
 
 //** Fallback default language
@@ -130,9 +128,8 @@ if (!isset($_SESSION['lang'])) {
     $_SESSION['lang'] = $lang_def;
 }
 
-//** Link language ID, config, and data
+//** Link language ID and data
 $lang_id   = $_SESSION['lang'];
-$lang_conf = "./lang/__config.php";
 $lang_data = "./lang/" . $lang_id . ".php";
 
 //** Check log folder
@@ -151,26 +148,11 @@ if (!is_dir('lang')) {
 }
 
 //** Check if file exists and is valid
-if (
-    file_exists($lang_data)
-    || file_exists($lang_conf)
-    || file_exists($css_conf)
-    || $emo_auto === 1
-) {
+if (file_exists($lang_data) || $emo_auto === 1) {
 
     if (file_exists($lang_data)) {
         $file_data = $lang_data;
         $file_text = "language file";
-    }
-
-    if (file_exists($lang_conf)) {
-        $file_data = $lang_conf;
-        $file_text = "language configuration";
-    }
-
-    if (file_exists($css_conf)) {
-        $file_data = $css_conf;
-        $file_text = "theme configuration";
     }
 
     if ($emo_auto === 1) {
@@ -268,7 +250,6 @@ if (isset($_POST['quit'])) {
     $text .= file_get_contents($chat_data);
 
     file_put_contents($chat_data, $text);
-
     unset($_SESSION['name']);
     header('Location: #LOGOUT');
     exit;
@@ -314,7 +295,7 @@ if (isset($_POST['post'])) {
                 $emo_ckey   = $emo_line[1];
 
                 //** Convert emoji
-                if (strpos($text, $emo_calt) !== false) {
+                if (stripos($text, $emo_calt) !== false) {
                     $text = trim(
                         str_replace(
                             $emo_calt, "<span class=emo>" .
@@ -338,9 +319,7 @@ if (isset($_POST['post'])) {
                  "</div>\n" .
                  "                <div class=item_text>$text</div>\n" .
                  "            </div>\n";
-
         $text .= file_get_contents($chat_data);
-
         file_put_contents($chat_data, $text);
         header('Location: #POST');
         exit;
@@ -352,10 +331,10 @@ if (isset($_POST['post'])) {
 
 //** Link selected theme
 if (isset($_POST['css_apply'])) {
-    $css_conf = htmlentities($_POST['css_id'], ENT_QUOTES, "UTF-8");
+    $css_id = htmlentities($_POST['css_id'], ENT_QUOTES, "UTF-8");
 
-    if ($css_conf !== "") {
-        $_SESSION['theme'] = $css_conf;
+    if ($css_id !== "") {
+        $_SESSION['theme'] = $css_id;
     }
 }
 
@@ -412,11 +391,53 @@ if (isset($_POST['settings'])) {
          "                    <select name=lang_id " .
          'title="' . $lang['lang_title']. '">' . "\n";
 
-    include $lang_conf;
+        //** Link and parse language folder
+        if ($lang_fold = opendir('./lang/')) {
+
+            while (false !== ($lang_list = readdir($lang_fold))) {
+
+                //** Exclude filters
+                if ($lang_list !== "."
+                    && $lang_list !== ".."
+                ) {
+                    //** Link item
+                    $lang_item = "./lang/$lang_list";
+                    $lang_file = file_get_contents($lang_item);
+                    $lang_line = file($lang_item);
+
+                    //** Link and trim name
+                    $lang_name = $lang_line[24];
+                    $lang_name = str_replace(
+                        "\$lang['__name__']    = \"", "", $lang_name
+                    );
+                    $lang_name = str_replace("\";\n", "", $lang_name);
+
+                    //** Link and trim text
+                    $lang_text = $lang_line[25];
+                    $lang_text = str_replace(
+                        "\$lang['__text__']    = \"", "", $lang_text
+                    );
+                    $lang_text = str_replace("\";\n", "", $lang_text);
+
+                    //** Strip extension
+                    $lang_list = str_replace(".php", "", $lang_list);
+
+                    //** List items
+                    echo "                        <option " .
+                         'value="' . $lang_list . '" ' .
+                         'title="' . $lang_text . '">' .
+                         $lang_name . "</option>\n";
+                }
+            }
+
+            //** Close folder and reset current language
+            closedir($lang_dir);
+            $_SESSION['lang'] = $lang_live;
+        }
 
     echo "                    </select>\n" .
          "                    <input type=submit " .
-         'name=lang_apply value="' . $lang['apply'] . '" ' .
+         'name=lang_apply value="&#x2611; ' . $lang['apply'] . '" ' .
          'title="' . $lang['apply_title'] . '"/>' . "\n" .
          "                </div>\n";
 
@@ -440,16 +461,14 @@ if (isset($_POST['settings'])) {
                     // Strip extension
                     $css_list = str_replace(".css", "", $css_list);
 
-                    //** Print list
+                    //** List items
                     echo "                        <option " .
                          'value="' . $css_list . '" ' .
                          'title="' . $lang['theme_title'] . ' ' .
                          ucwords($css_list) . '">' . ucwords($css_list);
 
                     //** Flag current
-                    if (isset($_SESSION['theme'])
-                        && $css_item === $_SESSION['theme']
-                    ) {
+                    if ($css_list === $_SESSION['theme']) {
                         echo " [x]";
                     }
 
@@ -462,7 +481,7 @@ if (isset($_POST['settings'])) {
 
         echo "                    </select>\n" .
              "                    <input type=submit " .
-             'name=css_apply value="' . $lang['apply'] . '" ' .
+             'name=css_apply value="&#x2611; ' . $lang['apply'] . '" ' .
              'title="' . $lang['apply_title'] . '"/>' . "\n" .
              "                </div>\n";
     }
@@ -487,7 +506,7 @@ if (isset($_POST['settings'])) {
              "</strong></p>\n" .
              "                <pre id=emo>\n";
 
-        //** Print list
+        //** List items
         foreach ($emo_parr as $emo_code) {
  
             if ($emo_code !== "") { 
@@ -505,19 +524,10 @@ if (isset($_POST['settings'])) {
         echo "                </pre>\n";
     }
 
-    //** Info
-    echo "               <p><strong>" . $lang['info'] .
-         "</strong></p>\n" .
-         "               <pre>\n";
-
-    include './HOWTO';
-
-    echo "               </pre>\n";
-
     //** Close settings
     echo "                <div id=close>\n" .
          "                    <input type=submit " .
-             'value="' . $lang['close'] . '" ' .
+             'value="&#x2612; ' . $lang['close'] . '" ' .
              'title="' . $lang['close_title'] . '"/>' . "\n" .
          "                </div>\n" .
          "            </form>\n" .
@@ -556,31 +566,33 @@ if (isset($_SESSION['name']) && !empty($_SESSION['name'])) {
 
          //** Quit
          "                    <input type=submit " .
-         'name=quit value="' . $lang['quit'] . '" ' .
+         'name=quit value="&#x2612; ' . $lang['quit'] . '" ' .
          'title="' . $lang['quit_title'] . '"/>' . "\n" .
 
          //** Settings
          "                    <input type=submit " .
-         'name=settings value="' . $lang['set'] . '" ' .
+         'name=settings value="&#x2699; ' . $lang['set'] . '" ' .
          'title="' . $lang['set_title'] . '"/>' . "\n" .
 
          //** Save
          "                    <input type=submit " .
-         'name=save value="' . $lang['save'] . '" ' .
+         'name=save value="&#x1F4BE; ' . $lang['save'] . '" ' .
          'title="' . $lang['save_title'] . '"/>' . "\n" .
 
          //** Push
          "                    <input type=submit " .
-         'name=push value="' . $lang['push'] . '" ' .
+         'name=push value="&#x2610; ' . $lang['push'] . '" ' .
          'title="' . $lang['push_title'] . '"/>' . "\n" .
 
          //** Post
          "                    <input type=submit " .
-         'name=post value="' . $lang['post'] . '" ' .
+         'name=post value="&#x2611; ' . $lang['post'] . '" ' .
          'title="' . $lang['post_title'] . '"/>' . "\n" .
 
          "                </div>\n" .
          "            </form>\n" .
+
+         //** Status
          "            <div id=stat>\n" .
          "                <div>$stat</div>\n" .
          "                <noscript>" . $lang['noscript'] .

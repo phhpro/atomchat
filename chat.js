@@ -1,10 +1,36 @@
-// Push helper -- default timeout are 2 seconds (2000 ms)
-var wait = 2000;
-var http = null;
-var init = 0;
+/*
+ * Javascript push helper
+ *
+ * @category  PHP_Chat_Scripts
+ * @package   PHP_Atom_Chat
+ * @author    P H Claus <phhpro@gmail.com>
+ * @copyright 2015 - 2018 P H Claus
+ * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GPLv3
+ * @version   GIT: Latest
+ * @link      https://github.com/phhpro/atomchat
+ *
+ *
+ * HELP WANTED
+ *
+ * The AJAX push thing works OK, but is
+ *
+ * a) neither pretty, nor
+ * b) as effective as it could be.
+ *
+ * Also needs fixing to prevent double-render
+ * when viewed without styles.
+ */
 
-// AJAX object
+
+// Refresh every n seconds -- default 2 = 2000 ms
+var wait = 2000;
+
+// Init object
+var http = null;
+
+// Link object
 function object() {
+
     if (window.ActiveXObject) {
         return new ActiveXObject("Microsoft.XMLHTTP");
     } else if (window.XMLHttpRequest) {
@@ -15,35 +41,32 @@ function object() {
     }
 }
 
-// Container status
+// Status
 function status() {
+
     if (http.readyState == 4) {
-        var div       = document.getElementById("push");
-        div.innerHTML = http.responseText;
-//        div.scrollTop = div.scrollHeight;
+        document.getElementById("push").innerHTML = http.responseText;
     }
 }
 
-// Timer settings
+// Timer
 function timer() {
     http = object();
-    var rand = Math.floor(Math.random()*10000);
 
     if (http != null) {
-        var link = "?"+rand;
-        http.open("GET", link, true);
+        http.open("POST", "?"+Math.floor(Math.random()*10000), true);
         http.onreadystatechange = status;
         http.send(null);
     }
 }
 
-// Update screen
+// Update
 function update() {
     timer();
-    init = setTimeout('update()', wait);
+    setTimeout('update()', wait);
 }
 
-// Beep on new post -- where supported
+// Beep
 function bell() {
     var beep = new Audio("data:audio/wav;base64,"+
 "//uQRAAAAWMSLwUIYAAsYkXgoQwAEaYLWfkWgAI0wWs/ItAAAGDgYtAgAyN+QWaAAihw"+
