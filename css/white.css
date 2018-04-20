@@ -26,31 +26,28 @@ h1 img {
     vertical-align: top;
 }
 
-#push {
+#push, article {
     background-color: #fff;
     color: #000;
     position: fixed;
     top: 35px;
     right: 12px;
-    bottom: 210px;
+    bottom: 200px;
     left: 12px;
     overflow: auto;
+    margin: 0 8px;
+    padding: 8px;
     font-size: 95%;
+    border: 1px solid #ccc;
+    z-index: 100;
 }
 
 article {
-    background-color: #fff;
-    color: #000;
-    position: fixed;
-    top: 35px;
-    right: 4px;
-    bottom: 210px;
-    left: 12px;
-    overflow: auto;
+    position: relative;
+    top: 27px;
+    right: 6px;
+    left: 4px;
     z-index: 1000;
-    margin: 0 8px;
-    padding: 4px;
-    font-size: 95%;
 }
 
 nav {
@@ -63,6 +60,7 @@ nav {
     right: 0;
     bottom: 0;
     left: 0;
+    z-index: 100;
 }
 
 #stat {
@@ -107,10 +105,6 @@ input[type=submit] {
 
 input[type=submit]:hover {
     transform: scale(0.9);
-}
-
-#lang input[type=submit] {
-    margin: 0;
 }
 
 textarea {
@@ -204,51 +198,24 @@ a:hover {
 
 #close {
     position: fixed;
-    top: 24px;
-    right: 16px;
+    top: 28px;
+    right: 6px;
+}
+
+@media screen and (max-width: 900px) {
+    textarea {
+        width: 94%;
+    }
 }
 
 @media screen and (max-width: 700px) {
-    header {
-        bottom: 40px;
-    }
-
-    #push, article {
-        top: 40px;
-    }
-
-    #close {
-        top: 32px;
+    textarea {
+        width: 92%;
     }
 }
 
-@media screen and (max-width: 600px) {
-    #stat {
-        margin-bottom: 24px;
-        padding-bottom: 24px;
-    }
-}
-
-@media screen and (max-width: 400px) {
-    header {
-        bottom: 45px;
-    }
-
-    #push, article {
-        top: 45px;
-    }
-}
-
-@media screen and (max-width: 300px) {
-    header {
-        bottom: 50px;
-    }
-
-    #push, article {
-        top: 50px;
-    }
-
-    #close {
-        top: 40px;
+@media screen and (max-width: 500px) {
+    textarea {
+        width: 90%;
     }
 }
