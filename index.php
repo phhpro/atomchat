@@ -2,8 +2,8 @@
 /**
  * PHP Version 5 and above
  *
- * Preloader -- may contain custom prerequisites, like access control,
- *              or serve as a maintenance reminder, etc.
+ * Preloader -- may contain custom prerequisites
+ *              access control, maintenance lay-over, etc.
  *
  * @category  PHP_Chat_Scripts
  * @package   PHP_Atom_Chat
@@ -15,8 +15,8 @@
  */
 
 
-//** Bypass headers already sent warning -- just in case
+//** Required to bypass "Headers already sent" warning after posting
 ob_start();
 
-//** Load script -- ok to change chat.php to restrict spoofing
+//** Load script
 require './chat.php';

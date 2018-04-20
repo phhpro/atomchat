@@ -12,13 +12,8 @@
  *
  * HELP WANTED
  *
- * The AJAX push thing works OK, but is
- *
- * a) neither pretty, nor
- * b) as effective as it could be.
- *
- * Also needs fixing to prevent double-render
- * when viewed without styles.
+ * AJAX push works OK but is neither pretty nor overly effective.
+ * Also needs fixing to prevent double-render without styles.
  */
 
 

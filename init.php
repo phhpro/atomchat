@@ -16,10 +16,11 @@
             <h2>About</h2>
             <p><strong>PHP Atom Chat</strong> is a <strong>free PHP chat script</strong> for low volume sites or individual homepages, e.g. P2P chat.</p>
             <ul>
-                <li>Literally zero config. Works OOTB.</li>
+                <li>Works OOTB.</li>
                 <li>Completely anonymous.</li>
                 <li>No registration or passwords ever.</li>
-                <li>Auto-conversion of basic emojis.</li>
-                <li>Multi-lingual user interface.</li>
+                <li>Emoji auto-conversion.</li>
+                <li>User content file uploads.</li>
+                <li>Multi-lingual.</li>
                 <li>No database required.</li>
             </ul>

@@ -1,0 +1,12 @@
+Make a copy of en.php in the lang folder and save it as xx.php,
+where xx represents the language code identifier, e.g. fr for
+French, it for Italian, etc.
+
+Visit https://www.loc.gov/standards/iso639-2/php/code_list.php
+to lookup your language code ID if you don't already know it.
+
+Edit xx.php and mail a copy to @author given in en.php.
+
+Subject: Lang_XX_PHP_Atomchat
+Body   : @author Your Name yourmail@server.com
+Attach : xx.php
