@@ -31,6 +31,7 @@ $lang['apply']       = "Apply";
 $lang['apply_title'] = "Click here to apply the selection";
 
 $lang['by']          = "Powered by";
+$lang['bytes']       = "bytes";
 
 $lang['characters']  = "characters";
 
@@ -42,17 +43,29 @@ $lang['close_title'] = "Click here to close this window";
 
 $lang['emo']         = "Emoji";
 
+$lang['fail']        = "Upload failed:";
+$lang['fail_exist']  = "File already exists!";
+$lang['fail_img']    = "Invalid image!";
+$lang['fail_size']   = "File too large!";
+$lang['fail_type']   = "Invalid or missing type!";
+
 $lang['first']       = "It would seem the first entry is all yours.";
 
 $lang['get']         = "Click here to get a free copy of this script";
 
 $lang['info']        = "Info";
 
+$lang['link_img']    = "Click here to open the original image";
+$lang['link_doc']    = "Click here to open the file";
+
 $lang['lang']        = "Language";
 $lang['lang_title']  = "Click here to select language";
 
 $lang['login']       = "Login";
 $lang['login_title'] = "Click here to login";
+
+$lang['max']         = "Max";
+$lang['max_size']    = "Maximum filesize:";
 
 $lang['name']        = "Name";
 $lang['name_title']  = "Type here to enter your name";
@@ -82,3 +95,17 @@ $lang['theme_miss']  = "Missing theme definition!";
 
 $lang['text']        = "Text";
 $lang['text_title']  = "Type here to enter your message";
+
+$lang['type_au']     = "Audio";
+$lang['type_doc']    = "Document";
+$lang['type_img']    = "Image";
+$lang['type_vid']    = "Video";
+$lang['type_hint']   = "Allowed types in Settings.";
+$lang['type_list']   = "Supported file types:";
+
+$lang['uc']          = "User Content";
+$lang['uc_link']     = "User content:";
+
+$lang['up']          = "Upload";
+$lang['up_title']    = "Click here to upload selected file";
+$lang['up_select']   = "Click here to select a file";
