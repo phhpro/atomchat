@@ -61,9 +61,6 @@ $lang['lang_title']  = "Haga clic aquí para seleccionar idioma";
 $lang['login']       = "Iniciar";
 $lang['login_title'] = "Haga clic aquí para iniciar sesión";
 
-$lang['max']         = "Max";
-$lang['max_size']    = "Maximum filesize for uploads:";
-
 $lang['name']        = "Nombre";
 $lang['name_title']  = "Escribe aquí para ingresar su nombre";
 $lang['name_info']   = "Ingrese el nombre preferido y presione Iniciar.";
@@ -83,6 +80,8 @@ $lang['quit_title']  = "Haga clic aquí para salir de la sesión";
 $lang['save']        = "Guardar";
 $lang['save_title']  = "Haga clic aquí para guardar la sesión";
 
+$lang['sel_title']   = "Haga clic aquí para seleccionar un archivo";
+
 $lang['set']         = "Ajustes";
 $lang['set_title']   = "Haga clic aquí para cambiar la configuración";
 
@@ -93,19 +92,20 @@ $lang['theme_miss']  = "¡Falta la definición del tema!";
 $lang['text']        = "Texto";
 $lang['text_title']  = "Escribe aquí para ingresar su mensaje";
 
-$lang['link_img']    = "Haga clic aquí para abrir la imagen original";
-$lang['link_doc']    = "Haga clic aquí para abrir el archivo";
-
-$lang['type_au']     = "Audio";
+$lang['type_arc']    = "Archivo";
 $lang['type_doc']    = "Documento";
 $lang['type_img']    = "Imagen";
+$lang['type_snd']    = "Sonido";
 $lang['type_vid']    = "Vídeo";
-$lang['type_hint']   = "Tipos permitidos en Ajustes.";
-$lang['type_list']   = "Tipos de archivos admitidos:";
+$lang['type_info']   = "Info de tipos en Ajustes.";
+$lang['type_list']   = "Tipos Admitidos";
 
 $lang['uc']          = "Contenido De Usuario";
-$lang['uc_link']     = "Contenido del usuario:";
-
-$lang['up']          = "Subir";
-$lang['up_title']    = "Haga clic aquí para cargar el archivo seleccionado";
-$lang['up_select']   = "Haga clic aquí para seleccionar un archivo";
+$lang['uc_exceed']   = "¡El archivo excede el tamaño máximo!";
+$lang['uc_exist']    = "¡El archivo ya existe!";
+$lang['uc_fail']     = "Subida fallida:";
+$lang['uc_max']      = "Tamaño máximo en bytes:";
+$lang['uc_noimg']    = "¡Imagen inválida!";
+$lang['uc_nomove']   = "Error de escritura!";
+$lang['uc_notype']   = "¡Tipo de archivo invalido!";
+$lang['uc_open']     = "Haga clic aquí para abrir este archivo";

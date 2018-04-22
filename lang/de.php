@@ -58,14 +58,8 @@ $lang['info']        = "Info";
 $lang['lang']        = "Sprache";
 $lang['lang_title']  = "Klicken Sie hier um Sprache zu wählen";
 
-$lang['link_img']    = "Klicken Sie hier um die Originalgrafik zu öffnen";
-$lang['link_doc']    = "Klicken Sie hier um die Datei zu öffnen";
-
 $lang['login']       = "Anmelden";
 $lang['login_title'] = "Klicken Sie hier um sich anzumelden";
-
-$lang['max']         = "Max";
-$lang['max_size']    = "Maximale Dateigröße:";
 
 $lang['name']        = "Name";
 $lang['name_title']  = "Tippen Sie hier um Ihren Namen einzugeben";
@@ -86,6 +80,8 @@ $lang['quit_title']  = "Klicken Sie hier um die Sitzung zu beenden";
 $lang['save']        = "Sichern";
 $lang['save_title']  = "Klicken Sie hier um die Sitzung zu speichern";
 
+$lang['sel_title']   = "Klicken Sie hier um eine Datei zu wählen";
+
 $lang['set']         = "Einstellungen";
 $lang['set_title']   = "Klicken Sie hier um Einstellungen zu ändern";
 
@@ -96,16 +92,20 @@ $lang['theme_miss']  = "Fehlende Thema Definition!";
 $lang['text']        = "Text";
 $lang['text_title']  = "Tippen Sie hier um Ihre Nachricht einzugeben";
 
-$lang['type_au']     = "Audio";
+$lang['type_arc']    = "Archiv";
 $lang['type_doc']    = "Dokument";
 $lang['type_img']    = "Grafik";
+$lang['type_snd']    = "Audio";
 $lang['type_vid']    = "Video";
-$lang['type_hint']   = "Erlaubte Dateiarten in Einstellungen.";
-$lang['type_list']   = "Erlaubte Dateiarten:";
+$lang['type_info']   = "Typeninfo in Einstellungen.";
+$lang['type_list']   = "Erlaubte Dateiarten";
 
-$lang['uc']          = "Benutzer Inhalte";
-$lang['uc_link']     = "Benutzer Inhalt:";
-
-$lang['up']          = "Laden";
-$lang['up_title']    = "Klicken Sie hier um die gewählte Datei zu senden";
-$lang['up_select']   = "Klicken Sie hier um eine Datei zu wählen";
+$lang['uc']          = "Benutzer Inhalt";
+$lang['uc_exceed']   = "Datei übersteigt Maximalgröße!";
+$lang['uc_exist']    = "Datei existiert bereits!";
+$lang['uc_fail']     = "Ladefehler:";
+$lang['uc_max']      = "Maximalgröße in Bytes:";
+$lang['uc_noimg']    = "Ungültige Grafik!";
+$lang['uc_nomove']   = "Schreibfehler!";
+$lang['uc_notype']   = "Ungültiger Dateityp!";
+$lang['uc_open']     = "Klicken Sie hier um diese Datei zu öffnen";
