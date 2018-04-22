@@ -70,70 +70,103 @@ $emo        = 1;
 
 
 /**
- * User content -- allow users to upload files
+ ***********************************************************************
+ * UPLOADS                                            USE WITH CAUTION *
+ *                                                                     *
+ * For your own benefit: You should only enable this with $uc = 1; *
+ * when you are fully aware of the implied security risks!             *
+ *                                                                     *
+ * This feature is rudimentary at best. Don't come crying because some *
+ * smartass sent a fake exec hijacking your box. You have been warned! *
+ ***********************************************************************
  */
-$uc         = 1;
 
 
 /**
- * Below settings only apply when $uc = 1;
- * Contents are linked to view original.
+ * Enable uploads
  */
+$uc     = 1;
+
 
 /**
  * Maximum upload size -- bytes
  */
-$max        = 2048000;
+$max = 2048000;
+
 
 /**
  * Thumbnail width and height -- pixel
  */
-$tnw        = 64;
-$tnh        = 64;
+$tnw = 64;
+$tnh = 64;
 
 
-//** Audio
-$snd        = array(
-                "m4a",
-                "mid",
-                "mp3",
-                "oga",
-                "ogg",
-                "wav"
-              );
-
-
-//** Image
-$img        = array(
-                "bmp",
-                "gif",
-                "jpeg",
-                "jpg",
-                "png"
-              );
+/**
+ * Allowed file types
+ *
+ * Be adviced that the current script does not perform particular MIME
+ * checks on non-image types. Hence, there is a chance someone could
+ * upload a seemingly harmless text file, e.g. "foo.txt", when in fact
+ * the contents of that file are executable source.
+ *
+ * As a minimal precaution you should never explicitely allow anything
+ * directly executable on the server, like *. html, *.php, *.js, etc.
+ */
 
 
 //** Document
-$doc        = array(
-                "doc",
-                "docx",
-                "odt",
-                "pdf",
-                "txt"
-              );
+$doc = array(
+    "doc",
+    "docx",
+    "odt",
+    "pdf",
+    "txt"
+);
+
+
+//** Image
+$img = array(
+    "bmp",
+    "gif",
+    "jpeg",
+    "jpg",
+    "png"
+);
+
+
+//** Sound
+$snd = array(
+    "m4a",
+    "mid",
+    "mp3",
+    "oga",
+    "ogg",
+    "wav"
+);
 
 
 //** Video
-$vid        = array(
-                "avi",
-                "m4v",
-                "mp4",
-                "mpeg",
-                "mpg",
-                "ogg",
-                "ogv",
-                "qt",
-              );
+$vid = array(
+    "avi",
+    "m4v",
+    "mp4",
+    "mpeg",
+    "mpg",
+    "ogg",
+    "ogv",
+    "qt"
+);
+
+
+//** Archives
+$arc = array(
+    "bz2",
+    "gz",
+    "rar",
+    "tgz",
+    "xz",
+    "zip"
+);
 
 
 /**
@@ -144,7 +177,7 @@ $vid        = array(
 
 
 //** Script version
-$make = 20180420;
+$make = 20180422;
 
 //** Link logo
 if ($logo !== "") {
@@ -158,9 +191,9 @@ if (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS']) {
     $prot = "";    
 }
 
-//** Build URL reference
-$host = "http" . $prot . "://" . $_SERVER['HTTP_HOST'] .
-        "/" . basename(__DIR__) . "/";
+//** Build URL
+$host = "http" . $prot . "://" .
+        $_SERVER['HTTP_HOST'] . "/" . basename(__DIR__) . "/";
 
 //** Logfile, initial screen, and status
 $data = "log/" . date('Y-m-d') . ".html";
@@ -288,9 +321,9 @@ if (isset($_POST['login'])) {
         //** Init name session -- mt_rand() to prevent dupes
         $_SESSION['name'] = $name . "_" . mt_rand();
 
-        $text  = "            <div class=item_log>" .
-                 date('Y-m-d H:i:s') . " " . $_SESSION['name'] .
-                 " " . $lang['chat_enter'] . "</div>\n";
+        $text = "            <div class=item_log>" .
+                date('Y-m-d H:i:s') . " " . $_SESSION['name'] .
+                " " . $lang['chat_enter'] . "</div>\n";
 
         if (file_exists($data)) {
             $text .= file_get_contents($data);
@@ -333,13 +366,31 @@ if (isset($_POST['push'])) {
     exit;
 }
 
+//** Check upload
+if ($uc === 1) {
+
+    //** Get size, trim name, and link file
+    $size = $_FILES['file']['size'];
+    $base = basename($_FILES['file']['name']);
+    $file = $save . "/" . $base;
+
+    //** Link type and URL, and init error status
+    $type = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+    $open = $host . $file;
+    $fail = 1;
+}
+
+//** Initial form state
+$pass = 0;
+
 //** Post entry
 if (isset($_POST['post'])) {
     $name = htmlentities($_POST['name'], ENT_QUOTES, "UTF-8");
     $text = htmlentities($_POST['text'], ENT_QUOTES, "UTF-8");
 
     //** Check text
-    if (!empty($text)) {
+    if ($text !== "") {
+        $pass = 1;
 
         //** Check emoji conversion
         if ($emo === 1) {
@@ -379,21 +430,105 @@ if (isset($_POST['post'])) {
 
             unset($emo_code);
         }
+    }
 
-        //** Build entry and update log
-        $text = "            <div class=item " . 'id="pid' .
-                date('_Y-m-d_H-i-s_') . $_SESSION['name'] . '">' .
-                "\n                <div class=item_head>" .
-                "<div class=item_date>" .
-                date('Y-m-d H:i:s') . "</div> " .
-                "<div class=item_name>" .
-                $_SESSION['name'] . "</div>" .
+    //** Check user content
+    if ($uc === 1) {
+
+        //** Check selection
+        if (!empty($_FILES['file']['name'])) {
+
+            //** Link file
+            $mime = getimagesize($_FILES['file']['tmp_name']);
+
+            //** Check if file exists
+            if (file_exists($file)) {
+                $stat = $lang['uc_exist'];
+                $fail = 0;
+            }
+
+            //** Check size
+            if ($size >$max) {
+                $stat = $lang['uc_exceed'];
+                $fail = 0;
+            }
+
+            //** Check image type
+            if (in_array($type, $img)) {
+
+                //** Check valid image and build entry
+                if ($mime !== false) {
+                    $user = $lang['uc'] . ': <a href="' . $open .
+                            '" title="' . $lang['uc_open'] . '">' .
+                            "$base ($size)</a><br/>" . '<a href="' .
+                            $open . '" title="' . $lang['uc_open'] .
+                            '"><img src="' . $open . '" width=' .
+                            $tnw . ' height=' . $tnh . ' alt=""/></a>';
+                } else {
+                    $stat = $lang['uc_noimg'];
+                    $fail = 0;
+                }
+            } elseif (
+                //** Check non-image types and build entry
+                in_array($type, $arc)
+                || in_array($type, $doc)
+                || in_array($type, $snd)
+                || in_array($type, $vid)
+            ) {
+                $user = $lang['uc'] . ': <a href="' . $open . '" ' .
+                        'title="' . $lang['uc_open'] . '">' .
+                        "$base ($size)</a>";
+            } else {
+                $stat = $lang['uc_notype'];
+                $fail = 0;
+            }
+
+            //** Update error status
+            if ($fail === 0) {
+                $stat = $lang['uc_fail'] . " " . $stat;
+            } else {
+
+                //** Finalise upload
+                if (
+                    move_uploaded_file(
+                        $_FILES['file']['tmp_name'], $file
+                    )
+                ) {
+                    //** Link entry and clear temp file
+                    unlink($base);
+                    $pass = 1;
+                } else {
+                    $stat = $lang['uc_nomove'];
+                }
+            }
+        }
+    }
+
+    //** Link entry
+    if ($text !== "" && $user === "") {
+        $post = $text;
+    }
+
+    if ($text !== "" && $user !== "") {
+        $post = "$text<div><br/>$user</div>";
+    }
+
+    if ($text === "" && $user !== "") {
+        $post = $user;
+    }
+
+    //** Build entry and update log
+    if ($pass === 1) {
+        $post = "            <div class=item " . 'id="pid' .
+                date('_Ymd_His_') . $_SESSION['name'] . '">' . "\n" .
+                "                <div class=item_head>" .
+                "<div class=item_date>" . date('r') . "</div> " .
+                "<div class=item_name>" . $_SESSION['name'] . "</div>" .
                 "</div>\n" .
-                "                <div class=item_text>" .
-                "$text</div>\n" .
+                "                <div class=item_text>$post</div>\n" .
                 "            </div>\n";
-        $text .= file_get_contents($data);
-        file_put_contents($data, $text);
+        $post .= file_get_contents($data);
+        file_put_contents($data, $post);
         header('Location: #POST');
         exit;
     } else {
@@ -584,13 +719,17 @@ if (isset($_POST['settings'])) {
 
     //** User content
     if ($uc === 1) {
-        echo "                <p><strong>" .
-             $lang['uc'] . "</strong></p>\n" .
-             "                <p>" . $lang['max_size'] . " " .
-             $max . " " . $lang['bytes'] . "</p>\n" .
-             "                <p>" . $lang['type_list'] . "</p>\n" .
+
+        //** Summary
+        echo "                <h2>" . $lang['uc'] . "</h2>\n" .
+             "                <p>" . $lang['uc_max'] . " $max.</p>\n" .
+             "                <p><strong>" .
+             $lang['type_list'] . "</strong></p>\n" .
+
+        //** Document
              "                <ul>\n" .
-             "                    <li>" . $lang['type_doc'] . "\n" .
+             "                    <li><strong>" .
+             $lang['type_doc'] . "</strong>\n" .
              "                        <ul>\n";
 
         foreach ($doc as $adoc) {
@@ -601,20 +740,11 @@ if (isset($_POST['settings'])) {
         echo "                        </ul>\n" .
              "                    </li>\n" .
              "                </ul>\n" .
-             "                <ul>\n" .
-             "                    <li>" . $lang['type_au'] . "\n" .
-             "                        <ul>\n";
 
-        foreach ($snd as $asnd) {
-            echo "                            <li>$asnd</li>\n";
-        }
-
-        unset($asnd);
-        echo "                        </ul>\n" .
-             "                    </li>\n" .
-             "                </ul>\n" .
+        //** Image
              "                <ul>\n" .
-             "                    <li>" . $lang['type_img'] . "\n" .
+             "                    <li><strong>" .
+             $lang['type_img'] . "</strong>\n" .
              "                        <ul>\n";
 
         foreach ($img as $aimg) {
@@ -625,8 +755,26 @@ if (isset($_POST['settings'])) {
         echo "                        </ul>\n" .
              "                    </li>\n" .
              "                </ul>\n" .
+
+        //** Sound
              "                <ul>\n" .
-             "                    <li>" . $lang['type_vid'] . "\n" .
+             "                    <li><strong>" .
+             $lang['type_snd'] . "</strong>\n" .
+             "                        <ul>\n";
+
+        foreach ($snd as $asnd) {
+            echo "                            <li>$asnd</li>\n";
+        }
+
+        unset($asnd);
+        echo "                        </ul>\n" .
+             "                    </li>\n" .
+             "                </ul>\n" .
+
+        //** Video
+             "                <ul>\n" .
+             "                    <li><strong>" .
+             $lang['type_vid'] . "</strong>\n" .
              "                        <ul>\n";
 
         foreach ($vid as $avid) {
@@ -634,6 +782,21 @@ if (isset($_POST['settings'])) {
         }
 
         unset($avid);
+        echo "                        </ul>\n" .
+             "                    </li>\n" .
+             "                </ul>\n" .
+
+        //** Archive
+             "                <ul>\n" .
+             "                    <li><strong>" .
+             $lang['type_arc'] . "</strong>\n" .
+             "                        <ul>\n";
+
+        foreach ($arc as $aarc) {
+            echo "                            <li>$aarc</li>\n";
+        }
+
+        unset($aarc);
         echo "                        </ul>\n" .
              "                    </li>\n" .
              "                </ul>\n";
@@ -664,7 +827,8 @@ if (isset($_SESSION['name']) && !empty($_SESSION['name'])) {
     echo "        </div>\n" .
          "        <nav>\n" .
          '            <form action="#CHAT" method=POST ' .
-         'accept-charset="UTF-8">' . "\n" .
+         'accept-charset="UTF-8" ' .
+         'enctype="multipart/form-data">' . "\n" .
          "                <div>" . $lang['text'] . " " .
          "<small>($char " . $lang['characters'] . ")</small></div>\n" .
 
@@ -702,23 +866,29 @@ if (isset($_SESSION['name']) && !empty($_SESSION['name'])) {
          "                    <input type=submit name=post " .
          'value="&#x2611; ' . $lang['post'] . '" ' .
          'title="' . $lang['post_title'] . '"/>' . "\n" .
-         "                </div>\n" .
-         "            </form>\n";
+         "                </div>\n";
 
-        //** Check user content
-        if ($uc === 1) {
-            include './user-content.php';
-        }
+    //** Upload
+    if ($uc === 1) {
+        echo "                <div>\n" .
+             "                    <input type=file name=file " .
+             'title="' . $lang['sel_title'] . '"/>' . "\n" .
+             "                    <div><small>" . $lang['uc_max'] .
+             $max . ". " . $lang['type_info'] . "</small></div>\n" .
+             "                </div>\n";
+    }
 
-    //** Status
-    echo "            <div id=stat>\n" .
+    echo "            </form>\n" .
+
+         //** Status
+         "            <div id=stat>\n" .
          "                <div>$stat</div>\n" .
          "                <noscript>" .
          $lang['noscript'] . "</noscript>\n" .
          "            </div>\n";
 } else {
 
-    //** Load initial screen
+    //** Initial screen
     if (file_exists($init)) {
         echo "        <article>\n";
         include "./$init";
