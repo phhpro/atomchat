@@ -1,8 +1,8 @@
 /*
  * Javascript push helper
  *
- * @category  PHP_Chat_Scripts
- * @package   PHP_Atom_Chat
+ * @category  PHP_Chat
+ * @package   PHP_Atomchat
  * @author    P H Claus <phhpro@gmail.com>
  * @copyright 2015 - 2018 P H Claus
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GPLv3
@@ -13,7 +13,9 @@
  * HELP WANTED
  *
  * AJAX push works OK but is neither pretty nor overly effective.
- * Also needs fixing to prevent double-render without styles.
+ * Should only trigger refresh when someone adds an entry rather
+ * than continously pushing every n seconds. Also needs fixing to
+ * possibly skip content double-render when viewed without styles.
  */
 
 

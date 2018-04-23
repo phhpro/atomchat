@@ -4,8 +4,8 @@
  *
  * Main script and configuration
  *
- * @category  PHP_Chat_Scripts
- * @package   PHP_Atom_Chat
+ * @category  PHP_Chat
+ * @package   PHP_Atomchat
  * @author    P H Claus <phhpro@gmail.com>
  * @copyright 2015 - 2018 P H Claus
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GPLv3
@@ -43,7 +43,7 @@
  * Page title
  * Logo image -- $logo = ""; if not needed -- 16x16 px
  */
-$page      = "PHP Atom Chat";
+$page      = "PHP Atomchat";
 $logo      = "favicon.png";
 
 
@@ -70,10 +70,16 @@ $emo        = 1;
 
 
 /**
+ * Date format
+ */
+$date       = date('r');
+
+
+/**
  ***********************************************************************
  * UPLOADS                                            USE WITH CAUTION *
  *                                                                     *
- * For your own benefit: You should only enable this with $uc = 1; *
+ * For your own benefit: You should only enable this with $up = 1; *
  * when you are fully aware of the implied security risks!             *
  *                                                                     *
  * This feature is rudimentary at best. Don't come crying because some *
@@ -85,20 +91,30 @@ $emo        = 1;
 /**
  * Enable uploads
  */
-$uc     = 1;
+$up         = 1;
+
+
+/**
+ * Upload folder
+ *
+ * Default is to save uploads below the script folder. You need 
+ * to supply the full path if you want to change the location.
+ * E.g. $up_fold = $_SERVER['DOCUMENT_ROOT'] . "/files/go/here";
+ */
+$up_fold    = "user-content";
 
 
 /**
  * Maximum upload size -- bytes
  */
-$max = 2048000;
+$up_max     = 2048000;
 
 
 /**
  * Thumbnail width and height -- pixel
  */
-$tnw = 64;
-$tnh = 64;
+$up_tnw     = 64;
+$up_tnh     = 64;
 
 
 /**
@@ -115,7 +131,7 @@ $tnh = 64;
 
 
 //** Document
-$doc = array(
+$up_is_doc  = array(
     "doc",
     "docx",
     "odt",
@@ -125,7 +141,7 @@ $doc = array(
 
 
 //** Image
-$img = array(
+$up_is_img  = array(
     "bmp",
     "gif",
     "jpeg",
@@ -135,7 +151,7 @@ $img = array(
 
 
 //** Sound
-$snd = array(
+$up_is_snd  = array(
     "m4a",
     "mid",
     "mp3",
@@ -146,7 +162,7 @@ $snd = array(
 
 
 //** Video
-$vid = array(
+$up_is_vid  = array(
     "avi",
     "m4v",
     "mp4",
@@ -158,8 +174,8 @@ $vid = array(
 );
 
 
-//** Archives
-$arc = array(
+//** Archive
+$up_is_arc  = array(
     "bz2",
     "gz",
     "rar",
@@ -177,7 +193,7 @@ $arc = array(
 
 
 //** Script version
-$make = 20180422;
+$make = 20180423;
 
 //** Link logo
 if ($logo !== "") {
@@ -188,7 +204,7 @@ if ($logo !== "") {
 if (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS']) {
     $prot = "s";
 } else {
-    $prot = "";    
+    $prot = "";
 }
 
 //** Build URL
@@ -244,13 +260,12 @@ if (!is_dir('log')) {
     }
 }
 
-//** Check user content folder
-if ($uc === 1) {
-    $save = "user-content";
+//** Check upload folder
+if ($up === 1) {
 
-    if (!is_dir($save)) {
+    if (!is_dir($up_fold)) {
 
-        if (mkdir($save) === false) {
+        if (mkdir($up_fold) === false) {
             echo "Cannot write user content folder!";
             exit;
         }
@@ -267,24 +282,24 @@ if (!is_dir('lang')) {
 if (file_exists($lang_data) || $emo === 1) {
 
     if (file_exists($lang_data)) {
-        $file_data = $lang_data;
-        $file_text = "language file";
+        $up_file_data = $lang_data;
+        $up_file_text = "language file";
     }
 
     if ($emo === 1) {
-        $file_data = $emo_conf;
-        $file_text = "emoji configuration";
+        $up_file_data = $emo_conf;
+        $up_file_text = "emoji configuration";
     }
 
-    $file_trim = file_get_contents($file_data);
+    $up_file_trim = file_get_contents($up_file_data);
 
     //** True if file contains only BOM or empty lines => fail
-    if (filesize($file_data) <16 && trim($file_trim) === false) {
-        echo "Invalid $file_text!";
+    if (filesize($up_file_data) <16 && trim($up_file_trim) === false) {
+        echo "Invalid $up_file_text!";
         exit;
     }
 } else {
-    echo "Missing $file_text!";
+    echo "Missing $up_file_text!";
     exit;
 }
 
@@ -321,9 +336,9 @@ if (isset($_POST['login'])) {
         //** Init name session -- mt_rand() to prevent dupes
         $_SESSION['name'] = $name . "_" . mt_rand();
 
-        $text = "            <div class=item_log>" .
-                date('Y-m-d H:i:s') . " " . $_SESSION['name'] .
-                " " . $lang['chat_enter'] . "</div>\n";
+        $text = "            <div class=item_log>$date " .
+                $_SESSION['name'] . " " . $lang['chat_enter'] .
+                "</div>\n";
 
         if (file_exists($data)) {
             $text .= file_get_contents($data);
@@ -350,9 +365,9 @@ if (isset($_POST['save'])) {
 
 //** Logout
 if (isset($_POST['quit'])) {
-    $text  = "            <div class=item_log>" .
-             date('Y-m-d H:i:s') . " " . $_SESSION['name'] .
-             " " . $lang['chat_leave'] . "</div>\n";
+    $text  = "            <div class=item_log>$date " .
+             $_SESSION['name'] . " " . $lang['chat_leave'] .
+             "</div>\n";
     $text .= file_get_contents($data);
     file_put_contents($data, $text);
     unset($_SESSION['name']);
@@ -367,21 +382,21 @@ if (isset($_POST['push'])) {
 }
 
 //** Check upload
-if ($uc === 1) {
+if ($up === 1) {
 
     //** Get size, trim name, and link file
-    $size = $_FILES['file']['size'];
-    $base = basename($_FILES['file']['name']);
-    $file = $save . "/" . $base;
+    $up_size = $_FILES['file']['size'];
+    $up_base = basename($_FILES['file']['name']);
+    $up_file = $up_fold . "/" . $up_base;
 
     //** Link type and URL, and init error status
-    $type = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-    $open = $host . $file;
-    $fail = 1;
+    $up_type = strtolower(pathinfo($up_file, PATHINFO_EXTENSION));
+    $up_open = $host . $up_file;
+    $up_fail = 1;
 }
 
 //** Initial form state
-$pass = 0;
+$up_pass = 0;
 
 //** Post entry
 if (isset($_POST['post'])) {
@@ -390,7 +405,7 @@ if (isset($_POST['post'])) {
 
     //** Check text
     if ($text !== "") {
-        $pass = 1;
+        $up_pass = 1;
 
         //** Check emoji conversion
         if ($emo === 1) {
@@ -433,96 +448,96 @@ if (isset($_POST['post'])) {
     }
 
     //** Check user content
-    if ($uc === 1) {
+    if ($up === 1) {
 
         //** Check selection
         if (!empty($_FILES['file']['name'])) {
 
             //** Link file
-            $mime = getimagesize($_FILES['file']['tmp_name']);
+            $up_mime = getimagesize($_FILES['file']['tmp_name']);
 
             //** Check if file exists
-            if (file_exists($file)) {
-                $stat = $lang['uc_exist'];
-                $fail = 0;
+            if (file_exists($up_file)) {
+                $stat    = $lang['up_exist'];
+                $up_fail = 0;
             }
 
             //** Check size
-            if ($size >$max) {
-                $stat = $lang['uc_exceed'];
-                $fail = 0;
+            if ($up_size >$up_max) {
+                $stat    = $lang['up_exceed'];
+                $up_fail = 0;
             }
 
-            //** Check image type
-            if (in_array($type, $img)) {
+            //** Check image type and build entry
+            if (in_array($up_type, $up_is_img)) {
 
-                //** Check valid image and build entry
-                if ($mime !== false) {
-                    $user = $lang['uc'] . ': <a href="' . $open .
-                            '" title="' . $lang['uc_open'] . '">' .
-                            "$base ($size)</a><br/>" . '<a href="' .
-                            $open . '" title="' . $lang['uc_open'] .
-                            '"><img src="' . $open . '" width=' .
-                            $tnw . ' height=' . $tnh . ' alt=""/></a>';
+                if ($up_mime !== false) {
+                    $up_link = $lang['up'] . ': <a href="' . $up_open .
+                             '" title="' . $lang['up_open'] . '">' .
+                             "$up_base ($up_size)</a><br/>" .
+                             '<a href="' . $up_open . '" title="' .
+                             $lang['up_open'] . '"><img src="' .
+                             $up_open . '" width=' . $up_tnw . ' ' .
+                             'height=' . $up_tnh . ' alt=""/></a>';
                 } else {
-                    $stat = $lang['uc_noimg'];
-                    $fail = 0;
+                    $stat    = $lang['up_noimg'];
+                    $up_fail = 0;
                 }
             } elseif (
                 //** Check non-image types and build entry
-                in_array($type, $arc)
-                || in_array($type, $doc)
-                || in_array($type, $snd)
-                || in_array($type, $vid)
+                in_array($up_type, $up_is_arc)
+                || in_array($up_type, $up_is_doc)
+                || in_array($up_type, $up_is_snd)
+                || in_array($up_type, $up_is_vid)
             ) {
-                $user = $lang['uc'] . ': <a href="' . $open . '" ' .
-                        'title="' . $lang['uc_open'] . '">' .
-                        "$base ($size)</a>";
+                $up_link = $lang['up'] . ': <a href="' . $up_open .
+                           '" title="' . $lang['up_open'] . '">' .
+                           "$up_base ($up_size)</a>";
             } else {
-                $stat = $lang['uc_notype'];
-                $fail = 0;
+                $stat    = $lang['up_notype'];
+                $up_fail = 0;
             }
 
             //** Update error status
-            if ($fail === 0) {
-                $stat = $lang['uc_fail'] . " " . $stat;
+            if ($up_fail === 0) {
+                $stat = $lang['up_fail'] . " " . $stat;
             } else {
 
                 //** Finalise upload
                 if (
                     move_uploaded_file(
-                        $_FILES['file']['tmp_name'], $file
+                        $_FILES['file']['tmp_name'], $up_file
                     )
                 ) {
                     //** Link entry and clear temp file
-                    unlink($base);
-                    $pass = 1;
+                    unlink($up_base);
+                    $up_pass = 1;
                 } else {
-                    $stat = $lang['uc_nomove'];
+                    $stat = $lang['up_nowrite'];
                 }
             }
         }
     }
 
     //** Link entry
-    if ($text !== "" && $user === "") {
+    if ($text !== "" && $up_link === "") {
         $post = $text;
     }
 
-    if ($text !== "" && $user !== "") {
-        $post = "$text<div><br/>$user</div>";
+    if ($text !== "" && $up_link !== "") {
+        $post = "$text<div><br/>$up_link</div>";
     }
 
-    if ($text === "" && $user !== "") {
-        $post = $user;
+    if ($text === "" && $up_link !== "") {
+        $post = $up_link;
     }
 
     //** Build entry and update log
-    if ($pass === 1) {
+    if ($up_pass === 1) {
         $post = "            <div class=item " . 'id="pid' .
                 date('_Ymd_His_') . $_SESSION['name'] . '">' . "\n" .
                 "                <div class=item_head>" .
-                "<div class=item_date>" . date('r') . "</div> " .
+                "<div class=item_date>$date</div> " .
                 "<div class=item_name>" . $_SESSION['name'] . "</div>" .
                 "</div>\n" .
                 "                <div class=item_text>$post</div>\n" .
@@ -612,14 +627,14 @@ if (isset($_POST['settings'])) {
         $lang_line = file($lang_item);
 
         //** Trim name
-        $lang_name = $lang_line[24];
+        $lang_name = $lang_line[20];
         $lang_name = str_replace(
             "\$lang['__name__']    = \"", "", $lang_name
         );
         $lang_name = str_replace("\";\n", "", $lang_name);
 
         //** Trim text
-        $lang_text = $lang_line[25];
+        $lang_text = $lang_line[21];
         $lang_text = str_replace(
             "\$lang['__text__']    = \"", "", $lang_text
         );
@@ -717,26 +732,27 @@ if (isset($_POST['settings'])) {
         echo "                </pre>\n";
     }
 
-    //** User content
-    if ($uc === 1) {
+    //** Upload
+    if ($up === 1) {
 
         //** Summary
-        echo "                <h2>" . $lang['uc'] . "</h2>\n" .
-             "                <p>" . $lang['uc_max'] . " $max.</p>\n" .
+        echo "                <h2>" . $lang['up'] . "</h2>\n" .
+             "                <p>" .
+             $lang['up_max'] . " $up_max.</p>\n" .
              "                <p><strong>" .
-             $lang['type_list'] . "</strong></p>\n" .
+             $lang['up_allow'] . "</strong></p>\n" .
 
         //** Document
              "                <ul>\n" .
              "                    <li><strong>" .
-             $lang['type_doc'] . "</strong>\n" .
+             $lang['up_doc'] . "</strong>\n" .
              "                        <ul>\n";
 
-        foreach ($doc as $adoc) {
-            echo "                            <li>$adoc</li>\n";
+        foreach ($up_is_doc as $up_doc) {
+            echo "                            <li>$up_doc</li>\n";
         }
 
-        unset($adoc);
+        unset($up_doc);
         echo "                        </ul>\n" .
              "                    </li>\n" .
              "                </ul>\n" .
@@ -744,14 +760,14 @@ if (isset($_POST['settings'])) {
         //** Image
              "                <ul>\n" .
              "                    <li><strong>" .
-             $lang['type_img'] . "</strong>\n" .
+             $lang['up_img'] . "</strong>\n" .
              "                        <ul>\n";
 
-        foreach ($img as $aimg) {
-            echo "                            <li>$aimg</li>\n";
+        foreach ($up_is_img as $up_img) {
+            echo "                            <li>$up_img</li>\n";
         }
 
-        unset($aimg);
+        unset($up_img);
         echo "                        </ul>\n" .
              "                    </li>\n" .
              "                </ul>\n" .
@@ -759,14 +775,14 @@ if (isset($_POST['settings'])) {
         //** Sound
              "                <ul>\n" .
              "                    <li><strong>" .
-             $lang['type_snd'] . "</strong>\n" .
+             $lang['up_snd'] . "</strong>\n" .
              "                        <ul>\n";
 
-        foreach ($snd as $asnd) {
-            echo "                            <li>$asnd</li>\n";
+        foreach ($up_is_snd as $up_snd) {
+            echo "                            <li>$up_snd</li>\n";
         }
 
-        unset($asnd);
+        unset($up_snd);
         echo "                        </ul>\n" .
              "                    </li>\n" .
              "                </ul>\n" .
@@ -774,14 +790,14 @@ if (isset($_POST['settings'])) {
         //** Video
              "                <ul>\n" .
              "                    <li><strong>" .
-             $lang['type_vid'] . "</strong>\n" .
+             $lang['up_vid'] . "</strong>\n" .
              "                        <ul>\n";
 
-        foreach ($vid as $avid) {
-            echo "                            <li>$avid</li>\n";
+        foreach ($up_is_vid as $up_vid) {
+            echo "                            <li>$up_vid</li>\n";
         }
 
-        unset($avid);
+        unset($up_vid);
         echo "                        </ul>\n" .
              "                    </li>\n" .
              "                </ul>\n" .
@@ -789,14 +805,14 @@ if (isset($_POST['settings'])) {
         //** Archive
              "                <ul>\n" .
              "                    <li><strong>" .
-             $lang['type_arc'] . "</strong>\n" .
+             $lang['up_arc'] . "</strong>\n" .
              "                        <ul>\n";
 
-        foreach ($arc as $aarc) {
-            echo "                            <li>$aarc</li>\n";
+        foreach ($up_is_arc as $up_arc) {
+            echo "                            <li>$up_arc</li>\n";
         }
 
-        unset($aarc);
+        unset($up_arc);
         echo "                        </ul>\n" .
              "                    </li>\n" .
              "                </ul>\n";
@@ -869,12 +885,12 @@ if (isset($_SESSION['name']) && !empty($_SESSION['name'])) {
          "                </div>\n";
 
     //** Upload
-    if ($uc === 1) {
+    if ($up === 1) {
         echo "                <div>\n" .
              "                    <input type=file name=file " .
-             'title="' . $lang['sel_title'] . '"/>' . "\n" .
-             "                    <div><small>" . $lang['uc_max'] .
-             $max . ". " . $lang['type_info'] . "</small></div>\n" .
+             'title="' . $lang['up_select'] . '"/>' . "\n" .
+             "                    <div><small>" . $lang['up_max'] .
+             $up_max . ". " . $lang['up_info'] . "</small></div>\n" .
              "                </div>\n";
     }
 
@@ -923,7 +939,7 @@ if (isset($_SESSION['name']) && !empty($_SESSION['name'])) {
 echo "            <p id=by>" .
      '<a href="https://github.com/phhpro/atomchat" ' .
      'title="' . $lang['get'] . '">' . $lang['by'] .
-     " PHP Atom Chat v$make</a></p>\n" .
+     " PHP Atomchat v$make</a></p>\n" .
      "        </nav>\n" .
      '        <script src="chat.js"></script>' . "\n" .
      "    </body>\n" .
