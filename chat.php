@@ -40,17 +40,30 @@
 
 
 /**
+ * Document root
+ * Enter "/full/path" without trailing / if $_SERVER has wrong value
+ */
+$root       = $_SERVER['DOCUMENT_ROOT'];
+
+
+/**
+ * Script folder
+ */
+$fold       = "test/123/c";
+
+
+/**
  * Page title
  * Logo image -- $logo = ""; if not needed -- 16x16 px
  */
-$page      = "PHP Atomchat";
-$logo      = "favicon.png";
+$page       = "PHP Atomchat";
+$logo       = "favicon.png";
 
 
 /**
  * Characters allowed per post
  */
-$char      = 1024;
+$char       = 1024;
 
 
 /**
@@ -96,10 +109,6 @@ $up         = 1;
 
 /**
  * Upload folder
- *
- * Default is to save uploads below the script folder. You need 
- * to supply the full path if you want to change the location.
- * E.g. $up_fold = $_SERVER['DOCUMENT_ROOT'] . "/files/go/here";
  */
 $up_fold    = "user-content";
 
@@ -193,7 +202,7 @@ $up_is_arc  = array(
 
 
 //** Script version
-$make = 20180423;
+$make = 20180424;
 
 //** Link logo
 if ($logo !== "") {
@@ -201,7 +210,7 @@ if ($logo !== "") {
 }
 
 //** Link protocol
-if (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS']) {
+if (isset($_SERVER['HTTPS']) && "on" === $_SERVER['HTTPS']) {
     $prot = "s";
 } else {
     $prot = "";
@@ -209,7 +218,7 @@ if (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS']) {
 
 //** Build URL
 $host = "http" . $prot . "://" .
-        $_SERVER['HTTP_HOST'] . "/" . basename(__DIR__) . "/";
+        $_SERVER['HTTP_HOST'] . "/" . $fold . "/";
 
 //** Logfile, initial screen, and status
 $data = "log/" . date('Y-m-d') . ".html";
