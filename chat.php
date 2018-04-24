@@ -40,16 +40,9 @@
 
 
 /**
- * Document root
- * Enter "/full/path" without trailing / if $_SERVER has wrong value
- */
-$root       = $_SERVER['DOCUMENT_ROOT'];
-
-
-/**
  * Script folder
  */
-$fold       = "test/123/c";
+$fold       = "atomchat";
 
 
 /**
