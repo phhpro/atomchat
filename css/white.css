@@ -178,13 +178,24 @@ select:hover {
 
 a {
     background-color: transparent;
-    color: #000;
+    color: #666;
     text-decoration: none;
 }
 
 a:hover {
     background-color: transparent;
-    color: #666;
+    color: #000;
+}
+
+.item:hover a {
+    background-color: transparent;
+    color: #333;
+    text-decoration: none;
+}
+
+.item:hover a:hover {
+    background-color: transparent;
+    color: #000;
 }
 
 #emo {
@@ -200,6 +211,10 @@ a:hover {
     position: fixed;
     top: 28px;
     right: 6px;
+}
+
+.up_link {
+    margin-top: 8px;
 }
 
 @media screen and (max-width: 900px) {
