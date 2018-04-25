@@ -85,11 +85,8 @@ $date       = date('r');
  ***********************************************************************
  * UPLOADS                                            USE WITH CAUTION *
  *                                                                     *
- * For your own benefit: You should only enable this with $up = 1; *
- * when you are fully aware of the implied security risks!             *
- *                                                                     *
- * This feature is rudimentary at best. Don't come crying because some *
- * smartass sent a fake exec hijacking your box. You have been warned! *
+ * This feature is rudimentary at best and has potential to break your *
+ * box. Enable only when you understand the implied security risks!    *
  ***********************************************************************
  */
 
@@ -103,17 +100,23 @@ $up         = 1;
 /**
  * Upload folder
  */
-$up_fold    = "user-content";
+$up_fold    = "upload";
 
 
 /**
  * Maximum upload size -- bytes
+ *
+ * Most free hosting providers apply filesize limits, some as little as
+ * 500.000 bytes or less. Make sure this doesn't exceed any such limit.
  */
 $up_max     = 2048000;
 
 
 /**
  * Thumbnail width and height -- pixel
+ *
+ * Image previews are linked to open the original image when clicked.
+ * You should keep them small to prevent excessive flow gaps.
  */
 $up_tnw     = 64;
 $up_tnh     = 64;
@@ -129,6 +132,9 @@ $up_tnh     = 64;
  *
  * As a minimal precaution you should never explicitely allow anything
  * directly executable on the server, like *. html, *.php, *.js, etc.
+ *
+ * Some free hosting providers disallow certain file types, e.g. no mp3
+ * or archives. Make sure not to add any such types in the arrays below.
  */
 
 
@@ -195,18 +201,19 @@ $up_is_arc  = array(
 
 
 //** Script version
-$make = 20180424;
+$make = 20180425;
 
 //** Link logo
 if ($logo !== "") {
     $logo = '<img src="' . $logo . '" width=16 height=16 alt=""/> ';
 }
 
+//** Init protocol
+$prot = "";
+
 //** Link protocol
 if (isset($_SERVER['HTTPS']) && "on" === $_SERVER['HTTPS']) {
     $prot = "s";
-} else {
-    $prot = "";
 }
 
 //** Build URL
@@ -268,7 +275,7 @@ if ($up === 1) {
     if (!is_dir($up_fold)) {
 
         if (mkdir($up_fold) === false) {
-            echo "Cannot write user content folder!";
+            echo "Cannot write upload folder!";
             exit;
         }
     }
@@ -318,7 +325,7 @@ if (file_exists($lang_user)) {
     $lang_mime = $lang_id;
     include $lang_user;
 } else {
-    $stat = $lang['nolang'];
+    $stat = $lang['lang_miss'];
 }
 
 //** Check theme -- renders plain if missing
@@ -449,13 +456,13 @@ if (isset($_POST['post'])) {
         }
     }
 
-    //** Check user content
+    //** Check upload
     if ($up === 1) {
 
         //** Check selection
         if (!empty($_FILES['file']['name'])) {
 
-            //** Link file
+            //** Link MIME type -- image only
             $up_mime = getimagesize($_FILES['file']['tmp_name']);
 
             //** Check if file exists
@@ -470,10 +477,13 @@ if (isset($_POST['post'])) {
                 $up_fail = 0;
             }
 
-            //** Check image type and build entry
+            //** Check image
             if (in_array($up_type, $up_is_img)) {
 
+                //** Check MIME
                 if ($up_mime !== false) {
+
+                    //** Build entry
                     $up_link = $lang['up'] . ': <a href="' . $up_open .
                              '" title="' . $lang['up_open'] . '">' .
                              "$up_base ($up_size)</a><br/>" .
@@ -486,7 +496,7 @@ if (isset($_POST['post'])) {
                     $up_fail = 0;
                 }
             } elseif (
-                //** Check non-image types and build entry
+                //** Check non-image and build entry
                 in_array($up_type, $up_is_arc)
                 || in_array($up_type, $up_is_doc)
                 || in_array($up_type, $up_is_snd)
@@ -521,13 +531,13 @@ if (isset($_POST['post'])) {
         }
     }
 
-    //** Link entry
-    if ($text !== "" && $up_link === "") {
-        $post = $text;
+    //** Link reference
+    if ($text !== "" && $up_link !== "") {
+        $post = "$text<div class=up_link>$up_link</div>";
     }
 
-    if ($text !== "" && $up_link !== "") {
-        $post = "$text<div><br/>$up_link</div>";
+    if ($text !== "" && $up_link === "") {
+        $post = $text;
     }
 
     if ($text === "" && $up_link !== "") {
@@ -646,6 +656,7 @@ if (isset($_POST['settings'])) {
         $lang_link = basename($lang_item);
         $lang_link = str_replace(".php", "", $lang_link);
 
+        //** List item
         echo "                    <option " .
              'value="' . $lang_link . '" ' .
              'title="' . $lang_text . '">' .
@@ -718,7 +729,7 @@ if (isset($_POST['settings'])) {
              $lang['emo'] . "</strong></p>\n" .
              "                <pre id=emo>\n";
 
-        //** List items
+        //** List item
         foreach ($emo_parr as $emo_code) {
  
             if ($emo_code !== "") { 
@@ -834,7 +845,7 @@ if (isset($_POST['settings'])) {
 if (isset($_SESSION['name']) && !empty($_SESSION['name'])) {
     echo "        <div id=push>\n";
 
-    //** Check existing data
+    //** Check data
     if (file_exists($data)) {
         include $data;
     } else {
