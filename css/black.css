@@ -88,7 +88,7 @@ input {
     background-color: #333;
     color: #999;
     border: 1px outset #333;
-    font-size: 100%;
+    font-size: 85%;
     padding: 4px;
 }
 
@@ -100,7 +100,7 @@ input:hover {
 
 input[type=submit] {
     font-weight: bold;
-    margin: 16px;
+    margin: 4px;
 }
 
 input[type=submit]:hover {
@@ -224,6 +224,10 @@ a:hover {
 }
 
 @media screen and (max-width: 700px) {
+    body {
+        font-size: 85%;
+    }
+
     textarea {
         width: 92%;
     }
