@@ -45,6 +45,7 @@ $lang['info']        = "Info";
 
 $lang['lang']        = "Idioma";
 $lang['lang_title']  = "Haga clic aquí para seleccionar idioma";
+$lang['lang_miss']   = "¡Falta el archivo de idioma!";
 
 $lang['login']       = "Iniciar";
 $lang['login_title'] = "Haga clic aquí para iniciar sesión";
@@ -53,7 +54,6 @@ $lang['name']        = "Nombre";
 $lang['name_title']  = "Escribe aquí para ingresar su nombre";
 $lang['name_info']   = "Ingrese el nombre preferido y presione Iniciar.";
 
-$lang['nolang']      = "¡Falta el archivo de idioma!";
 $lang['noscript']    = "¡Funciones de Javascript no disponibles!";
 
 $lang['post']        = "Publicar";

@@ -45,6 +45,7 @@ $lang['info']        = "Info";
 
 $lang['lang']        = "Sprache";
 $lang['lang_title']  = "Klicken Sie hier um Sprache zu wählen";
+$lang['lang_miss']   = "Fehlende Sprachdatei!";
 
 $lang['login']       = "Anmelden";
 $lang['login_title'] = "Klicken Sie hier um sich anzumelden";
@@ -53,7 +54,6 @@ $lang['name']        = "Name";
 $lang['name_title']  = "Tippen Sie hier um Ihren Namen einzugeben";
 $lang['name_info']   = "Geben Sie den gewünschten Namen ein und drücken auf Anmelden.";
 
-$lang['nolang']      = "Fehlende Sprachdatei!";
 $lang['noscript']    = "Javascriptfunktionen nicht verfügbar!";
 
 $lang['post']        = "Senden";
