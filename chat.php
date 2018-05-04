@@ -38,7 +38,7 @@ if (file_exists('config.php')) {
 }
 
 //** Script version
-$make = 20180427;
+$make = 20180504;
 
 //** Link logo
 if ($logo !== "") {
@@ -57,7 +57,7 @@ if (isset($_SERVER['HTTPS']) && "on" === $_SERVER['HTTPS']) {
 $host = "http" . $prot . "://" .
         $_SERVER['HTTP_HOST'] . "/" . $fold . "/";
 
-//** Logfile, initial screen, and status
+//** Link logfile, initial screen, and status
 $data = "log/" . date('Y-m-d') . ".html";
 $init = "init.php";
 $stat = "";
@@ -128,24 +128,24 @@ if (!is_dir('lang')) {
 if (file_exists($lang_data) || $emo === 1) {
 
     if (file_exists($lang_data)) {
-        $up_file_data = $lang_data;
-        $up_file_text = "language file";
+        $file_data = $lang_data;
+        $file_text = "language file";
     }
 
     if ($emo === 1) {
-        $up_file_data = $emo_conf;
-        $up_file_text = "emoji configuration";
+        $file_data = $emo_conf;
+        $file_text = "emoji configuration";
     }
 
-    $up_file_trim = file_get_contents($up_file_data);
+    $file_trim = file_get_contents($file_data);
 
     //** True if file contains only BOM or empty lines => fail
-    if (filesize($up_file_data) <16 && trim($up_file_trim) === false) {
-        echo "Invalid $up_file_text!";
+    if (filesize($file_data) <16 && trim($file_trim) === false) {
+        echo "Invalid $file_text!";
         exit;
     }
 } else {
-    echo "Missing $up_file_text!";
+    echo "Missing $file_text!";
     exit;
 }
 
@@ -178,8 +178,7 @@ if (isset($_POST['login'])) {
         header('Location: #MISSING_NAME');
         exit;
     } else {
-
-        //** Init name session -- mt_rand() to prevent dupes
+        //** Init name session -- append mt_rand() to prevent dupes
         $_SESSION['name'] = $name . "_" . mt_rand();
 
         $text = "            <div class=item_log>$date " .
@@ -268,9 +267,6 @@ if (isset($_POST['post'])) {
 
             fclose($emo_open);
 
-            //** Link secondary array
-            $emo_sarr = array();
-
             //** Parse primary array and split values
             foreach ($emo_parr as $emo_code) {
                 $emo_line   = explode("|", $emo_code);
@@ -351,7 +347,6 @@ if (isset($_POST['post'])) {
             if ($up_fail === 0) {
                 $stat = $lang['up_fail'] . " " . $stat;
             } else {
-
                 //** Finalise upload
                 if (
                     move_uploaded_file(
@@ -492,7 +487,7 @@ if (isset($_POST['settings'])) {
         //** Trim link
         $lang_link = basename($lang_item);
         $lang_link = str_replace(".php", "", $lang_link);
-
+ 
         //** List item
         echo "                    <option " .
              'value="' . $lang_link . '" ' .
@@ -508,7 +503,7 @@ if (isset($_POST['settings'])) {
          "                </div>\n";
 
     //** Theme
-    if ($css_usr === 1) {
+    if ($css === 1) {
         echo "                <div>\n" .
              "                    <p><strong>" .
              $lang['theme'] . "</strong></p>\n" .
@@ -548,9 +543,6 @@ if (isset($_POST['settings'])) {
 
     //** Emoji
     if ($emo === 1) {
-
-        //** Link primary array and config
-        $emo_parr = array();
         $emo_open = fopen($emo_conf, 'r');
 
         //** Parse list
@@ -753,7 +745,6 @@ if (isset($_SESSION['name']) && !empty($_SESSION['name'])) {
          $lang['noscript'] . "</noscript>\n" .
          "            </div>\n";
 } else {
-
     //** Initial screen
     if (file_exists($init)) {
         echo "        <article>\n";

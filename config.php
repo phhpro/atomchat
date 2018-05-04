@@ -14,9 +14,6 @@
  */
 
 
-//** Values of 0 mean NO -- 1 equals YES
-
-
 /**
  * Script folder
  */
@@ -25,7 +22,7 @@ $fold       = "atomchat";
 
 /**
  * Page title
- * Logo image -- $logo = ""; if not needed -- 16x16 px
+ * Logo image (16x16 px) -- $logo = ""; if not needed
  */
 $page       = "PHP Atomchat";
 $logo       = "favicon.png";
@@ -38,18 +35,19 @@ $char       = 1024;
 
 
 /**
- * Default theme
- * User theme -- allow users to change theme
- */
-$css_def    = "grey";
-$css_usr    = 1;
-
-
-/**
- * Default language
- * Convert emojis
+ * Default language and theme
  */
 $lang_def   = "en";
+$css_def    = "grey";
+
+
+/*
+ * Allow users to change theme
+ * Auto-convert emojis
+ *
+ * 0 = NO -- 1 = YES
+ */
+$css        = 1;
 $emo        = 1;
 
 
@@ -63,8 +61,8 @@ $date       = date('r');
  ***********************************************************************
  * UPLOADS                                            USE WITH CAUTION *
  *                                                                     *
- * This feature is rudimentary at best and has potential to break your *
- * box. Enable only when you understand the implied security risks!    *
+ * This feature might get you into deep water and even break your box. *
+ * Enable only when you fully understand the implied security risks!   *
  ***********************************************************************
  */
 
@@ -84,8 +82,7 @@ $up_fold    = "upload";
 /**
  * Maximum upload size -- bytes
  *
- * Most free hosting providers apply filesize limits, some as little as
- * 500.000 bytes or less. Make sure this doesn't exceed any such limit.
+ * Make sure this doesn't exceed your filesize limit, if any.
  */
 $up_max     = 2048000;
 
@@ -94,7 +91,7 @@ $up_max     = 2048000;
  * Thumbnail width and height -- pixel
  *
  * Image previews are linked to open the original image when clicked.
- * You should keep them small to prevent excessive flow gaps.
+ * You should keep them small to prevent excessive gaps in the flow.
  */
 $up_tnw     = 64;
 $up_tnh     = 64;
@@ -103,16 +100,11 @@ $up_tnh     = 64;
 /**
  * Allowed file types
  *
- * Be adviced that the current script does not perform particular MIME
- * checks on non-image types. Hence, there is a chance someone could
- * upload a seemingly harmless text file, e.g. "foo.txt", when in fact
- * the contents of that file are executable source.
- *
- * As a minimal precaution you should never explicitely allow anything
- * directly executable on the server, like *. html, *.php, *.js, etc.
- *
- * Some free hosting providers disallow certain file types, e.g. no mp3
- * or archives. Make sure not to add any such types in the arrays below.
+ * Please note that the script does not check non-image MIME types.
+ * There is a chance for fake uploads. As a minimal precaution you
+ * should never allow anything directly or indirectly executable on
+ * the server, e.g. html, php, js, etc., and remove all types your
+ * hosting may forbid, e.g. no mp3 or certain archives.
  */
 
 
@@ -130,6 +122,7 @@ $up_is_doc  = array(
 $up_is_img  = array(
     "bmp",
     "gif",
+    "ico",
     "jpeg",
     "jpg",
     "png"
@@ -162,10 +155,12 @@ $up_is_vid  = array(
 
 //** Archive
 $up_is_arc  = array(
+    "7z",
     "bz2",
     "gz",
     "rar",
     "tgz",
     "xz",
+    "z",
     "zip"
 );
