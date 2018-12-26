@@ -2,7 +2,7 @@
 /**
  * PHP Version 5 and above
  *
- * User configuration
+ * User configuration -- integer values of 0 = NO, 1 = YES
  *
  * @category  PHP_Chat
  * @package   PHP_Atomchat
@@ -14,99 +14,45 @@
  */
 
 
-/**
- * Script folder
- */
+//** Script folder and page title
 $fold       = "atomchat";
-
-
-/**
- * Page title
- * Logo image (16x16 px) -- $logo = ""; if not needed
- */
 $page       = "PHP Atomchat";
-$logo       = "favicon.png";
 
+//** Page META tags description and keywords
+$meta_des   = "PHP Atomchat Demo";
+$meta_key   = "PHP Atomchat Demo";
 
-/**
- * Characters allowed per post
- */
-$char       = 1024;
-
-
-/**
- * Default language and theme
- */
+//** Default language and theme
 $lang_def   = "en";
 $css_def    = "grey";
 
-
-/*
- * Allow users to change theme
- * Auto-convert emojis
- *
- * 0 = NO -- 1 = YES
+/**
+ * Logo image, width, height, and text
+ * Set $logo_i = ""; to skip image, $logo_t = 0; to skip text 
  */
+$logo_i     = "logo.png";
+$logo_w     = 32;
+$logo_h     = 32;
+$logo_t     = 1;
+
+//** Allow users to change theme, auto-convert emojis
 $css        = 1;
 $emo        = 1;
 
-
-/**
- * Date format
- */
+//** Maximum characters to post and date format
+$char       = 1024;
 $date       = date('r');
 
-
-/**
- ***********************************************************************
- * UPLOADS                                            USE WITH CAUTION *
- *                                                                     *
- * This feature might get you into deep water and even break your box. *
- * Enable only when you fully understand the implied security risks!   *
- ***********************************************************************
- */
-
-
-/**
- * Enable uploads
- */
+//** Enable uploads -- use with caution
 $up         = 1;
 
-
-/**
- * Upload folder
- */
+//** Uploads folder and maximum filesize
 $up_fold    = "upload";
-
-
-/**
- * Maximum upload size -- bytes
- *
- * Make sure this doesn't exceed your filesize limit, if any.
- */
 $up_max     = 2048000;
 
-
-/**
- * Thumbnail width and height -- pixel
- *
- * Image previews are linked to open the original image when clicked.
- * You should keep them small to prevent excessive gaps in the flow.
- */
+//** Thumbnail width and height -- auto-trimmed if source is larger
 $up_tnw     = 64;
 $up_tnh     = 64;
-
-
-/**
- * Allowed file types
- *
- * Please note that the script does not check non-image MIME types.
- * There is a chance for fake uploads. As a minimal precaution you
- * should never allow anything directly or indirectly executable on
- * the server, e.g. html, php, js, etc., and remove all types your
- * hosting may forbid, e.g. no mp3 or certain archives.
- */
-
 
 //** Document
 $up_is_doc  = array(
@@ -116,7 +62,6 @@ $up_is_doc  = array(
     "pdf",
     "txt"
 );
-
 
 //** Image
 $up_is_img  = array(
@@ -128,7 +73,6 @@ $up_is_img  = array(
     "png"
 );
 
-
 //** Sound
 $up_is_snd  = array(
     "m4a",
@@ -138,7 +82,6 @@ $up_is_snd  = array(
     "ogg",
     "wav"
 );
-
 
 //** Video
 $up_is_vid  = array(
@@ -151,7 +94,6 @@ $up_is_vid  = array(
     "ogv",
     "qt"
 );
-
 
 //** Archive
 $up_is_arc  = array(

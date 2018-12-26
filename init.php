@@ -14,13 +14,14 @@
  */
 ?>
             <h2>About</h2>
-            <p><strong>PHP Atomchat</strong> is a <strong>free PHP chat script</strong> for low volume sites or individual homepages, e.g. P2P chat.</p>
+            <p><strong>PHP Atomchat</strong> is a <strong>free PHP chat script</strong> for low volume websites or individual homepages.</p>
             <ul>
                 <li>Works OOTB</li>
                 <li>Completely anonymous</li>
                 <li>No registration or passwords ever</li>
                 <li>Emoji auto-conversion</li>
                 <li>File uploads</li>
+                <li>Themeable</li>
                 <li>Multi-lingual</li>
                 <li>No database required</li>
             </ul>

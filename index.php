@@ -2,8 +2,7 @@
 /**
  * PHP Version 5 and above
  *
- * Preloader -- may contain custom prerequisites
- *              access control, maintenance lay-over, etc.
+ * Preloader -- custom prerequisites, access control, etc.
  *
  * @category  PHP_Chat
  * @package   PHP_Atomchat
@@ -15,7 +14,7 @@
  */
 
 
-//** Required to bypass "Headers already sent" warning after posting
+//** Required to bypass "Headers already sent" warning
 ob_start();
 
 //** Load script

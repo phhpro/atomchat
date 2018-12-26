@@ -1,5 +1,7 @@
 /*
- * Javascript push helper
+ * PHP Version 5 and above
+ *
+ * Javascript pseudo push -- actually more pull then push
  *
  * @category  PHP_Chat
  * @package   PHP_Atomchat
@@ -12,43 +14,43 @@
  *
  * HELP WANTED
  *
- * AJAX push works OK but is neither pretty nor overly effective.
- * Should only trigger refresh when someone adds an entry rather
- * than continously pushing every n seconds. Also needs fixing to
- * possibly skip content double-render when viewed without styles.
+ * This should only refresh on new entry rather than continously
+ * polling every n seconds. Existing code also needs fixing to
+ * prevent double-drawing content when viewed without styles.
  */
 
 
-// Refresh every n seconds -- default 2 = 2000 ms
+// Refresh rate -- default 2 = 2000 ms
 var wait = 2000;
 
 // Init object
 var http = null;
 
 // Link object
-function object() {
-
+function ajax()
+{
     if (window.ActiveXObject) {
         return new ActiveXObject("Microsoft.XMLHTTP");
     } else if (window.XMLHttpRequest) {
         return new XMLHttpRequest();
     } else {
-        alert("Your browser does not support AJAX!");
+        alert("Your browser doesn't support AJAX!");
         return null;
     }
 }
 
 // Status
-function status() {
-
+function status()
+{
     if (http.readyState == 4) {
         document.getElementById("push").innerHTML = http.responseText;
     }
 }
 
 // Timer
-function timer() {
-    http = object();
+function wait()
+{
+    http = ajax();
 
     if (http != null) {
         http.open("POST", "?"+Math.floor(Math.random()*10000), true);
@@ -58,13 +60,15 @@ function timer() {
 }
 
 // Update
-function update() {
-    timer();
-    setTimeout('update()', wait);
+function push()
+{
+    wait();
+    setTimeout('push()', wait);
 }
 
 // Beep
-function bell() {
+function bell()
+{
     var beep = new Audio("data:audio/wav;base64,"+
 "//uQRAAAAWMSLwUIYAAsYkXgoQwAEaYLWfkWgAI0wWs/ItAAAGDgYtAgAyN+QWaAAihw"+
 "MWm4G8QQRDiMcCBcH3Cc+CDv/7xA4Tvh9Rz/y8QADBwMWgQAZG/ILNAARQ4GLTcDeIII"+
@@ -130,5 +134,5 @@ function bell() {
 }
 
 // Init
-update();
+push();
 bell();
