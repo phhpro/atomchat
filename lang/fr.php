@@ -86,7 +86,6 @@ $lang['up_exceed']   = "Le fichier dépasse la taille maximale!";
 $lang['up_exist']    = "Le fichier existe déjà!";
 $lang['up_fail']     = "Le téléchargement a échoué:";
 $lang['up_img']      = "Image";
-$lang['up_info']     = "Typeinfo dans les paramètres.";
 $lang['up_max']      = "Taille maximale en octets:";
 $lang['up_noimg']    = "Image invalide!";
 $lang['up_notype']   = "Type de fichier invalide!";

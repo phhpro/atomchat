@@ -86,7 +86,6 @@ $lang['up_exceed']   = "Datei übersteigt Maximalgröße!";
 $lang['up_exist']    = "Datei existiert bereits!";
 $lang['up_fail']     = "Ladefehler:";
 $lang['up_img']      = "Grafik";
-$lang['up_info']     = "Typeninfo in Einstellungen.";
 $lang['up_max']      = "Maximalgröße in Bytes:";
 $lang['up_noimg']    = "Ungültige Grafik!";
 $lang['up_notype']   = "Ungültiger Dateityp!";

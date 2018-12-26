@@ -1,4 +1,4 @@
-<?php
+ <?php
 /**
  * PHP Version 5 and above
  *
@@ -86,7 +86,6 @@ $lang['up_exceed']   = "الملف يتجاوز الحجم الأقصى!";
 $lang['up_exist']    = "الملف موجود بالفعل!";
 $lang['up_fail']     = "التحميل فشل:";
 $lang['up_img']      = "صورة";
-$lang['up_info']     = "اكتب المعلومات في الإعدادات.";
 $lang['up_max']      = "الحجم الأقصى بالبايت:";
 $lang['up_noimg']    = "صورة غير صالحة!";
 $lang['up_notype']   = "نوع غير صالح!";

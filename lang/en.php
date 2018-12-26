@@ -86,7 +86,6 @@ $lang['up_exceed']   = "File exceeds maximum size!";
 $lang['up_exist']    = "File already exists!";
 $lang['up_fail']     = "Upload failed:";
 $lang['up_img']      = "Image";
-$lang['up_info']     = "Typeinfo in Settings.";
 $lang['up_max']      = "Maximum size in bytes:";
 $lang['up_noimg']    = "Invalid image!";
 $lang['up_notype']   = "Invalid filetype!";

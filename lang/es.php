@@ -86,7 +86,6 @@ $lang['up_exceed']   = "¡El archivo excede el tamaño máximo!";
 $lang['up_exist']    = "¡El archivo ya existe!";
 $lang['up_fail']     = "Subida fallida:";
 $lang['up_img']      = "Imagen";
-$lang['up_info']     = "Info de tipos en Ajustes.";
 $lang['up_max']      = "Tamaño máximo en bytes:";
 $lang['up_noimg']    = "¡Imagen inválida!";
 $lang['up_notype']   = "¡Tipo de archivo invalido!";
