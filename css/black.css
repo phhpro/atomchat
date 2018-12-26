@@ -3,7 +3,7 @@
 body {
     background-color: #000;
     color: #666;
-    font-family: "DejaVu Sans", Arial, sans-serif;
+    font-family: "DejaVu Sans", Arial, Helvetica, sans-serif;
 }
 
 header {
@@ -22,30 +22,27 @@ h1 {
 }
 
 h1 img {
-    border-radius: 50%;
-    vertical-align: top;
+    vertical-align: middle;
 }
 
 #push, article {
     background-color: #000;
     color: #666;
+    padding: 0;
     position: fixed;
-    top: 35px;
+    top: 48px;
     right: 12px;
     bottom: 200px;
     left: 12px;
     overflow: auto;
-    margin: 0 8px;
-    padding: 8px;
     font-size: 95%;
-    border: 1px solid #333;
-    z-index: 100;
 }
 
 article {
+    padding: 4px;
     position: relative;
-    top: 27px;
-    right: 6px;
+    top: 40px;
+    right: 12px;
     left: 4px;
     z-index: 1000;
 }
@@ -55,7 +52,7 @@ nav {
     color: #666;
     font-size: 95%;
     text-align: center;
-    padding: 4px;
+    padding-top: 8px;
     position: fixed;
     right: 0;
     bottom: 0;
@@ -65,7 +62,6 @@ nav {
 
 #stat {
     font-size: 85%;
-    font-weight: bold;
     margin-bottom: 24px;
     padding-bottom: 24px;
 }
@@ -110,10 +106,10 @@ input[type=submit]:hover {
 textarea {
     background-color: #333;
     color: #999;
-    font-size: 105%;
+    font-size: 95%;
     border: 1px solid #333;
     padding: 4px;
-    width: 96%;
+    width: 97%;
 }
 
 textarea:hover {
@@ -137,6 +133,7 @@ select:hover {
 }
 
 .item {
+    font-size: 95%;
     border: 1px solid #333;
     margin: 8px 8px 16px 8px;
 }
@@ -148,19 +145,21 @@ select:hover {
 }
 
 .item_log {
+    background-color: transparent;
+    color: #333;
     padding: 4px 10px;
 }
 
 .item_head {
+    font-size: 95%;
     background-color: #333;
-    color: #666;
+    color: #999;
     padding: 4px;
-    border-bottom: 1px solid #333;
 }
 
 .item:hover .item_head {
     background-color: #333;
-    color: #999;
+    color: #ccc;
 }
 
 .item_date {
@@ -196,11 +195,6 @@ a:hover {
 .item:hover a:hover {
     background-color: transparent;
     color: #fff;
-}
-
-#emo {
-    font-size: 135%;
-    font-weight: bold;
 }
 
 .emo {
