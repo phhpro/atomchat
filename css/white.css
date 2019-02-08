@@ -175,24 +175,24 @@ select:hover {
     padding: 4px;
 }
 
-a {
+a:link, a:visited {
     background-color: transparent;
     color: #666;
     text-decoration: none;
 }
 
-a:hover {
+a:hover, a:active {
     background-color: transparent;
     color: #000;
 }
 
-.item:hover a {
+.item:hover a:link, .item:hover a:visited{
     background-color: transparent;
     color: #333;
     text-decoration: none;
 }
 
-.item:hover a:hover {
+.item:hover a:hover, .item:hover a:active {
     background-color: transparent;
     color: #000;
 }
