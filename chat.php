@@ -50,8 +50,16 @@ if (isset($_SERVER['HTTPS']) && "on" === $_SERVER['HTTPS']) {
 //** Build URL
 $host = "http$prot://" . $_SERVER['HTTP_HOST'] . "/$fold/";
 
-//** Link logfile, initial screen, and status
-$data = "log/" . date('Y-m-d') . ".html";
+//** Link logfile
+if ($log_less === 0) {
+    $log_name = date('Y-m-d');
+} else {
+    $log_name = "atomchat-log";
+}
+
+$data = "log/" . $log_name . ".html";
+
+//** Initial screen and status
 $init = "init.php";
 $stat = "";
 
@@ -259,9 +267,19 @@ if (isset($_POST['push'])) {
 if ($up === 1) {
     $up_size = $_FILES['file']['size'];
     $up_base = basename($_FILES['file']['name']);
-    $up_file = "$up_fold/" . $_SESSION['name'] . "_$up_base";
+    $up_file = $up_fold . "/" . $up_base;
     $up_type = strtolower(pathinfo($up_file, PATHINFO_EXTENSION));
-    $up_open = "$host$up_file";
+    $_SESSION['ac_rand'] = mt_rand();
+    $up_rand = $_SESSION['ac_rand'];
+    $up_save = str_replace(
+        $up_base,
+        $_SESSION['name'] . "-" . $up_rand . "." . $up_type,
+        $up_file
+    );
+
+    $up_file = $up_save;
+    $up_open = $host . $up_file;
+    $up_text = str_replace("$up_fold/", "", $up_save);
     $up_fail = 1;
 }
 
@@ -315,12 +333,7 @@ if (isset($_POST['post'])) {
         if (!empty($_FILES['file']['name'])) {
             $up_src = getimagesize($_FILES['file']['tmp_name']);
 
-            if (is_file($up_file)) {
-                $stat    = $lang['up_exist'];
-                $up_fail = 0;
-            }
-
-            if ($up_size >$up_max) {
+            if ($up_size > $up_max) {
                 $stat    = $lang['up_exceed'];
                 $up_fail = 0;
             }
@@ -331,19 +344,18 @@ if (isset($_POST['post'])) {
                     $up_iw = $up_src[0];
                     $up_ih = $up_src[1];
 
-                    if ($up_iw <=$up_tnw) {
+                    if ($up_iw <= $up_tnw) {
                         $up_tnw = $up_iw;
                     }
 
-                    if ($up_ih <=$up_tnh) {
+                    if ($up_ih <= $up_tnh) {
                         $up_tnh = $up_ih;
                     }
 
-                    $up_link = $lang['up'] . ": $up_base ($up_size)" .
-                               "<br/><a href=\"$up_open\" " .
+                    $up_link = "<p><a href=\"$up_open\" " .
                                "title=\"" . $lang['up_open'] . "\">" .
                                "<img src=\"$up_open\" width=$up_tnw " .
-                               "height=$up_tnh alt=\"\"/></a>";
+                               "height=$up_tnh alt=\"\"/></a></p>";
                 } else {
                     $stat    = $lang['up_noimg'];
                     $up_fail = 0;
@@ -353,9 +365,9 @@ if (isset($_POST['post'])) {
                 || in_array($up_type, $up_is_snd)
                 || in_array($up_type, $up_is_vid)
             ) {
-                $up_link = $lang['up'] . ": <a href=\"$up_open\" " .
+                $up_link = "<p><a href=\"$up_open\" " .
                            "title=\"" . $lang['up_open'] . "\">" .
-                           "$up_base ($up_size)</a>";
+                           "$up_text</a></p>";
             } else {
                 $stat    = $lang['up_notype'];
                 $up_fail = 0;

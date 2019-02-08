@@ -43,12 +43,22 @@ $emo        = 1;
 $char       = 1024;
 $date       = date('r');
 
+/**
+ * Endless log
+ *
+ * The default setting is 0 to create a fresh log every day.
+ * Set $log_less = 1; if you'd rather like an endless log.
+ * Note that this might cause considerable lag depending
+ * the size of the log!
+ */
+$log_less = 0;
+
 //** Enable uploads -- use with caution
 $up         = 1;
 
-//** Uploads folder and maximum filesize
+//** Uploads folder and maximum filesize -- default are 4 MiB
 $up_fold    = "upload";
-$up_max     = 2048000;
+$up_max     = 4096000;
 
 //** Thumbnail width and height -- auto-trimmed if source is larger
 $up_tnw     = 64;
