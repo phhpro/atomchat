@@ -6,7 +6,7 @@
  * @category  PHP_Chat
  * @package   PHP_Atomchat
  * @author    P H Claus <phhpro@gmail.com>
- * @copyright 2015 - 2018 P H Claus
+ * @copyright 2015 - 2019 P H Claus
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GPLv3
  * @version   GIT: Latest
  * @link      https://github.com/phhpro/atomchat
@@ -14,13 +14,13 @@
  *
  * HELP WANTED
  *
- * This should only refresh on new entry rather than continously
- * polling every n seconds. Existing code also needs fixing to
- * prevent double-drawing content when viewed without styles.
+ * This should only refresh on any new entry rather than polling
+ * nonstop every n seconds. Also needs fix to prevent double-drawing
+ * of content when viewed without styles.
  */
 
 
-// Refresh rate -- default 2 = 2000 ms
+// Refresh rate -- default 2000 ms = 2 seconds
 var wait = 2000;
 
 // Init object

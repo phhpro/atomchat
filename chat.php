@@ -7,7 +7,7 @@
  * @category  PHP_Chat
  * @package   PHP_Atomchat
  * @author    P H Claus <phhpro@gmail.com>
- * @copyright 2015 - 2018 P H Claus
+ * @copyright 2015 - 2019 P H Claus
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GPLv3
  * @version   GIT: Latest
  * @link      https://github.com/phhpro/atomchat
@@ -38,7 +38,7 @@ if (is_file('config.php')) {
 }
 
 //** Script version
-$make = "20181226";
+$make = "20190208";
 
 //** Link protocol
 $prot = "";
@@ -94,13 +94,40 @@ if ($_SESSION['test'] !== 1) {
     unset($_SESSION['test']);
 }
 
+//** Link language MIME
+$lang_mime = $lang_def;
+
 //** Check language selection
 if (isset($_POST['lang_apply'])) {
     $_SESSION['lang']
         = htmlentities($_POST['lang_id'], ENT_QUOTES, "UTF-8");
 }
 
-//** Link language
+/**
+ * Try language auto-detect
+ *
+ * Applies to internal strings only to render script output in
+ * user language. Global page language MIME is left intact, e.g.
+ * if page MIME is set to "de" (German), and user selects "fr"
+ * (French), the page's language MIME is still declared as "de"
+ * whereas all script output is rendered "fr".
+ */
+if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+    $lang_sub = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+    $lang_sup = [
+        "ar",
+        "de",
+        "en",
+        "es",
+        "fr",
+        "th",
+        "zh"
+    ];
+    $lang_sub = in_array($lang_sub, $lang_sup) ? $lang_sub : "en";
+    $lang_def = $lang_sub;
+}
+
+//** Link language session and data file
 if (!isset($_SESSION['lang'])) {
     $_SESSION['lang'] = $lang_def;
 }
@@ -160,13 +187,11 @@ if (is_file($lang_data) || $emo === 1) {
 }
 
 //** Link language
-$lang_mime = $lang_def;
 require $lang_data;
 $lang_id   = $_SESSION['lang'];
 $lang_user = "lang/$lang_id.php";
 
 if (is_file($lang_user)) {
-    $lang_mime = $lang_id;
     include $lang_user;
 } else {
     $stat = $lang['lang_miss'];
@@ -323,8 +348,7 @@ if (isset($_POST['post'])) {
                     $stat    = $lang['up_noimg'];
                     $up_fail = 0;
                 }
-            } elseif (
-                in_array($up_type, $up_is_arc)
+            } elseif (in_array($up_type, $up_is_arc)
                 || in_array($up_type, $up_is_doc)
                 || in_array($up_type, $up_is_snd)
                 || in_array($up_type, $up_is_vid)
@@ -341,10 +365,9 @@ if (isset($_POST['post'])) {
             if ($up_fail === 0) {
                 $stat = $lang['up_fail'] . " " . $stat;
             } else {
-                if (
-                    move_uploaded_file(
-                        $_FILES['file']['tmp_name'], $up_file
-                    )
+                if (move_uploaded_file(
+                    $_FILES['file']['tmp_name'], $up_file
+                )
                 ) {
                     $up_pass = 1;
                 } else {
@@ -500,9 +523,9 @@ if (isset($_POST['settings'])) {
                  "$css_link\" title=\"" . $lang['theme_title'] . " " .
                  ucwords($css_link) . "\">" . ucwords($css_link);
 
-                if ($css_link === $_SESSION['theme']) {
-                    echo " [x]";
-                }
+            if ($css_link === $_SESSION['theme']) {
+                echo " [x]";
+            }
 
             echo "</option>\n";
         }
