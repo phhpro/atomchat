@@ -2,12 +2,12 @@
 /**
  * PHP Version 5 and above
  *
- * Language file English
+ * Language file Chinese Simplified
  *
  * @category  PHP_Chat
  * @package   PHP_Atomchat
  * @author    P H Claus <phhpro@gmail.com>
- * @copyright 2015 - 2018 P H Claus
+ * @copyright 2015 - 2019 P H Claus
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GPLv3
  * @version   GIT: Latest
  * @link      https://github.com/phhpro/atomchat
@@ -56,14 +56,14 @@ $lang['name_info']   = "Enter preferred name and press Login.";
 
 $lang['noscript']    = "Javascript functions not available!";
 
-$lang['post']        = "Post";
+$lang['post']        = "Send";
 $lang['post_title']  = "Click here to post your message";
 
 $lang['push']        = "Push";
 $lang['push_title']  = "Click here to manually update the session";
 
 $lang['quit']        = "Quit";
-$lang['quit_title']  = "Click here to quit the session";
+$lang['quit_title']  = "Click here to end the session";
 
 $lang['save']        = "Save";
 $lang['save_title']  = "Click here to save the session";
@@ -92,5 +92,5 @@ $lang['up_notype']   = "Invalid filetype!";
 $lang['up_nowrite']  = "Write error!";
 $lang['up_open']     = "Click here to open this file";
 $lang['up_select']   = "Click here to select a file";
-$lang['up_snd']      = "Sound";
+$lang['up_snd']      = "Audio";
 $lang['up_vid']      = "Video";
