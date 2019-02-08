@@ -83,7 +83,6 @@ $lang['up_allow']    = "Tipos Admitidos";
 $lang['up_arc']      = "Archivo";
 $lang['up_doc']      = "Documento";
 $lang['up_exceed']   = "¡El archivo excede el tamaño máximo!";
-$lang['up_exist']    = "¡El archivo ya existe!";
 $lang['up_fail']     = "Subida fallida:";
 $lang['up_img']      = "Imagen";
 $lang['up_max']      = "Tamaño máximo en bytes:";

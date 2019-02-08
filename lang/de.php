@@ -83,7 +83,6 @@ $lang['up_allow']    = "Erlaubte Dateiarten";
 $lang['up_arc']      = "Archiv";
 $lang['up_doc']      = "Dokument";
 $lang['up_exceed']   = "Datei übersteigt Maximalgröße!";
-$lang['up_exist']    = "Datei existiert bereits!";
 $lang['up_fail']     = "Ladefehler:";
 $lang['up_img']      = "Grafik";
 $lang['up_max']      = "Maximalgröße in Bytes:";

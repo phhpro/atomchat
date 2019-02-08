@@ -83,7 +83,6 @@ $lang['up_allow']    = "Types Autorisés";
 $lang['up_arc']      = "Archiver";
 $lang['up_doc']      = "Document";
 $lang['up_exceed']   = "Le fichier dépasse la taille maximale!";
-$lang['up_exist']    = "Le fichier existe déjà!";
 $lang['up_fail']     = "Le téléchargement a échoué:";
 $lang['up_img']      = "Image";
 $lang['up_max']      = "Taille maximale en octets:";

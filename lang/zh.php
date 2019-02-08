@@ -83,7 +83,6 @@ $lang['up_allow']    = "允许的类型";
 $lang['up_arc']      = "档案";
 $lang['up_doc']      = "文献";
 $lang['up_exceed']   = "文件超过最大尺寸！";
-$lang['up_exist']    = "文件已存在！";
 $lang['up_fail']     = "上传失败：";
 $lang['up_img']      = "图片";
 $lang['up_max']      = "最大大小（字节）：";
