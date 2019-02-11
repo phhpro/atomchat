@@ -35,6 +35,9 @@ $lang['chat_leave']  = "dejó el chat";
 $lang['close']       = "Cerrar";
 $lang['close_title'] = "Haga clic aquí para cerrar esta ventana";
 
+$lang['conf']        = "Ajustes";
+$lang['conf_title']  = "Haga clic aquí para cambiar la configuración";
+
 $lang['emo']         = "Emoji";
 
 $lang['first']       = "El primer mensaje es todo suja.";
@@ -67,9 +70,6 @@ $lang['quit_title']  = "Haga clic aquí para salir de la sesión";
 
 $lang['save']        = "Guardar";
 $lang['save_title']  = "Haga clic aquí para guardar la sesión";
-
-$lang['set']         = "Ajustes";
-$lang['set_title']   = "Haga clic aquí para cambiar la configuración";
 
 $lang['theme']       = "Tema";
 $lang['theme_title'] = "Haga clic aquí para seleccionar tema";

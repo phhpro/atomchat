@@ -35,6 +35,9 @@ $lang['chat_leave']  = "离开了聊天";
 $lang['close']       = "关";
 $lang['close_title'] = "点击此处关闭窗口";
 
+$lang['conf']        = "设置";
+$lang['conf_title']  = "单击此处更改设置";
+
 $lang['emo']         = "表情符号";
 
 $lang['first']       = "第一个条目全是你的";
@@ -67,9 +70,6 @@ $lang['quit_title']  = "单击此处结束会话";
 
 $lang['save']        = "保存";
 $lang['save_title']  = "单击此处保存会话";
-
-$lang['set']         = "设置";
-$lang['set_title']   = "单击此处更改设置";
 
 $lang['theme']       = "主题";
 $lang['theme_title'] = "点击此处选择主题";
