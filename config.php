@@ -51,7 +51,7 @@ $date       = date('r');
  * Note that this might cause considerable lag depending
  * the size of the log!
  */
-$log_less = 0;
+$log_less   = 0;
 
 //** Enable uploads -- use with caution
 $up         = 1;

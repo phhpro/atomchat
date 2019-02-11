@@ -38,7 +38,7 @@ if (is_file('config.php')) {
 }
 
 //** Script version
-$make = "20190208";
+$make = "20190211";
 
 //** Link protocol
 $prot = "";
@@ -63,7 +63,7 @@ $data = "log/" . $log_name . ".html";
 $init = "init.php";
 $stat = "";
 
-//** Link logo image
+//** Link logo image, text, and string
 if ($logo_i !== "") {
     $logo_i = "<img src=\"$logo_i\" " .
               "width=$logo_w height=$logo_h alt=\"\"/> ";
@@ -71,12 +71,13 @@ if ($logo_i !== "") {
     $logo_i = "";
 }
 
-//** Link logo text
 if ($logo_t === 1) {
     $logo_t = $page;
 } else {
     $logo_t = "";
 }
+
+$logo = $logo_i . $logo_t;
 
 //** Link emoji config, arrays, and init code
 $emo_conf = "emoji.txt";
@@ -215,7 +216,7 @@ if (isset($_POST['login'])) {
     $name = htmlentities($_POST['name'], ENT_QUOTES, "UTF-8");
 
     if ($name === "") {
-        header('Location: #MISSING_NAME');
+        header("Location: $host#MISSING_NAME");
         exit;
     } else {
         $_SESSION['name'] = $name . "_" . mt_rand();
@@ -229,7 +230,7 @@ if (isset($_POST['login'])) {
 
         $stat = "";
         file_put_contents($data, $text);
-        header('Location: #LOGIN');
+        header("Location: $host#LOGIN");
         exit;
     }
 }
@@ -253,13 +254,13 @@ if (isset($_POST['quit'])) {
     $text .= file_get_contents($data);
     file_put_contents($data, $text);
     unset($_SESSION['name']);
-    header('Location: #LOGOUT');
+    header("Location: $host#LOGOUT");
     exit;
 }
 
 //** Manual update
 if (isset($_POST['push'])) {
-    header('Location: #PUSH');
+    header("Location: $host#PUSH");
     exit;
 }
 
@@ -414,10 +415,10 @@ if (isset($_POST['post'])) {
                 "            </div>\n";
         $post .= file_get_contents($data);
         file_put_contents($data, $post);
-        header('Location: #POST');
+        header("Location: $host#POST");
         exit;
     } else {
-        header('Location: #INVALID_POST');
+        header("Location: $host#INVALID_POST");
         exit;
     }
 }
@@ -467,14 +468,14 @@ echo "<!DOCTYPE html>\n" .
      "    </head>\n" .
      "    <body>\n" .
      "        <header>\n" .
-     "            <h1>$logo_i$logo_t</h1>\n" .
+     "            <h1>$logo</h1>\n" .
      "        </header>\n";
 
 //** Settings
-if (isset($_POST['settings'])) {
+if (isset($_POST['conf'])) {
     echo "        <article>\n" .
-         "            <h2>" . $lang['set'] . "</h2>\n" .
-         "            <form action=\"#CHAT\" method=POST " .
+         "            <h2>" . $lang['conf']. "</h2>\n" .
+         "            <form action=\"$host#CHAT\" method=POST " .
          "accept-charset=\"UTF-8\">\n" .
 
          //** Language
@@ -688,7 +689,7 @@ if (isset($_SESSION['name']) && !empty($_SESSION['name'])) {
     //** Navigation
     echo "        </div>\n" .
          "        <nav>\n" .
-         "            <form action=\"#CHAT\" method=POST " .
+         "            <form action=\"$host#CHAT\" method=POST " .
          "accept-charset=\"UTF-8\" enctype=\"multipart/form-data\">\n" .
          "                <div>" . $lang['text'] . " " .
          "<small>(<span id=char>$char</span> " . $lang['characters'] .
@@ -706,27 +707,27 @@ if (isset($_SESSION['name']) && !empty($_SESSION['name'])) {
 
          //** Quit
          "                    <input type=submit name=quit " .
-         "value=\"" . $lang['quit'] . "\" " .
+         "value=\"&#x23F8; " . $lang['quit'] . "\" " .
          "title=\"" . $lang['quit_title'] . "\"/>\n" .
 
          //** Conf
-         "                    <input type=submit name=settings " .
-         "value=\"" . $lang['set'] . "\" " .
-         "title=\"" . $lang['set_title'] . "\"/>\n" .
+         "                    <input type=submit name=conf " .
+         "value=\"&#x1F4F6; " . $lang['conf'] . "\" " .
+         "title=\"" . $lang['conf_title'] . "\"/>\n" .
 
          //** Save
          "                    <input type=submit name=save " .
-         "value=\"" . $lang['save'] . "\" " .
+         "value=\"&#x1F53D; " . $lang['save'] . "\" " .
          "title=\"" . $lang['save_title'] . "\"/>\n" .
 
          //** Push
          "                    <input type=submit name=push " .
-         "value=\"" . $lang['push'] . "\" " .
+         "value=\"&#x1F501; " . $lang['push'] . "\" " .
          "title=\"" . $lang['push_title'] . "\"/>\n" .
 
          //** Post
          "                    <input type=submit name=post " .
-         "value=\"" . $lang['post'] . "\" " .
+         "value=\"&#x1F53C; " . $lang['post'] . "\" " .
          "title=\"" . $lang['post_title'] . "\"/>\n" .
          "                </div>\n";
 
@@ -757,7 +758,7 @@ if (isset($_SESSION['name']) && !empty($_SESSION['name'])) {
     $stat = $lang['name_info'];
     echo "        </article>\n" .
          "        <nav>\n" .
-         "            <form action=\"#LOGIN\" method=POST " .
+         "            <form action=\"$host#LOGIN\" method=POST " .
          "accept-charset=\"UTF-8\">\n" .
          "                <div>\n" .
          "                    <label for=name>" .

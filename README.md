@@ -10,3 +10,6 @@
 - Themeable
 - Multi-lingual
 - No database required
+
+
+Note: Some browsers and versions of Android may not support all of the Unicode characters used to render emojis.

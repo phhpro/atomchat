@@ -15,13 +15,16 @@
  * HELP WANTED
  *
  * This should only refresh on any new entry rather than polling
- * nonstop every n seconds. Also needs fix to prevent double-drawing
+ * nonstop every n seconds. Also needs fix to stop double-drawing
  * of content when viewed without styles.
  */
 
 
-// Refresh rate -- default 2000 ms = 2 seconds
-var wait = 2000;
+/*
+ * Delay and refresh rate -- default 1000 ms = 1 second
+ * Default of 1 second may cause logo image to flicker
+ */
+var rate = 1000;
 
 // Init object
 var http = null;
@@ -63,7 +66,7 @@ function wait()
 function push()
 {
     wait();
-    setTimeout('push()', wait);
+    setTimeout('push()', rate);
 }
 
 // Beep
