@@ -27,8 +27,6 @@ $lang['apply_title'] = "Click here to apply the selection";
 
 $lang['by']          = "Powered by";
 
-$lang['characters']  = "characters";
-
 $lang['chat_enter']  = "entered the chat";
 $lang['chat_leave']  = "left the chat";
 
@@ -49,6 +47,8 @@ $lang['info']        = "Info";
 $lang['lang']        = "Language";
 $lang['lang_title']  = "Click here to select language";
 $lang['lang_miss']   = "Missing language file!";
+
+$lang['log_reset']   = "Log reset";
 
 $lang['login']       = "Login";
 $lang['login_title'] = "Click here to login";
@@ -81,6 +81,7 @@ $lang['text_title']  = "Type here to enter your message";
 $lang['up']          = "User Content";
 $lang['up_allow']    = "Allowed Types";
 $lang['up_arc']      = "Archive";
+$lang['up_b64']      = "Base64";
 $lang['up_doc']      = "Document";
 $lang['up_exceed']   = "File exceeds maximum size!";
 $lang['up_fail']     = "Upload failed:";

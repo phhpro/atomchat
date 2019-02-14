@@ -27,8 +27,6 @@ $lang['apply_title'] = "单击此处应用选择";
 
 $lang['by']          = "供电";
 
-$lang['characters']  = "人物";
-
 $lang['chat_enter']  = "进入聊天室";
 $lang['chat_leave']  = "离开了聊天";
 
@@ -49,6 +47,8 @@ $lang['info']        = "信息";
 $lang['lang']        = "语言";
 $lang['lang_title']  = "单击此处选择语言";
 $lang['lang_miss']   = "缺少语言文件！";
+
+$lang['log_reset']   = "日志重置";
 
 $lang['login']       = "登录";
 $lang['login_title'] = "点击此处登录";
@@ -81,6 +81,7 @@ $lang['text_title']  = "在此输入以输入您的消息";
 $lang['up']          = "用户内容";
 $lang['up_allow']    = "允许的类型";
 $lang['up_arc']      = "档案";
+$lang['up_b64']      = "Base64";
 $lang['up_doc']      = "文献";
 $lang['up_exceed']   = "文件超过最大尺寸！";
 $lang['up_fail']     = "上传失败：";

@@ -27,8 +27,6 @@ $lang['apply_title'] = "Cliquez ici pour appliquer la sélection";
 
 $lang['by']          = "Alimenté par";
 
-$lang['characters']  = "caractère";
-
 $lang['chat_enter']  = "entré dans le chat";
 $lang['chat_leave']  = "a quitté le chat";
 
@@ -49,6 +47,8 @@ $lang['info']        = "Info";
 $lang['lang']        = "Langue";
 $lang['lang_title']  = "Cliquez ici pour sélectionner la langue";
 $lang['lang_miss']   = "Fichier de langue manquant!";
+
+$lang['log_reset']   = "Journal réinitialiser";
 
 $lang['login']       = "Entrer";
 $lang['login_title'] = "Cliquez ici pour vous identifier";
@@ -81,6 +81,7 @@ $lang['text_title']  = "Tapez ici pour entrer votre message";
 $lang['up']          = "Contenu De L'utilisateur";
 $lang['up_allow']    = "Types Autorisés";
 $lang['up_arc']      = "Archiver";
+$lang['up_b64']      = "Base64";
 $lang['up_doc']      = "Document";
 $lang['up_exceed']   = "Le fichier dépasse la taille maximale!";
 $lang['up_fail']     = "Le téléchargement a échoué:";

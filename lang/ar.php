@@ -27,8 +27,6 @@ $lang['apply_title'] = "انقر هنا لتطبيق التحديد";
 
 $lang['by']          = "مشغل بواسطة";
 
-$lang['characters']  = "الشخصيات";
-
 $lang['chat_enter']  = "دخلت الدردشة";
 $lang['chat_leave']  = "ترك المحادثة";
 
@@ -49,6 +47,8 @@ $lang['info']        = "معلومات";
 $lang['lang']        = "لغة";
 $lang['lang_title']  = "انقر هنا لتحديد اللغة";
 $lang['lang_miss']   = "ملف اللغة مفقود!";
+
+$lang['log_reset']   = "إعادة ضبط السجل"
 
 $lang['login']       = "تسجيل الدخول";
 $lang['login_title'] = "انقر هنا لتسجيل الدخول";
@@ -81,6 +81,7 @@ $lang['text_title']  = "اكتب هنا لإدخال رسالتك";
 $lang['up']          = "محتوى المستخدم";
 $lang['up_allow']    = "أنواع المسموح بها";
 $lang['up_arc']      = "أرشيف";
+$lang['up_b64']      = "Base64";
 $lang['up_doc']      = "وثيقة";
 $lang['up_exceed']   = "الملف يتجاوز الحجم الأقصى!";
 $lang['up_fail']     = "التحميل فشل:";

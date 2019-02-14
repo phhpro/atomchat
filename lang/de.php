@@ -27,8 +27,6 @@ $lang['apply_title'] = "Klicken Sie hier um die Auswahl anzuwenden";
 
 $lang['by']          = "Angetrieben von";
 
-$lang['characters']  = "Zeichen";
-
 $lang['chat_enter']  = "hat den Chat betreten";
 $lang['chat_leave']  = "hat den Chat verlassen";
 
@@ -40,7 +38,7 @@ $lang['conf_title']  = "Klicken Sie hier um Einstellungen zu ändern";
 
 $lang['emo']         = "Emoji";
 
-$lang['first']       = "Der erste Eintrag gehört ganz Ihnen.";
+$lang['first']       = "Der erste Eintrag gehört Ihnen";
 
 $lang['get']         = "Klicken Sie hier um eine kostenlose Kopie dieses Skriptes zu erhalten";
 
@@ -49,6 +47,8 @@ $lang['info']        = "Info";
 $lang['lang']        = "Sprache";
 $lang['lang_title']  = "Klicken Sie hier um Sprache zu wählen";
 $lang['lang_miss']   = "Fehlende Sprachdatei!";
+
+$lang['log_reset']   = "Log Reinitialisierung";
 
 $lang['login']       = "Anmelden";
 $lang['login_title'] = "Klicken Sie hier um sich anzumelden";
@@ -81,6 +81,7 @@ $lang['text_title']  = "Tippen Sie hier um Ihre Nachricht einzugeben";
 $lang['up']          = "Benutzer Inhalt";
 $lang['up_allow']    = "Erlaubte Dateiarten";
 $lang['up_arc']      = "Archiv";
+$lang['up_b64']      = "Base64";
 $lang['up_doc']      = "Dokument";
 $lang['up_exceed']   = "Datei übersteigt Maximalgröße!";
 $lang['up_fail']     = "Ladefehler:";
