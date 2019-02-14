@@ -162,17 +162,19 @@ select:hover {
     color: #ccc;
 }
 
-.item_date {
-    float: left;
-}
-
 .item_name {
-    text-align: right;
+    float: right;
 }
 
 .item_text {
-    white-space: pre-wrap;
+    font-family: sans-serif;
+    font-size: 100%;
+    margin: 0;
     padding: 4px;
+}
+
+#char {
+    text-align: center;
 }
 
 a:link, a:visited {
@@ -205,10 +207,6 @@ a:hover, a:active {
     position: fixed;
     top: 28px;
     right: 6px;
-}
-
-.up_link {
-    margin-top: 8px;
 }
 
 @media screen and (max-width: 900px) {
