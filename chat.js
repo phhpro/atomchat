@@ -1,7 +1,7 @@
 /*
  * PHP Version 5 and above
  *
- * Javascript pseudo push -- actually more pull then push
+ * Javascript helper
  *
  * @category  PHP_Chat
  * @package   PHP_Atomchat
@@ -14,22 +14,36 @@
  *
  * HELP WANTED
  *
- * This should only refresh on any new entry rather than polling
- * nonstop every n seconds. Also needs fix to stop double-drawing
- * of content when viewed without styles.
+ * 1. Function push() should really only fire on any new post
+ *    rather than polling nonstop.
+ *
+ * 2. Needs fix to stop double-render when viewed without styles.
  */
 
 
 /*
- * Delay and refresh rate -- default 1000 ms = 1 second
- * Default of 1 second may cause logo image to flicker
+ ***********************************************************************
+ *                                                   BEGIN USER CONFIG *
+ ***********************************************************************
  */
-var rate = 1000;
 
-// Init object
+
+// Post delay and refresh rate -- default 2000 ms = 2 seconds
+var rate = 2000;
+
+// Maximum chars per post -- value must match "$char" in config.php
+var char = 1024;
+
+
+/*
+ ***********************************************************************
+ *                                                     END USER CONFIG *
+ ***********************************************************************
+ */
+
+
 var http = null;
 
-// Link object
 function ajax()
 {
     if (window.ActiveXObject) {
@@ -42,7 +56,6 @@ function ajax()
     }
 }
 
-// Status
 function status()
 {
     if (http.readyState == 4) {
@@ -50,26 +63,24 @@ function status()
     }
 }
 
-// Timer
 function wait()
 {
     http = ajax();
 
     if (http != null) {
-        http.open("POST", "?"+Math.floor(Math.random()*10000), true);
+        http.open("POST", "?" + Math.floor(Math.random() * 10000), true);
         http.onreadystatechange = status;
         http.send(null);
     }
 }
 
-// Update
 function push()
 {
     wait();
     setTimeout('push()', rate);
+
 }
 
-// Beep
 function bell()
 {
     var beep = new Audio("data:audio/wav;base64,"+
@@ -136,6 +147,14 @@ function bell()
     beep.play();
 }
 
-// Init
+function chars(chat)
+{
+    if (chat.text.value.length >= char) {
+        chat.text.value = chat.text.value.substring(0, char);
+    } else {
+        chat.char.value = char - chat.text.value.length;
+    }
+}
+
 push();
 bell();

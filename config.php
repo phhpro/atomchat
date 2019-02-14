@@ -14,11 +14,11 @@
  */
 
 
-//** Script folder and page title
+//** Script folder and title
 $fold       = "atomchat";
 $page       = "PHP Atomchat";
 
-//** Page META tags description and keywords
+//** META tags description and keywords
 $meta_des   = "PHP Atomchat Demo";
 $meta_key   = "PHP Atomchat Demo";
 
@@ -28,7 +28,10 @@ $css_def    = "grey";
 
 /**
  * Logo image, width, height, and text
- * Set $logo_i = ""; to skip image, $logo_t = 0; to skip text 
+ *
+ * Set $logo_i = "" to skip image, $logo_t = 0 to skip text.
+ *
+ * Image type must be either one of gif, jpeg, jpg, or png!
  */
 $logo_i     = "logo.png";
 $logo_w     = 32;
@@ -39,19 +42,27 @@ $logo_t     = 1;
 $css        = 1;
 $emo        = 1;
 
-//** Maximum characters to post and date format
+/**
+ * Maximum characters to post and date format.
+ * Value of "$char" must match "char" in chat.js.
+ */
 $char       = 1024;
-$date       = date('r');
+$date       = gmdate('Y-m-d H:m:s');
 
 /**
- * Endless log
+ * Log mode and maximum size
  *
- * The default setting is 0 to create a fresh log every day.
- * Set $log_less = 1; if you'd rather like an endless log.
- * Note that this might cause considerable lag depending
- * the size of the log!
+ * Mode 1 creates endless log, 0 creates daily logs.
+ * Log will auto-reset after size limit is reached.
  */
-$log_less   = 0;
+$log_mode   = 1;
+$log_size   = 10240000;
+
+/*
+ ***********************************************************************
+ *                                                             UPLOADS *
+ ***********************************************************************
+ */
 
 //** Enable uploads -- use with caution
 $up         = 1;
@@ -64,23 +75,27 @@ $up_max     = 4096000;
 $up_tnw     = 64;
 $up_tnh     = 64;
 
-//** Document
-$up_is_doc  = array(
-    "doc",
-    "docx",
-    "odt",
-    "pdf",
-    "txt"
-);
-
-//** Image
-$up_is_img  = array(
-    "bmp",
+/**
+ * Image, Base64 -- DO NOT EDIT !!!
+ *
+ * These will be converted to Base64 strings to minimise server
+ * requests and avoid flicker. Only Base64 types will get thumbnails.
+ */
+$up_is_b64  = array(
     "gif",
-    "ico",
     "jpeg",
     "jpg",
     "png"
+);
+
+/**
+ * Image, other
+ *
+ * Add any other image types here. These will NOT get thumbnails.
+ */
+$up_is_img  = array(
+    "bmp",
+    "ico"
 );
 
 //** Sound
@@ -93,18 +108,6 @@ $up_is_snd  = array(
     "wav"
 );
 
-//** Video
-$up_is_vid  = array(
-    "avi",
-    "m4v",
-    "mp4",
-    "mpeg",
-    "mpg",
-    "ogg",
-    "ogv",
-    "qt"
-);
-
 //** Archive
 $up_is_arc  = array(
     "7z",
@@ -115,4 +118,25 @@ $up_is_arc  = array(
     "xz",
     "z",
     "zip"
+);
+
+//** Document
+$up_is_doc  = array(
+    "doc",
+    "docx",
+    "odt",
+    "pdf",
+    "txt"
+);
+
+//** Video
+$up_is_vid  = array(
+    "avi",
+    "m4v",
+    "mp4",
+    "mpeg",
+    "mpg",
+    "ogg",
+    "ogv",
+    "qt"
 );
