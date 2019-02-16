@@ -1,0 +1,227 @@
+@charset "UTF-8";
+
+body {
+    background-color: #999;
+    color: #333;
+    font-family: "DejaVu Sans", Arial, Helvetica, sans-serif;
+}
+
+header {
+    background-color: #999;
+    color: #333;
+    margin: 0 12px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 35px;
+    left: 0;
+}
+
+h1 {
+    font-size: 95%;
+}
+
+h1 img {
+    vertical-align: middle;
+}
+
+#push {
+    background-color: #999;
+    color: #333;
+    padding: 4px;
+    position: fixed;
+    top: 48px;
+    right: 12px;
+    bottom: 240px;
+    left: 12px;
+    overflow: auto;
+    font-size: 95%;
+}
+
+article {
+    background-color: #999;
+    color: #333;
+    padding: 4px;
+    position: fixed;
+    top: 48px;
+    right: 12px;
+    bottom: 36px;
+    left: 14px;
+    overflow: auto;
+    font-size: 95%;
+    z-index: 1000;
+}
+
+nav {
+    background-color: #999;
+    color: #333;
+    font-size: 95%;
+    text-align: center;
+    padding-top: 8px;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+#login {
+    z-index: 1001;
+}
+
+#stat, #by {
+    font-size: 85%;
+}
+
+h2 {
+    font-size: 115%;
+    margin: 0;
+}
+
+label {
+    font-weight: bold;
+}
+
+input {
+    background-color: #999;
+    color: #000;
+    border: 1px outset #999;
+    font-size: 85%;
+    padding: 4px;
+}
+
+input:hover {
+    background-color: #ccc;
+    color: #000;
+    border: 1px inset #ccc;
+}
+
+input[type=submit] {
+    font-weight: bold;
+    margin: 4px;
+}
+
+input[type=submit]:hover {
+    transform: scale(0.9);
+}
+
+#char {
+    background-color: transparent;
+    color: #333;
+    text-align: center;
+    border: 0;
+    padding: 0;
+}
+
+textarea {
+    background-color: #999;
+    color: #000;
+    font-size: 95%;
+    border: 1px solid #666;
+    padding: 4px;
+    width: 50%;
+    max-width: 400px;
+}
+
+textarea:hover {
+    background-color: #ccc;
+    color: #000;
+    border: 1px inset #ccc;
+}
+
+select {
+    background-color: #999;
+    color: #000;
+    font-size: 105%;
+    border: 1px outset #999;
+    padding: 2px;
+}
+
+select:hover {
+    background-color: #ccc;
+    color: #000;
+    border: 1px inset #ccc;
+}
+
+.item {
+    font-size: 95%;
+    border: 1px solid #666;
+    margin: 8px 0 16px 0;
+}
+
+.item:hover {
+    background-color: #ccc;
+    color: #000;
+    border: 1px solid #666;
+}
+
+.item_log {
+    background-color: transparent;
+    color: #666;
+    padding: 4px 10px;
+}
+
+.item_head {
+    font-size: 95%;
+    background-color: #666;
+    color: #000;
+    padding: 4px;
+}
+
+.item:hover .item_head {
+    background-color: #333;
+    color: #ccc;
+}
+
+.item_name {
+    float: right;
+}
+
+.item_text {
+    font-family: sans-serif;
+    font-size: 100%;
+    margin: 0;
+    padding: 4px;
+}
+
+a:link, a:visited {
+    background-color: transparent;
+    color: #333;
+    text-decoration: none;
+}
+
+a:hover, a:active {
+    background-color: transparent;
+    color: #000;
+}
+
+.item:hover a:link, .item:hover a:visited {
+    background-color: transparent;
+    color: #333;
+}
+
+.item:hover a:hover, .item:hover a:active {
+    background-color: transparent;
+    color: #000;
+}
+
+.emo {
+    font-size: 135%;
+}
+
+#close {
+    position: fixed;
+    top: 50px;
+    right: 24px;
+}
+
+@media screen and (max-width: 800px) {
+    body {
+        font-size: 85%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    textarea {
+        width: 80%;
+    }
+}
