@@ -10,14 +10,6 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GPLv3
  * @version   GIT: Latest
  * @link      https://github.com/phhpro/atomchat
- *
- *
- * HELP WANTED
- *
- * 1. Function push() should really only fire on any new post
- *    rather than polling nonstop.
- *
- * 2. Needs fix to stop double-render when viewed without styles.
  */
 
 
@@ -28,10 +20,10 @@
  */
 
 
-// Post delay and refresh rate -- default 2000 ms = 2 seconds
+// Post delay and refresh rate -- see README -> Issues
 var rate = 2000;
 
-// Maximum chars per post -- value must match "$char" in config.php
+// Maximum chars per post -- value must match $char in config.php
 var char = 1024;
 
 
@@ -42,43 +34,21 @@ var char = 1024;
  */
 
 
-var http = null;
-
-function ajax()
-{
-    if (window.ActiveXObject) {
-        return new ActiveXObject("Microsoft.XMLHTTP");
-    } else if (window.XMLHttpRequest) {
-        return new XMLHttpRequest();
-    } else {
-        alert("Your browser doesn't support AJAX!");
-        return null;
-    }
-}
-
-function status()
-{
-    if (http.readyState == 4) {
-        document.getElementById("push").innerHTML = http.responseText;
-    }
-}
-
-function wait()
-{
-    http = ajax();
-
-    if (http != null) {
-        http.open("POST", "?" + Math.floor(Math.random() * 10000), true);
-        http.onreadystatechange = status;
-        http.send(null);
-    }
-}
-
 function push()
 {
-    wait();
-    setTimeout('push()', rate);
+    var http = null;
+    http = new XMLHttpRequest();
+    http.open("GET", '#', true);
 
+    http.onreadystatechange = function() {
+
+        if (http.readyState == 4) {
+            document.getElementById('push').innerHTML = http.responseText;
+        }
+    }
+
+    http.send();
+    setTimeout('push()', rate);
 }
 
 function bell()
@@ -156,5 +126,5 @@ function chars(chat)
     }
 }
 
-push();
 bell();
+push();

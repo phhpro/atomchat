@@ -1,6 +1,6 @@
 # PHP Atomchat
 
-**PHP Atomchat** is a **free PHP chat script** for low volume websites or individual homepages.
+**PHP Atomchat** is a **free PHP chat script** for low-volume and individual websites.
 
 ## Features
 - Works OOTB
@@ -18,7 +18,7 @@ The only logging applies to the chat history. The script can create either daily
 
 ### Emojis
 
-Some older browsers and versions of Android may not support all of the Unicode characters used to render emojis. This is usually save to ignore because the fallback provides the textual abbreviation and the icons on the menu buttons are purely cosmetic anyway.
+As of February 2019 only Firefox appears to have suitable Unicode support. The script therefore only covers a very basic set of emojis, which ought to be available on most devices and platforms.
 
 ### Uploads
 
@@ -28,7 +28,7 @@ Depending your server's configuration, you may need to edit your CSP to add an e
 
 ### Themes
 
-The provided CSS themes are probably not the most fashionable. They are kept simple and primarily intended to serve as guidance. You'll probably want to create and use your own styles though.
+The provided CSS themes are probably not the most fashionable. They are kept simple and primarily intended to serve as guidance.
 
 ### Languages
 
@@ -44,4 +44,9 @@ If you have Javascript disabled or your device doesn't support it, or if you are
 
 ## Issues
 
-Setting the delay to 1 second appears to cause massive memory leaking, at least in Firefox 65 - even with a minimal log. Testing in Qupzilla 1.8.9 and Chrome 72 fails to reproduce the issue. Feedback welcome, thank you.
+A polling rate of 1 second (`var rate = nnnn` in `chat.js`) appears to trigger a massive memory leak in Firefox 65; even with a minimal log. Testing in Qupzilla 1.8.9 and Chrome 72 didn't reproduce the issue.
+
+Applying the trigger to the `body` ID instead of `push` fixes distorted rendering but effectively prevents input. This only happens when viewed either without or generic styles. Rename `.__debug.css` to `__debug.css` for testing. It's using the exact same rules, just without declaring fonts or colours. Switch to any other theme and the issue is gone.
+
+Feedback welcome, thank you.
+

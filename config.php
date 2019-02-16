@@ -18,13 +18,17 @@
 $fold       = "atomchat";
 $page       = "PHP Atomchat";
 
-//** META tags description and keywords
+//** META description and keywords
 $meta_des   = "PHP Atomchat Demo";
 $meta_key   = "PHP Atomchat Demo";
 
-//** Default language and theme
+//** Default language and folder
 $lang_def   = "en";
-$css_def    = "grey";
+$lang_fold  = "lang";
+
+//** Default theme and folder
+$css_def    = "light";
+$css_fold   = "css";
 
 /**
  * Logo image, width, height, and text
@@ -50,13 +54,14 @@ $char       = 1024;
 $date       = gmdate('Y-m-d H:m:s');
 
 /**
- * Log mode and maximum size
+ * Log mode, maximum size, and folder
  *
  * Mode 1 creates endless log, 0 creates daily logs.
  * Log will auto-reset after size limit is reached.
  */
 $log_mode   = 1;
 $log_size   = 10240000;
+$log_fold   = "log";
 
 /*
  ***********************************************************************

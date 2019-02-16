@@ -38,7 +38,7 @@ if (is_file('config.php')) {
 }
 
 //** Version
-$make = "20190214";
+$make = "20190216";
 
 //** Protocol and URL
 $prot = "";
@@ -50,22 +50,22 @@ if (isset($_SERVER['HTTPS']) && "on" === $_SERVER['HTTPS']) {
 $host = "http$prot://" . $_SERVER['HTTP_HOST'] . "/$fold/";
 
 //** Log
-if ($log_mode === 0) {
-    $log_name = "atomchat-log_" . date('Y-m-d');
-} else {
+if ($log_mode === 1) {
     $log_name = "atomchat-log";
+} else {
+    $log_name = $log_name . "_" . date('Y-m-d');
 }
 
-$data = "log/" . $log_name . ".html";
+$log_data = $log_fold . "/" . $log_name . ".html";
 
-if (is_file($data)) {
+if (is_file($log_data)) {
 
-    if (filesize($data) > $log_size) {
-        unlink($data);
+    if (filesize($log_data) > $log_size) {
+        unlink($log_data);
     }
 }
 
-//** Initial welcome screen and status
+//** Welcome screen and status init
 $init = "welcome.php";
 $stat = "";
 
@@ -81,14 +81,14 @@ function b64enc($b64_src)
     $b64_src = $b64_src;
     $b64_ext = pathinfo($b64_src, PATHINFO_EXTENSION);
     $b64_get = file_get_contents($b64_src);
-    $b64_str = "data:image/" . $b64_ext .
-               ";base64," . base64_encode($b64_get);
+    $b64_str = "\"data:image/" . $b64_ext .
+               ";base64," . base64_encode($b64_get) . "\" ";
     return chunk_split($b64_str);
 }
 
 //** Logo
 if ($logo_i !== "") {
-    $logo_i = "<img src=\"" . b64enc($logo_i) . "\" " .
+    $logo_i = "<img src=" . b64enc($logo_i) .
               "width=$logo_w height=$logo_h alt=\"\"/> ";
 } else {
     $logo_i = "";
@@ -109,38 +109,37 @@ $emo_sarr = array();
 $emo_code = "";
 
 //** Session
-if (get_cfg_var('session.use_strict_mode') !== '1') {
-    ini_set('session.use_strict_mode', '1');
+if (get_cfg_var('session.use_strict_mode') !== 1) {
+    ini_set('session.use_strict_mode', 1);
 }
 
 session_start();
-$_SESSION['test'] = 1;
+$_SESSION['ac_test'] = 1;
 
-if ($_SESSION['test'] !== 1) {
+if ($_SESSION['ac_test'] !== 1) {
     echo "<p>Missing session cookie!</p>\n" .
          "<p>Please edit your browser's cookie " .
          "settings and then try again.</p>\n";
     exit;
 } else {
-    unset($_SESSION['test']);
+    unset($_SESSION['ac_test']);
 }
 
 //** Language
 $lang_mime = $lang_def;
 
 if (isset($_POST['lang_apply'])) {
-    $_SESSION['lang']
+    $_SESSION['ac_lang']
         = htmlentities($_POST['lang_id'], ENT_QUOTES, "UTF-8");
 }
 
 /**
  * Try language auto-detect
  *
- * Applies to internal strings only to render script output in
- * user language. Global page language MIME is left intact, e.g.
- * if page MIME is set to "de" (German), and user selects "fr"
- * (French), the page's language MIME is still declared as "de"
- * whereas all script output is rendered "fr".
+ * Applies to internal strings only to render script output in user
+ * language. Global page MIME is left intact, e.g. if page MIME is
+ * set to "de" (German), and user selects "fr" (French), page MIME
+ * remains "de" whereas all script output is rendered "fr".
  */
 if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
     $lang_sub = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
@@ -157,18 +156,23 @@ if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
     $lang_def = $lang_sub;
 }
 
-if (!isset($_SESSION['lang'])) {
-    $_SESSION['lang'] = $lang_def;
+if (!isset($_SESSION['ac_lang'])) {
+    $_SESSION['ac_lang'] = $lang_def;
 }
 
-$lang_id   = $_SESSION['lang'];
-$lang_data = "./lang/$lang_id.php";
+$lang_id   = $_SESSION['ac_lang'];
+$lang_data = $lang_fold . "/" . $lang_id . ".php";
 
 
 //** Folders
-if (!is_dir('log')) {
+if (!is_dir($lang_fold)) {
+    echo "Missing language folder!";
+    exit;
+}
 
-    if (mkdir('log') === false) {
+if (!is_dir($log_fold)) {
+
+    if (mkdir($log_fold) === false) {
         echo "Failed to create log folder!";
         exit;
     }
@@ -183,11 +187,6 @@ if ($up === 1) {
             exit;
         }
     }
-}
-
-if (!is_dir('lang')) {
-    echo "Missing language folder!";
-    exit;
 }
 
 //** Files
@@ -216,18 +215,13 @@ if (is_file($lang_data) || $emo === 1) {
 
 //** Link language
 require $lang_data;
-$lang_id   = $_SESSION['lang'];
-$lang_user = "lang/$lang_id.php";
+$lang_id   = $_SESSION['ac_lang'];
+$lang_user = $lang_fold . "/" . $lang_id . ".php";
 
 if (is_file($lang_user)) {
     include $lang_user;
 } else {
     $stat = $lang['lang_miss'];
-}
-
-//** Theme
-if (!is_file("css/$css_def.css")) {
-    $stat = $lang['theme_miss'];
 }
 
 //** Login
@@ -238,17 +232,17 @@ if (isset($_POST['login'])) {
         header("Location: $host#MISSING_NAME");
         exit;
     } else {
-        $_SESSION['name'] = $name . "_" . mt_rand();
+        $_SESSION['ac_name'] = $name . "_" . mt_rand();
         $text = "            <div class=item_log>$date " .
-                $_SESSION['name'] . " " . $lang['chat_enter'] .
-                "</div>\n";
+                 $_SESSION['ac_name'] . " " . $lang['chat_enter'] .
+                 "</div>\n";
 
-        if (is_file($data)) {
-            $text .= file_get_contents($data);
+        if (is_file($log_data)) {
+            $text .= file_get_contents($log_data);
         }
 
         $stat = "";
-        file_put_contents($data, $text);
+        file_put_contents($log_data, $text);
         header("Location: $host#LOGIN");
         exit;
     }
@@ -258,21 +252,21 @@ if (isset($_POST['login'])) {
 if (isset($_POST['save'])) {
     header('Content-type: text/html');
     header(
-        'Content-Disposition: attachment; ' .
-        'filename="' . str_replace('log/', '', $data) . '"'
+        'Content-Disposition: attachment; filename="' .
+        str_replace($log_fold . '/', '', $log_data) . '"'
     );
-    readfile($data);
+    readfile($log_data);
     exit;
 }
 
 //** Logout
 if (isset($_POST['quit'])) {
     $text  = "            <div class=item_log>$date " .
-             $_SESSION['name'] . " " . $lang['chat_leave'] .
+             $_SESSION['ac_name'] . " " . $lang['chat_leave'] .
              "</div>\n";
-    $text .= file_get_contents($data);
-    file_put_contents($data, $text);
-    unset($_SESSION['name']);
+    $text .= file_get_contents($log_data);
+    file_put_contents($log_data, $text);
+    unset($_SESSION['ac_name']);
     header("Location: $host#LOGOUT");
     exit;
 }
@@ -314,8 +308,9 @@ if (isset($_POST['post'])) {
                 if (stripos($text, $emo_calt) !== false) {
                     $text = trim(
                         str_replace(
-                            $emo_calt, "<span class=emo>" .
-                            $emo_ckey ."</span>", $text
+                            $emo_calt,
+                            "<span class=emo>$emo_ckey</span>",
+                            $text
                         )
                     );
                 }
@@ -330,7 +325,7 @@ if (isset($_POST['post'])) {
         $up_file = $up_fold . "/" . $up_base;
         $up_type = strtolower(pathinfo($up_file, PATHINFO_EXTENSION));
         $_SESSION['ac_rand'] = mt_rand();
-        $up_rand = $_SESSION['name'] . "-" .
+        $up_rand = $_SESSION['ac_name'] . "-" .
                    $_SESSION['ac_rand'] . "." . $up_type;
         $up_save = str_replace($up_base, $up_rand, $up_file);
         $up_text = str_replace("$up_fold/", "", $up_save);
@@ -363,8 +358,8 @@ if (isset($_POST['post'])) {
 
                     $up_link = "<p><a href=\"$up_open\" " .
                                "title=\"" . $lang['up_open'] . "\">" .
-                               "<img src=\"" . b64enc($up_name) .
-                               "\" width=$up_tnw height=$up_tnh " .
+                               "<img src=" . b64enc($up_name) .
+                               "width=$up_tnw height=$up_tnh " .
                                "alt=\"\"/></a></p>";
                 } else {
                     $stat    = $lang['up_noimg'];
@@ -397,9 +392,9 @@ if (isset($_POST['post'])) {
                     $stat = $lang['up_nowrite'];
                 }
             }
-        }
 
-        unlink($up_file);
+            unlink($up_file);
+        }
     }
 
     if ($text !== "" && $up_link === "") {
@@ -416,16 +411,16 @@ if (isset($_POST['post'])) {
 
     if ($up_pass === 1) {
         $post = "            <div class=item id=\"pid" .
-                date('_Ymd_His_') . $_SESSION['name'] . "\">\n" .
+                date('_Ymd_His_') . $_SESSION['ac_name'] . "\">\n" .
                 "                <div class=item_head>\n" .
                 "                    <span class=item_date>" .
                 "$date</span> <span class=item_name>" .
-                $_SESSION['name'] . "</span>\n" .
+                $_SESSION['ac_name'] . "</span>\n" .
                 "                </div>\n" .
                 "                <pre class=item_text>$post</pre>\n" .
                 "            </div>\n";
-        $post .= file_get_contents($data);
-        file_put_contents($data, $post);
+        $post .= file_get_contents($log_data);
+        file_put_contents($log_data, $post);
         header("Location: $host#POST");
         exit;
     } else {
@@ -434,21 +429,22 @@ if (isset($_POST['post'])) {
     }
 }
 
-//** Link theme
 if (isset($_POST['css_apply'])) {
     $css_id = htmlentities($_POST['css_id'], ENT_QUOTES, "UTF-8");
 
     if ($css_id !== "") {
-        $_SESSION['theme'] = $css_id;
+        $_SESSION['ac_theme'] = $css_id;
     }
 }
 
-if (isset($_SESSION['theme'])) {
-    $css_sel = $_SESSION['theme'];
+if (isset($_SESSION['ac_theme'])) {
+    $css_sel = $_SESSION['ac_theme'];
 } else {
-    $css_sel           = $css_def;
-    $_SESSION['theme'] = $css_sel;
+    $css_sel              = $css_def;
+    $_SESSION['ac_theme'] = $css_sel;
 }
+
+$css_file = $css_fold . "/" . $css_sel . ".css";
 
 //** Headers
 header('Expires: on, 01 Jan 1970 00:00:00 GMT');
@@ -472,11 +468,12 @@ echo "<!DOCTYPE html>\n" .
      "        <meta name=robots content=\"noodp, noydir\"/>\n" .
      "        <meta name=viewport content=\"width=device-width, " .
      "height=device-height, initial-scale=1\"/>\n" .
-     "        <link rel=icon href=\"favicon.png\" " .
+     "        <link rel=icon href=\"" . $host . "favicon.png\" " .
      "type=\"image/png\"/>\n" .
-     "        <link rel=stylesheet href=\"css/$css_sel.css\"/>\n" .
+     "        <link rel=stylesheet href=\"$host$css_file\"/>\n" .
+     "        <link rel=stylesheet href=\"" . $host . "fa.css\"/>\n" .
      "    </head>\n" .
-     "    <body>\n" .
+     "    <body id=body>\n" .
      "        <header>\n" .
      "            <h1>$logo</h1>\n" .
      "        </header>\n";
@@ -533,18 +530,18 @@ if (isset($_POST['conf'])) {
              "                    <select name=css_id " .
              "title=\"" . $lang['theme_title'] . "\">\n";
 
-        $css_fold = "css/";
-        $css_list = glob($css_fold . "*.css");
+        $css_list = glob($css_fold . "/*.css");
         sort($css_list);
 
         foreach ($css_list as $css_item) {
             $css_link = basename($css_item);
             $css_link = str_replace(".css", "", $css_link);
+            $css_text = str_replace(array("-", "_"), " ", $css_link);
             echo "                        <option value=\"".
                  "$css_link\" title=\"" . $lang['theme_title'] . " " .
-                 ucwords($css_link) . "\">" . ucwords($css_link);
+                 ucwords($css_text) . "\">" . ucwords($css_text);
 
-            if ($css_link === $_SESSION['theme']) {
+            if ($css_link === $_SESSION['ac_theme']) {
                 echo " [x]";
             }
 
@@ -700,11 +697,11 @@ if (isset($_POST['conf'])) {
 }
 
 //** Check name session
-if (isset($_SESSION['name']) && !empty($_SESSION['name'])) {
+if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
     echo "        <div id=push>\n";
 
-    if (is_file($data)) {
-        include $data;
+    if (is_file($log_data)) {
+        include $log_data;
     } else {
         $stat = $lang['first'];
     }
@@ -715,9 +712,9 @@ if (isset($_SESSION['name']) && !empty($_SESSION['name'])) {
          "            <form action=\"$host#CHAT\" name=chat " .
          "method=POST accept-charset=\"UTF-8\" " .
          "enctype=\"multipart/form-data\">\n" .
-         "                <div>" . $lang['text'] . " " .
-         "                    <input disabled id=char " .
-         "size=4 value=\"$char\"/>\n" .
+         "                <div>\n" .
+         "                    " . $lang['text'] . " " .
+         "<input disabled id=char size=4 value=\"$char\"/>\n" .
          "                </div>\n" .
 
          //** Text
@@ -731,31 +728,31 @@ if (isset($_SESSION['name']) && !empty($_SESSION['name'])) {
 
          //** Name -- hidden session token
          "                    <input type=hidden name=name " .
-         "value=\"" . $_SESSION['name'] . "\"/>\n" .
+         "value=\"" . $_SESSION['ac_name'] . "\"/>\n" .
 
          //** Quit
          "                    <input type=submit name=quit " .
-         "value=\"&#x23F8; " . $lang['quit'] . "\" " .
+         "value=\" " . $lang['quit'] . "\" " .
          "title=\"" . $lang['quit_title'] . "\"/>\n" .
 
          //** Conf
          "                    <input type=submit name=conf " .
-         "value=\"&#x1F4F6; " . $lang['conf'] . "\" " .
+         "value=\" " . $lang['conf'] . "\" " .
          "title=\"" . $lang['conf_title'] . "\"/>\n" .
 
          //** Save
          "                    <input type=submit name=save " .
-         "value=\"&#x1F53D; " . $lang['save'] . "\" " .
+         "value=\"" . $lang['save'] . "\" " .
          "title=\"" . $lang['save_title'] . "\"/>\n" .
 
          //** Push
          "                    <input type=submit name=push " .
-         "value=\"&#x1F501; " . $lang['push'] . "\" " .
+         "value=\"" . $lang['push'] . "\" " .
          "title=\"" . $lang['push_title'] . "\"/>\n" .
 
          //** Post
          "                    <input type=submit name=post " .
-         "value=\"&#x1F53C; " . $lang['post'] . "\" " .
+         "value=\" " . $lang['post'] . "\" " .
          "title=\"" . $lang['post_title'] . "\"/>\n" .
          "                </div>\n";
 
@@ -770,14 +767,15 @@ if (isset($_SESSION['name']) && !empty($_SESSION['name'])) {
     }
 
     //** Log status
-    if (is_file($data)) {
+    if (is_file($log_data)) {
         echo "                <div><small>" . $lang['log_reset'] .
-             " " . filesize($data) . " / $log_size </small></div>\n";
+             " " . filesize($log_data) . " / $log_size </small></div>\n";
     }
 
     echo "            </form>\n" .
          "            <div id=stat>\n" .
          "                <div>$stat</div>\n" .
+         "                <script src=\"chat.js\"></script>\n" .
          "                <noscript>" .
          $lang['noscript'] . "</noscript>\n" .
          "            </div>\n";
@@ -785,13 +783,13 @@ if (isset($_SESSION['name']) && !empty($_SESSION['name'])) {
 
     if (is_file($init)) {
         echo "        <article>\n";
-        include "./$init";
+        include "./" . $init;
     }
 
     //** Login
     $stat = $lang['name_info'];
     echo "        </article>\n" .
-         "        <nav>\n" .
+         "        <nav id=login>\n" .
          "            <form action=\"$host#LOGIN\" method=POST " .
          "accept-charset=\"UTF-8\">\n" .
          "                <div>\n" .
@@ -816,6 +814,5 @@ echo "            <p id=by><a href=\" " .
      "https://github.com/phhpro/atomchat\" title=\"" . $lang['get'] .
      "\">" . $lang['by'] . " PHP Atomchat v$make</a></p>\n" .
      "        </nav>\n" .
-     "        <script src=\"chat.js\"></script>\n" .
      "    </body>\n" .
      "</html>\n";
