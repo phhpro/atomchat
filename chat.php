@@ -471,7 +471,6 @@ echo "<!DOCTYPE html>\n" .
      "        <link rel=icon href=\"" . $host . "favicon.png\" " .
      "type=\"image/png\"/>\n" .
      "        <link rel=stylesheet href=\"$host$css_file\"/>\n" .
-     "        <link rel=stylesheet href=\"" . $host . "fa.css\"/>\n" .
      "    </head>\n" .
      "    <body id=body>\n" .
      "        <header>\n" .
