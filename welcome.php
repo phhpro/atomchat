@@ -17,17 +17,16 @@
             <p>
                 <strong>PHP Atomchat</strong> is a 
                 <strong>free PHP chat script</strong> 
-                for low-volume and individual websites.</p>
-            <ul>
-                <li>Works OOTB</li>
-                <li>Completely anonymous</li>
-                <li>No registration or passwords ever</li>
-                <li>Emoji auto-conversion</li>
-                <li>File uploads</li>
-                <li>Themeable</li>
-                <li>Multi-lingual</li>
-                <li>No database required</li>
-            </ul>
+                for low-volume and individual websites.
+            </p>
+            <p>
+                Completely <strong>anonymous</strong>. No registration
+                or passwords ever. <strong>Smart conversion</strong> of
+                text smileys to Unicode emojis. Supports <strong>
+                uploads</strong>, is <strong>themeable</strong> and
+                <strong>multi-lingual</strong>. Best of all: <strong>No
+                database</strong> required.
+            </p>
             <p>
                 Note: If you have Javascript disabled or your device 
                 doesn't support it, or if you are using a text-mode 

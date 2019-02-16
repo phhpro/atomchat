@@ -2,7 +2,7 @@
 /**
  * PHP Version 5 and above
  *
- * User configuration -- integer values of 0 = NO, 1 = YES
+ * User configuration -- integer value 0 = NO, 1 = YES
  *
  * @category  PHP_Chat
  * @package   PHP_Atomchat
