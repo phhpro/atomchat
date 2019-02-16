@@ -20,17 +20,8 @@
                 for low-volume and individual websites.
             </p>
             <p>
-                Completely <strong>anonymous</strong>. No registration
-                or passwords ever. <strong>Smart conversion</strong> of
-                text smileys to Unicode emojis. Supports <strong>
-                uploads</strong>, is <strong>themeable</strong> and
-                <strong>multi-lingual</strong>. Best of all: <strong>No
-                database</strong> required.
-            </p>
-            <p>
-                Note: If you have Javascript disabled or your device 
-                doesn't support it, or if you are using a text-mode 
-                browser, you may have to manually refresh the page to 
-                execute the selected form action or to view any new 
-                posts. A common key combination is <code>CTRL-R</code>.
+                Note: With Javascript disabled or not supported, or if
+                using a text-mode browser, you'll need to manually
+                refresh the page to execute the selected form action or
+                view any new posts.
             </p>
