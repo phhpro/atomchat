@@ -48,7 +48,4 @@ A polling rate of 1 second (`var rate = nnnn` in `chat.js`) appears to trigger a
 
 Applying the trigger to the `body` ID instead of `push` fixes distorted rendering but effectively prevents input. This only happens when viewed either without or generic styles. Rename `.__debug.css` to `__debug.css` for testing. It's using the exact same rules, just without declaring fonts or colours. Switch to any other theme and the issue is gone.
 
-Push works on local dev but completely fails on remote live host!
-
 Feedback welcome, thank you.
-

@@ -29,6 +29,14 @@
  */
 
 
+//** Headers
+//header('Content-Type: text/event-stream');
+header('Expires: on, 01 Jan 1970 00:00:00 GMT');
+header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+header('Cache-Control: no-cache');
+header('Pragma: no-cache');
+header_remove('X-Powered-By');
+
 // Config
 if (is_file('config.php')) {
     include './config.php';
@@ -38,7 +46,7 @@ if (is_file('config.php')) {
 }
 
 //** Version
-$make = "20190216";
+$make = "20190217";
 
 //** Protocol and URL
 $prot = "";
@@ -50,9 +58,9 @@ if (isset($_SERVER['HTTPS']) && "on" === $_SERVER['HTTPS']) {
 $host = "http$prot://" . $_SERVER['HTTP_HOST'] . "/$fold/";
 
 //** Log
-if ($log_mode === 1) {
-    $log_name = "atomchat-log";
-} else {
+$log_name = "atomchat-log";
+
+if ($log_mode === 0) {
     $log_name = $log_name . "_" . date('Y-m-d');
 }
 
@@ -233,7 +241,7 @@ if (isset($_POST['login'])) {
         exit;
     } else {
         $_SESSION['ac_name'] = $name . "_" . mt_rand();
-        $text = "            <div class=item_log>$date " .
+        $text  = "            <div class=item_log>$date " .
                  $_SESSION['ac_name'] . " " . $lang['chat_enter'] .
                  "</div>\n";
 
@@ -241,7 +249,7 @@ if (isset($_POST['login'])) {
             $text .= file_get_contents($log_data);
         }
 
-        $stat = "";
+        $stat  = "";
         file_put_contents($log_data, $text);
         header("Location: $host#LOGIN");
         exit;
@@ -253,7 +261,7 @@ if (isset($_POST['save'])) {
     header('Content-type: text/html');
     header(
         'Content-Disposition: attachment; filename="' .
-        str_replace($log_fold . '/', '', $log_data) . '"'
+        str_replace($log_fold . "/", "", $log_data) . '"'
     );
     readfile($log_data);
     exit;
@@ -268,12 +276,6 @@ if (isset($_POST['quit'])) {
     file_put_contents($log_data, $text);
     unset($_SESSION['ac_name']);
     header("Location: $host#LOGOUT");
-    exit;
-}
-
-//** Push -- manual update
-if (isset($_POST['push'])) {
-    header("Location: $host#PUSH");
     exit;
 }
 
@@ -410,15 +412,15 @@ if (isset($_POST['post'])) {
     }
 
     if ($up_pass === 1) {
-        $post = "            <div class=item id=\"pid" .
-                date('_Ymd_His_') . $_SESSION['ac_name'] . "\">\n" .
-                "                <div class=item_head>\n" .
-                "                    <span class=item_date>" .
-                "$date</span> <span class=item_name>" .
-                $_SESSION['ac_name'] . "</span>\n" .
-                "                </div>\n" .
-                "                <pre class=item_text>$post</pre>\n" .
-                "            </div>\n";
+        $post  = "            <div class=item id=\"pid" .
+                 date('_Ymd_His_') . $_SESSION['ac_name'] . "\">\n" .
+                 "                <div class=item_head>\n" .
+                 "                    <span class=item_date>" .
+                 "$date</span> <span class=item_name>" .
+                 $_SESSION['ac_name'] . "</span>\n" .
+                 "                </div>\n" .
+                 "                <pre class=item_text>$post</pre>\n" .
+                 "            </div>\n";
         $post .= file_get_contents($log_data);
         file_put_contents($log_data, $post);
         header("Location: $host#POST");
@@ -445,14 +447,6 @@ if (isset($_SESSION['ac_theme'])) {
 }
 
 $css_file = $css_fold . "/" . $css_sel . ".css";
-
-//** Headers
-header('Expires: on, 01 Jan 1970 00:00:00 GMT');
-header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
-header('Cache-Control: post-check=0, pre-check=0', false);
-header('Pragma: no-cache');
-header_remove('X-Powered-By');
 
 //** Begin mark-up
 echo "<!DOCTYPE html>\n" .
@@ -720,9 +714,9 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
          "                <textarea name=text id=text " .
          "rows=3 cols=40 maxlength=$char " .
          "title=\"" . $lang['text_title'] . "\" " .
-         "onKeyPress=chars(this.form); " .
-         "onKeyDown=chars(this.form); ".
-         "onKeyUp=chars(this.form);></textarea>\n" .
+         "onkeydown=chars(this.form); ".
+         "onkeypress=chars(this.form); " .
+         "onkeyup=chars(this.form);></textarea>\n" .
          "                <div>\n" .
 
          //** Name -- hidden session token
@@ -744,15 +738,11 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
          "value=\"" . $lang['save'] . "\" " .
          "title=\"" . $lang['save_title'] . "\"/>\n" .
 
-         //** Push
-         "                    <input type=submit name=push " .
-         "value=\"" . $lang['push'] . "\" " .
-         "title=\"" . $lang['push_title'] . "\"/>\n" .
-
          //** Post
          "                    <input type=submit name=post " .
          "value=\" " . $lang['post'] . "\" " .
-         "title=\"" . $lang['post_title'] . "\"/>\n" .
+         "title=\"" . $lang['post_title'] . "\" " .
+         "onclick=\"live();\"/>\n" .
          "                </div>\n";
 
     //** Upload
@@ -775,15 +765,16 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
          "            <div id=stat>\n" .
          "                <div>$stat</div>\n" .
          "                <script src=\"chat.js\"></script>\n" .
+         "                <script>\n" .
+         "                live();\n" .
+         "                </script>\n" .
          "                <noscript>" .
          $lang['noscript'] . "</noscript>\n" .
          "            </div>\n";
 } else {
-
-    if (is_file($init)) {
-        echo "        <article>\n";
-        include "./" . $init;
-    }
+    //** Welcome
+    echo "        <article>\n";
+    include "./" . $init;
 
     //** Login
     $stat = $lang['name_info'];

@@ -20,10 +20,10 @@
  */
 
 
-// Post delay and refresh rate -- see README -> Issues
+// Post delay and refresh rate -- default 2000 ms = 2 seconds
 var rate = 2000;
 
-// Maximum chars per post -- value must match $char in config.php
+// Maximum chars per post -- value must match "$char" in config.php
 var char = 1024;
 
 
@@ -34,20 +34,50 @@ var char = 1024;
  */
 
 
+function chars(chat)
+{
+    if (chat.text.value.length >= char) {
+        chat.text.value = chat.text.value.substring(0, char);
+    } else {
+        chat.char.value = char - chat.text.value.length;
+    }
+}
+
+var http = null;
+
+function ajax()
+{
+    if (window.ActiveXObject) {
+        return new ActiveXObject("Microsoft.XMLHTTP");
+    } else if (window.XMLHttpRequest) {
+        return new XMLHttpRequest();
+    } else {
+        alert("Your browser doesn't support AJAX!");
+        return null;
+    }
+}
+
+function stat()
+{
+    if (http.readyState == 4) {
+        document.getElementById("push").innerHTML = http.responseText;
+    }
+}
+
+function wait()
+{
+    http = ajax();
+
+    if (http != null) {
+        http.open("POST", "?" + Math.floor(Math.random() * 10000), true);
+        http.onreadystatechange = stat;
+        http.send(null);
+    }
+}
+
 function push()
 {
-    var http = null;
-    http = new XMLHttpRequest();
-    http.open("GET", '#', true);
-
-    http.onreadystatechange = function() {
-
-        if (http.readyState == 4) {
-            document.getElementById('push').innerHTML = http.responseText;
-        }
-    }
-
-    http.send();
+    wait();
     setTimeout('push()', rate);
 }
 
@@ -117,14 +147,7 @@ function bell()
     beep.play();
 }
 
-function chars(chat)
-{
-    if (chat.text.value.length >= char) {
-        chat.text.value = chat.text.value.substring(0, char);
-    } else {
-        chat.char.value = char - chat.text.value.length;
-    }
+function live() {
+    bell();
+    push();
 }
-
-bell();
-push();

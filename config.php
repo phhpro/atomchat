@@ -59,8 +59,8 @@ $date       = gmdate('Y-m-d H:m:s');
  * Mode 1 creates endless log, 0 creates daily logs.
  * Log will auto-reset after size limit is reached.
  */
-$log_mode   = 1;
-$log_size   = 10240000;
+$log_mode   = 0;
+$log_size   = 1000000;
 $log_fold   = "log";
 
 /*
@@ -74,7 +74,7 @@ $up         = 1;
 
 //** Uploads folder and maximum filesize -- default are 4 MiB
 $up_fold    = "upload";
-$up_max     = 4096000;
+$up_max     = 500000;
 
 //** Thumbnail width and height -- auto-trimmed if source is larger
 $up_tnw     = 64;
