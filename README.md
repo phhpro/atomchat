@@ -18,7 +18,7 @@ The only logging applies to the chat history. The script can create either daily
 
 ### Emojis
 
-As of February 2019 only Firefox appears to have suitable Unicode support. The script therefore only covers a very basic set of emojis, which ought to be available on most devices and platforms.
+As of February 2019 only Firefox appears to have suitable Unicode support. The script therefore only covers a very basic set of emojis, which ought to be available on most devices and platforms. Edit `emo.txt` to add or modify.
 
 ### Uploads
 
@@ -38,11 +38,11 @@ The script comes with a few demo translations. Just make a copy of `en.php` in t
 
 ### Delay
 
-The default post delay and refresh rate are 2 seconds. You may want to increase the delay, or possibly even randomise it, if you're expecting nasty bots or users attempting to flood the page; though this may only be relevant when using an endless log. Edit `var rate = nnnn` in `chat.js` to change. See below: Issues.
+The default post delay and refresh rate are 2 seconds. See below: Issues.
 
 ## Limitations
 
-If you have Javascript disabled or your device doesn't support it, or if you are using a text-mode browser, you may have to manually refresh the page to execute the selected form action or to view any new posts. A common key combination is CTRL-R. 
+If Javascript is disabled or not supported, or when using a text-mode browser, the page needs to be manually refreshed to execute a selected action or to view any new posts. 
 
 ## Issues
 
