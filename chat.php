@@ -29,6 +29,9 @@
  */
 
 
+//** Version
+$ver = "20190219";
+
 //** Headers
 //header('Content-Type: text/event-stream');
 header('Expires: on, 01 Jan 1970 00:00:00 GMT');
@@ -38,15 +41,40 @@ header('Pragma: no-cache');
 header_remove('X-Powered-By');
 
 // Config
-if (is_file('config.php')) {
-    include './config.php';
+if (is_file('conf.php')) {
+    include './conf.php';
 } else {
     echo "Missing configuration!";
     exit;
 }
 
-//** Version
-$make = "20190217";
+/**
+ * Function rnum()
+ *
+ * @return integer random number
+ */
+function rnum()
+{
+    $n = mt_rand(1000, 9999);
+    return $n;
+}
+
+/**
+ * Function b64enc()
+ *
+ * @param string $b64_src source file
+ *
+ * @return string data block
+ */
+function b64enc($b64_src)
+{
+    $b64_src = $b64_src;
+    $b64_ext = pathinfo($b64_src, PATHINFO_EXTENSION);
+    $b64_get = file_get_contents($b64_src);
+    $b64_str = "\"data:image/" . $b64_ext .
+               ";base64," . base64_encode($b64_get) . "\" ";
+    return chunk_split($b64_str);
+}
 
 //** Protocol and URL
 $prot = "";
@@ -61,38 +89,22 @@ $host = "http$prot://" . $_SERVER['HTTP_HOST'] . "/$fold/";
 $log_name = "atomchat-log";
 
 if ($log_mode === 0) {
-    $log_name = $log_name . "_" . date('Y-m-d');
+    $log_name = $log_name . "_" . gmdate('Y-m-d');
 }
 
 $log_data = $log_fold . "/" . $log_name . ".html";
+$log_stat = filesize($log_data);
 
 if (is_file($log_data)) {
 
-    if (filesize($log_data) > $log_size) {
+    if ($log_stat > $log_size) {
         unlink($log_data);
     }
 }
 
-//** Welcome screen and status init
-$init = "welcome.php";
+//** Home screen and status init
+$home = "home.php";
 $stat = "";
-
-/**
- * Function b64enc()
- *
- * @param string $b64_src source
- *
- * @return string data
- */
-function b64enc($b64_src)
-{
-    $b64_src = $b64_src;
-    $b64_ext = pathinfo($b64_src, PATHINFO_EXTENSION);
-    $b64_get = file_get_contents($b64_src);
-    $b64_str = "\"data:image/" . $b64_ext .
-               ";base64," . base64_encode($b64_get) . "\" ";
-    return chunk_split($b64_str);
-}
 
 //** Logo
 if ($logo_i !== "") {
@@ -111,7 +123,7 @@ if ($logo_t === 1) {
 $logo = $logo_i . $logo_t;
 
 //** Emoji
-$emo_conf = "emoji.txt";
+$emo_conf = "emo.txt";
 $emo_parr = array();
 $emo_sarr = array();
 $emo_code = "";
@@ -240,7 +252,7 @@ if (isset($_POST['login'])) {
         header("Location: $host#MISSING_NAME");
         exit;
     } else {
-        $_SESSION['ac_name'] = $name . "_" . mt_rand();
+        $_SESSION['ac_name'] = $name . "_" . rnum();
         $text  = "            <div class=item_log>$date " .
                  $_SESSION['ac_name'] . " " . $lang['chat_enter'] .
                  "</div>\n";
@@ -280,7 +292,7 @@ if (isset($_POST['quit'])) {
 }
 
 //** Initial upload state
-$up_pass = 0;
+$pass = 0;
 
 //** Post
 if (isset($_POST['post'])) {
@@ -288,7 +300,7 @@ if (isset($_POST['post'])) {
     $text = htmlentities($_POST['text'], ENT_QUOTES, "UTF-8");
 
     if ($text !== "") {
-        $up_pass = 1;
+        $pass = 1;
 
         if ($emo === 1) {
             $emo_open = fopen($emo_conf, 'r');
@@ -326,13 +338,12 @@ if (isset($_POST['post'])) {
         $up_base = basename($_FILES['file']['name']);
         $up_file = $up_fold . "/" . $up_base;
         $up_type = strtolower(pathinfo($up_file, PATHINFO_EXTENSION));
-        $_SESSION['ac_rand'] = mt_rand();
+        $_SESSION['ac_rand'] = rnum();
         $up_rand = $_SESSION['ac_name'] . "-" .
                    $_SESSION['ac_rand'] . "." . $up_type;
         $up_save = str_replace($up_base, $up_rand, $up_file);
         $up_text = str_replace("$up_fold/", "", $up_save);
         $up_open = $host . $up_save;
-        $up_fail = 1;
 
         if (!empty($_FILES['file']['name'])) {
             $up_name = $_FILES['file']['tmp_name'];
@@ -340,8 +351,8 @@ if (isset($_POST['post'])) {
             $up_size = $_FILES['file']['size'];
 
             if ($up_size > $up_max) {
-                $stat    = $lang['up_exceed'];
-                $up_fail = 0;
+                header("Location: $host#INVALID_FILESIZE");
+                exit;
             }
 
             if (in_array($up_type, $up_is_b64)) {
@@ -364,8 +375,8 @@ if (isset($_POST['post'])) {
                                "width=$up_tnw height=$up_tnh " .
                                "alt=\"\"/></a></p>";
                 } else {
-                    $stat    = $lang['up_noimg'];
-                    $up_fail = 0;
+                    header("Location: $host#INVALID_IMAGE");
+                    exit;
                 }
             } elseif (in_array($up_type, $up_is_arc)
                 || in_array($up_type, $up_is_doc)
@@ -377,26 +388,23 @@ if (isset($_POST['post'])) {
                            "title=\"" . $lang['up_open'] . "\">" .
                            "$up_text</a></p>";
             } else {
-                $stat    = $lang['up_notype'];
-                $up_fail = 0;
+                header("Location: $host#INVALID_FILETYPE");
+                exit;
             }
 
-            if ($up_fail === 0) {
-                $stat = $lang['up_fail'] . " " . $stat;
+            if (move_uploaded_file(
+                $_FILES['file']['tmp_name'], $up_file
+            )
+            ) {
+                copy($up_file, $up_save);
+                $pass = 1;
             } else {
-                if (move_uploaded_file(
-                    $_FILES['file']['tmp_name'], $up_file
-                )
-                ) {
-                    copy($up_file, $up_save);
-                    $up_pass = 1;
-                } else {
-                    $stat = $lang['up_nowrite'];
-                }
+                header("Location: $host#WRITE_ERROR");
+                exit;
             }
-
-            unlink($up_file);
         }
+
+        unlink($up_file);
     }
 
     if ($text !== "" && $up_link === "") {
@@ -411,9 +419,8 @@ if (isset($_POST['post'])) {
         $post = $up_link;
     }
 
-    if ($up_pass === 1) {
-        $post  = "            <div class=item id=\"pid" .
-                 date('_Ymd_His_') . $_SESSION['ac_name'] . "\">\n" .
+    if ($pass === 1) {
+        $post  = "            <div class=item>\n" .
                  "                <div class=item_head>\n" .
                  "                    <span class=item_date>" .
                  "$date</span> <span class=item_name>" .
@@ -587,8 +594,6 @@ if (isset($_POST['conf'])) {
              "                <p><strong>" .
              $lang['up_allow'] . "</strong></p>\n" .
 
-
-
         //** Image, Base64
              "                <ul>\n" .
              "                    <li><strong>" .
@@ -741,8 +746,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
          //** Post
          "                    <input type=submit name=post " .
          "value=\" " . $lang['post'] . "\" " .
-         "title=\"" . $lang['post_title'] . "\" " .
-         "onclick=\"live();\"/>\n" .
+         "title=\"" . $lang['post_title'] . "\"/>\n" .
          "                </div>\n";
 
     //** Upload
@@ -758,23 +762,23 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
     //** Log status
     if (is_file($log_data)) {
         echo "                <div><small>" . $lang['log_reset'] .
-             " " . filesize($log_data) . " / $log_size </small></div>\n";
+             " $log_stat / $log_size</small></div>\n";
     }
 
     echo "            </form>\n" .
          "            <div id=stat>\n" .
          "                <div>$stat</div>\n" .
          "                <script src=\"chat.js\"></script>\n" .
-         "                <script>\n" .
-         "                live();\n" .
-         "                </script>\n" .
          "                <noscript>" .
          $lang['noscript'] . "</noscript>\n" .
          "            </div>\n";
 } else {
-    //** Welcome
+    //** Home
     echo "        <article>\n";
-    include "./" . $init;
+
+    if (is_file($home)) {
+        include "./" . $home;
+    }
 
     //** Login
     $stat = $lang['name_info'];
@@ -802,7 +806,30 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
 //** End mark-up
 echo "            <p id=by><a href=\" " .
      "https://github.com/phhpro/atomchat\" title=\"" . $lang['get'] .
-     "\">" . $lang['by'] . " PHP Atomchat v$make</a></p>\n" .
+     "\">" . $lang['by'] . " PHP Atomchat v$ver</a></p>\n" .
      "        </nav>\n" .
      "    </body>\n" .
      "</html>\n";
+
+//** Old files
+if ($up_del === 1) {
+    $up_old = $up_old * 24 * 60 * 60;
+
+    if (file_exists($up_fold)) {
+
+        foreach (new DirectoryIterator($up_fold) as $up_obj) {
+
+            if ($up_obj -> isDot()) {
+                continue;
+            }
+
+            if ($up_obj -> isFile()
+                && time() - $up_obj -> getMTime() >= $up_old
+            ) {
+                unlink($up_obj -> getRealPath());
+            }
+        }
+    }
+}
+
+flush();
