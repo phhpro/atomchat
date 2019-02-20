@@ -22,66 +22,37 @@ $lang['__name__']    = "عربى";
 $lang['__text__']    = "انقر هنا لتحديد اللغة العربية";
 
 //** Strings
-$lang['apply']       = "تطبيق";
 $lang['apply_title'] = "انقر هنا لتطبيق التحديد";
-
-$lang['by']          = "مشغل بواسطة";
-
 $lang['chat_enter']  = "دخلت الدردشة";
 $lang['chat_leave']  = "ترك المحادثة";
-
-$lang['close']       = "قريب";
 $lang['close_title'] = "انقر هنا لإغلاق هذه النافذة";
-
 $lang['conf']        = "إعدادات";
 $lang['conf_title']  = "انقر هنا لتغيير الإعدادات";
-
 $lang['emo']         = "رمز تعبيري";
-
 $lang['first']       = "الإدخال الأول هو كل شيء لك.";
-
 $lang['get']         = "انقر هنا للحصول على نسخة مجانية من هذا البرنامج النصي";
-
 $lang['info']        = "معلومات";
-
 $lang['lang']        = "لغة";
 $lang['lang_title']  = "انقر هنا لتحديد اللغة";
 $lang['lang_miss']   = "ملف اللغة مفقود!";
-
 $lang['log_reset']   = "إعادة ضبط السجل"
-
-$lang['login']       = "تسجيل الدخول";
 $lang['login_title'] = "انقر هنا لتسجيل الدخول";
-
 $lang['name']        = "اسم";
 $lang['name_title']  = "اكتب هنا لإدخال اسمك";
-$lang['name_info']   = "أدخل الاسم المفضل واضغط على تسجيل الدخول.";
-
+$lang['name_info']   = "أدخل الاسم المفضل والضغط على زر.";
 $lang['noscript']    = "وظائف جافا سكريبت غير متاحة!";
-
-$lang['post']        = "إرسال";
 $lang['post_title']  = "انقر هنا لنشر رسالتك";
-
-$lang['push']        = "إدفع";
-$lang['push_title']  = "انقر هنا لتحديث الجلسة يدويًا";
-
-$lang['quit']        = "استقال";
 $lang['quit_title']  = "انقر هنا للخروج من الجلسة";
-
-$lang['save']        = "حفظ";
 $lang['save_title']  = "انقر هنا لحفظ الجلسة";
-
 $lang['theme']       = "موضوع";
 $lang['theme_title'] = "انقر هنا لتحديد الموضوع";
 $lang['theme_miss']  = "مفقود موضوع تعريف!";
-
 $lang['text']        = "نص";
 $lang['text_title']  = "اكتب هنا لإدخال رسالتك";
-
 $lang['up']          = "محتوى المستخدم";
 $lang['up_allow']    = "أنواع المسموح بها";
 $lang['up_arc']      = "أرشيف";
-$lang['up_b64']      = "Base64";
+$lang['up_b64']      = "base64 في";
 $lang['up_doc']      = "وثيقة";
 $lang['up_img']      = "صورة";
 $lang['up_max']      = "";

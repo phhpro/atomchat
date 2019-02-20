@@ -22,62 +22,33 @@ $lang['__name__']    = "Français";
 $lang['__text__']    = "Cliquez ici pour sélectionner le français";
 
 //** Strings
-$lang['apply']       = "Appliquer";
 $lang['apply_title'] = "Cliquez ici pour appliquer la sélection";
-
-$lang['by']          = "Alimenté par";
-
 $lang['chat_enter']  = "entré dans le chat";
 $lang['chat_leave']  = "a quitté le chat";
-
-$lang['close']       = "Fermer";
 $lang['close_title'] = "Cliquez ici pour fermer cette fenêtre";
-
 $lang['conf']        = "Paramètres";
 $lang['conf_title']  = "Cliquez ici pour changer les paramètres";
-
 $lang['emo']         = "Emoji";
-
 $lang['first']       = "La première entrée est à vous.";
-
 $lang['get']         = "Cliquez ici pour obtenir une copie gratuite de ce script";
-
 $lang['info']        = "Info";
-
 $lang['lang']        = "Langue";
 $lang['lang_title']  = "Cliquez ici pour sélectionner la langue";
 $lang['lang_miss']   = "Fichier de langue manquant!";
-
-$lang['log_reset']   = "Journal réinitialiser";
-
-$lang['login']       = "Entrer";
+$lang['log_reset']   = "Réinitialiser";
 $lang['login_title'] = "Cliquez ici pour vous identifier";
-
 $lang['name']        = "Nom";
 $lang['name_title']  = "Tapez ici pour entrer votre nom";
-$lang['name_info']   = "Entrez le nom préféré et appuyez sur Connexion.";
-
+$lang['name_info']   = "Entrez le nom de votre choix et appuyez sur le bouton.";
 $lang['noscript']    = "Les fonctions Javascript ne sont pas disponibles!";
-
-$lang['post']        = "Poster";
 $lang['post_title']  = "Cliquez ici pour poster votre message";
-
-$lang['push']        = "Pousser";
-$lang['push_title']  = "Cliquez ici pour mettre à jour manuellement la session";
-
-$lang['quit']        = "Quitter";
 $lang['quit_title']  = "Cliquez ici pour quitter la session";
-
-$lang['save']        = "Sauver";
 $lang['save_title']  = "Cliquez ici pour enregistrer la session";
-
 $lang['theme']       = "Thème";
 $lang['theme_title'] = "Cliquez ici pour sélectionner le thème";
 $lang['theme_miss']  = "Définition de thème manquant!";
-
 $lang['text']        = "Texte";
 $lang['text_title']  = "Tapez ici pour entrer votre message";
-
 $lang['up']          = "Contenu De L'utilisateur";
 $lang['up_allow']    = "Types Autorisés";
 $lang['up_arc']      = "Archiver";

@@ -22,62 +22,33 @@ $lang['__name__']    = "Español";
 $lang['__text__']    = "Haga click aquí para seleccionar al Español";
 
 //** Strings
-$lang['apply']       = "Aplicar";
 $lang['apply_title'] = "Haga clic aquí para aplicar la seleccion";
-
-$lang['by']          = "Desarrollado por";
-
 $lang['chat_enter']  = "ingresó al chat";
 $lang['chat_leave']  = "dejó el chat";
-
-$lang['close']       = "Cerrar";
 $lang['close_title'] = "Haga clic aquí para cerrar esta ventana";
-
 $lang['conf']        = "Ajustes";
 $lang['conf_title']  = "Haga clic aquí para cambiar la configuración";
-
 $lang['emo']         = "Emoji";
-
 $lang['first']       = "El primer mensaje es todo suja.";
-
 $lang['get']         = "Haga clic aquí para obtener una copia gratuita de este script";
-
 $lang['info']        = "Info";
-
 $lang['lang']        = "Idioma";
 $lang['lang_title']  = "Haga clic aquí para seleccionar idioma";
 $lang['lang_miss']   = "¡Falta el archivo de idioma!";
-
-$lang['log_reset']   = "Restablecimiento de registro";
-
-$lang['login']       = "Iniciar";
+$lang['log_reset']   = "Restablecimiento";
 $lang['login_title'] = "Haga clic aquí para iniciar sesión";
-
 $lang['name']        = "Nombre";
 $lang['name_title']  = "Escribe aquí para ingresar su nombre";
-$lang['name_info']   = "Ingrese el nombre preferido y presione Iniciar.";
-
+$lang['name_info']   = "Ingrese el nombre preferido y presione el botón.";
 $lang['noscript']    = "¡Funciones de Javascript no disponibles!";
-
-$lang['post']        = "Publicar";
 $lang['post_title']  = "Haga clic aquí para publicar su mensaje";
-
-$lang['push']        = "Actualizar";
-$lang['push_title']  = "Haga clic aquí para actualizar manualmente la sesión";
-
-$lang['quit']        = "Salir";
 $lang['quit_title']  = "Haga clic aquí para salir de la sesión";
-
-$lang['save']        = "Guardar";
 $lang['save_title']  = "Haga clic aquí para guardar la sesión";
-
 $lang['theme']       = "Tema";
 $lang['theme_title'] = "Haga clic aquí para seleccionar tema";
 $lang['theme_miss']  = "¡Falta la definición del tema!";
-
 $lang['text']        = "Texto";
 $lang['text_title']  = "Escribe aquí para ingresar su mensaje";
-
 $lang['up']          = "Contenido De Usuario";
 $lang['up_allow']    = "Tipos Admitidos";
 $lang['up_arc']      = "Archivo";
