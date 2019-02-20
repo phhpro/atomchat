@@ -13,7 +13,7 @@
  * @link      https://github.com/phhpro/atomchat
  */
 ?>
-            <h2>Welcome</h2>
+            <h2>Welcome to PHP Atomchat</h2>
             <p>
                 <strong>PHP Atomchat</strong> is a 
                 <strong>free PHP chat script</strong> 

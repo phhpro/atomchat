@@ -30,7 +30,7 @@
 
 
 //** Version
-$ver = "20190219";
+$ver = "20190220";
 
 //** Headers
 //header('Content-Type: text/event-stream');
@@ -487,8 +487,8 @@ if (isset($_POST['conf'])) {
 
          //** Language
          "                <div>\n" .
-         "                    <p><strong>" .
-         $lang['lang'] . "</strong></p>\n" .
+         "                    <p><label for=name_id>" .
+         $lang['lang'] . "</label></p>\n" .
          "                    <select name=lang_id " .
          "title=\"" . $lang['lang_title']. "\">\n";
 
@@ -511,22 +511,23 @@ if (isset($_POST['conf'])) {
         $lang_text = str_replace("\";\n", "", $lang_text);
         $lang_link = basename($lang_item);
         $lang_link = str_replace(".php", "", $lang_link);
-        echo "                    <option value=\"$lang_link\" " .
+        echo "                        <option value=\"$lang_link\" " .
+             "lang=\"$lang_link\" " .
              "title=\"$lang_text\">$lang_name</option>\n";
     }
 
     unset($lang_item);
-    echo "                </select>\n" .
+    echo "                    </select>\n" .
          "                    <input type=submit name=lang_apply " .
-         "value=\"" . $lang['apply'] . "\" " .
+         "value=\"#\" " .
          "title=\"" . $lang['apply_title'] . "\"/>\n" .
          "                </div>\n";
 
     //** Theme
     if ($css === 1) {
         echo "                <div>\n" .
-             "                    <p><strong>" .
-             $lang['theme'] . "</strong></p>\n" .
+             "                    <p><label for=css_id>" .
+             $lang['theme'] . "</label></p>\n" .
              "                    <select name=css_id " .
              "title=\"" . $lang['theme_title'] . "\">\n";
 
@@ -551,7 +552,7 @@ if (isset($_POST['conf'])) {
         unset($css_item);
         echo "                    </select>\n" .
              "                    <input type=submit name=css_apply " .
-             "value=\"" . $lang['apply'] . "\" " .
+             "value=\"#\" " .
              "title=\"" . $lang['apply_title'] . "\"/>\n" .
              "                </div>\n";
     }
@@ -687,7 +688,7 @@ if (isset($_POST['conf'])) {
 
     echo "                <div id=close>\n" .
          "                    <input type=submit " .
-         "value=\"" . $lang['close'] . "\" " .
+         "value=\"x\" " . 
          "title=\"" . $lang['close_title'] . "\"/>\n" .
          "                </div>\n" .
          "            </form>\n" .
@@ -730,22 +731,22 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
 
          //** Quit
          "                    <input type=submit name=quit " .
-         "value=\" " . $lang['quit'] . "\" " .
+         "value=\"x\" " .
          "title=\"" . $lang['quit_title'] . "\"/>\n" .
 
          //** Conf
          "                    <input type=submit name=conf " .
-         "value=\" " . $lang['conf'] . "\" " .
+         "value=\"?\" " .
          "title=\"" . $lang['conf_title'] . "\"/>\n" .
 
          //** Save
          "                    <input type=submit name=save " .
-         "value=\"" . $lang['save'] . "\" " .
+         "value=\"v\" " .
          "title=\"" . $lang['save_title'] . "\"/>\n" .
 
          //** Post
          "                    <input type=submit name=post " .
-         "value=\" " . $lang['post'] . "\" " .
+         "value=\"&gt;\" " .
          "title=\"" . $lang['post_title'] . "\"/>\n" .
          "                </div>\n";
 
@@ -792,7 +793,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
          "                    <input name=name id=name maxlength=16 " .
          "title=\"" . $lang['name_title'] . "\"/>\n" .
          "                    <input type=submit name=login " .
-         "value=\"" . $lang['login'] . "\" " .
+         "value=\"&gt;\" " .
          "title=\"" . $lang['login_title'] . "\"/>\n" .
          "                </div>\n" .
          "            </form>\n" .
@@ -805,8 +806,8 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
 
 //** End mark-up
 echo "            <p id=by><a href=\" " .
-     "https://github.com/phhpro/atomchat\" title=\"" . $lang['get'] .
-     "\">" . $lang['by'] . " PHP Atomchat v$ver</a></p>\n" .
+     "https://github.com/phhpro/atomchat\" " .
+     "title=\"" . $lang['get'] . "\">PHP Atomchat v$ver</a></p>\n" .
      "        </nav>\n" .
      "    </body>\n" .
      "</html>\n";
