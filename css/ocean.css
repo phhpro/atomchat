@@ -1,15 +1,15 @@
 @charset "UTF-8";
 
 body {
-    background-color: #999;
-    color: #333;
+    background-color: #ccf;
+    color: #00c;
     font-family: sans-serif;
     font-size: 95%;
 }
 
 header {
-    background-color: #999;
-    color: #333;
+    background-color: #ccf;
+    color: #00c;
     margin: 0 12px;
     position: fixed;
     top: 0;
@@ -27,8 +27,8 @@ h1 img {
 }
 
 #push {
-    background-color: #999;
-    color: #333;
+    background-color: #ccf;
+    color: #00c;
     padding: 4px;
     position: fixed;
     top: 48px;
@@ -40,8 +40,8 @@ h1 img {
 }
 
 article {
-    background-color: #999;
-    color: #333;
+    background-color: #ccf;
+    color: #00c;
     padding: 4px;
     position: fixed;
     top: 48px;
@@ -54,8 +54,8 @@ article {
 }
 
 nav {
-    background-color: #999;
-    color: #333;
+    background-color: #ccf;
+    color: #00c;
     font-size: 95%;
     text-align: center;
     margin-top: 8px;
@@ -84,9 +84,9 @@ label {
 }
 
 input {
-    background-color: #999;
-    color: #000;
-    border: 1px outset #999;
+    background-color: #9cc;
+    color: #009;
+    border: 1px outset #99f;
     margin: 8px;
     padding: 4px;
 }
@@ -108,7 +108,7 @@ input[type=file] {
 
 #char {
     background-color: transparent;
-    color: #333;
+    color: #00c;
     text-align: center;
     border: 0;
     margin: 4px;
@@ -116,43 +116,43 @@ input[type=file] {
 }
 
 textarea {
-    background-color: #999;
-    color: #000;
+    background-color: #9cc;
+    color: #009;
+    border: 1px outset #99f;
     font-size: 95%;
-    border: 1px outset #666;
     padding: 4px;
     width: 50%;
     max-width: 400px;
 }
 
 select {
-    background-color: #999;
-    color: #000;
-    border: 1px outset #999;
+    background-color: #9cc;
+    color: #009;
+    border: 1px outset #99f;
     margin: 0;
     padding: 1px;
 }
 
 .item {
-    border: 1px outset #666;
+    border: 1px outset #99f;
     margin: 8px 0 16px 0;
 }
 
 .item_log {
     background-color: transparent;
-    color: #666;
+    color: #006;
     padding: 4px;
 }
 
 .item_head {
-    background-color: #666;
-    color: #000;
+    background-color: #99f;
+    color: #009;
     padding: 4px;
 }
 
 .item:hover .item_head {
-    background-color: #333;
-    color: #ccc;
+    background-color: #9cc;
+    color: #006;
 }
 
 .item_name {
@@ -166,30 +166,30 @@ select {
 }
 
 input:hover, textarea:hover, select:hover, .item:hover {
-    background-color: #ccc;
-    color: #000;
-    border: 1px ouset #ccc;
+    background-color: #99f;
+    color: #006;
+    border: 1px outset #99c;
 }
 
 a:link, a:visited {
     background-color: transparent;
-    color: #333;
+    color: #00c;
     text-decoration: none;
 }
 
 a:hover, a:active {
     background-color: transparent;
-    color: #000;
+    color: #99f;
 }
 
 .item:hover a:link, .item:hover a:visited {
     background-color: transparent;
-    color: #333;
+    color: #00c;
 }
 
 .item:hover a:hover, .item:hover a:active {
     background-color: transparent;
-    color: #000;
+    color: #99f;
 }
 
 .emo {
