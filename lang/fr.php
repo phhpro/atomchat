@@ -23,8 +23,6 @@ $lang['__text__']    = "Cliquez ici pour sélectionner le français";
 
 //** Strings
 $lang['apply_title'] = "Cliquez ici pour appliquer la sélection";
-$lang['chat_enter']  = "entré dans le chat";
-$lang['chat_leave']  = "a quitté le chat";
 $lang['close_title'] = "Cliquez ici pour fermer cette fenêtre";
 $lang['conf']        = "Paramètres";
 $lang['conf_title']  = "Cliquez ici pour changer les paramètres";
@@ -49,8 +47,7 @@ $lang['theme_title'] = "Cliquez ici pour sélectionner le thème";
 $lang['theme_miss']  = "Définition de thème manquant!";
 $lang['text']        = "Texte";
 $lang['text_title']  = "Tapez ici pour entrer votre message";
-$lang['up']          = "Contenu De L'utilisateur";
-$lang['up_allow']    = "Types Autorisés";
+$lang['up']          = "Télécharger";
 $lang['up_arc']      = "Archiver";
 $lang['up_b64']      = "Base64";
 $lang['up_doc']      = "Document";

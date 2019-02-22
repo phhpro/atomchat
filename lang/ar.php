@@ -1,4 +1,4 @@
- <?php
+<?php
 /**
  * PHP Version 5 and above
  *
@@ -23,8 +23,6 @@ $lang['__text__']    = "انقر هنا لتحديد اللغة العربية";
 
 //** Strings
 $lang['apply_title'] = "انقر هنا لتطبيق التحديد";
-$lang['chat_enter']  = "دخلت الدردشة";
-$lang['chat_leave']  = "ترك المحادثة";
 $lang['close_title'] = "انقر هنا لإغلاق هذه النافذة";
 $lang['conf']        = "إعدادات";
 $lang['conf_title']  = "انقر هنا لتغيير الإعدادات";
@@ -35,7 +33,7 @@ $lang['info']        = "معلومات";
 $lang['lang']        = "لغة";
 $lang['lang_title']  = "انقر هنا لتحديد اللغة";
 $lang['lang_miss']   = "ملف اللغة مفقود!";
-$lang['log_reset']   = "إعادة ضبط السجل"
+$lang['log_reset']   = "إعادة ضبط السجل";
 $lang['login_title'] = "انقر هنا لتسجيل الدخول";
 $lang['name']        = "اسم";
 $lang['name_title']  = "اكتب هنا لإدخال اسمك";
@@ -49,13 +47,12 @@ $lang['theme_title'] = "انقر هنا لتحديد الموضوع";
 $lang['theme_miss']  = "مفقود موضوع تعريف!";
 $lang['text']        = "نص";
 $lang['text_title']  = "اكتب هنا لإدخال رسالتك";
-$lang['up']          = "محتوى المستخدم";
-$lang['up_allow']    = "أنواع المسموح بها";
+$lang['up']          = "تحميل";
 $lang['up_arc']      = "أرشيف";
 $lang['up_b64']      = "base64 في";
 $lang['up_doc']      = "وثيقة";
 $lang['up_img']      = "صورة";
-$lang['up_max']      = "";
+$lang['up_max']      = "أكبر مقاس";
 $lang['up_open']     = "انقر هنا لفتح هذا الملف";
 $lang['up_select']   = "انقر هنا لتحديد ملف";
 $lang['up_snd']      = "صوت";

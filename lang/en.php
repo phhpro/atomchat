@@ -23,8 +23,6 @@ $lang['__text__']    = "Click here to select English";
 
 //** Strings
 $lang['apply_title'] = "Click here to apply the selection";
-$lang['chat_enter']  = "entered the chat";
-$lang['chat_leave']  = "left the chat";
 $lang['close_title'] = "Click here to close this screen";
 $lang['conf']        = "Settings";
 $lang['conf_title']  = "Click here to change settings";
@@ -49,8 +47,7 @@ $lang['theme_title'] = "Click here to select theme";
 $lang['theme_miss']  = "Missing theme definition!";
 $lang['text']        = "Text";
 $lang['text_title']  = "Type here to enter your message";
-$lang['up']          = "User Content";
-$lang['up_allow']    = "Allowed Types";
+$lang['up']          = "Uploads";
 $lang['up_arc']      = "Archive";
 $lang['up_b64']      = "Base64";
 $lang['up_doc']      = "Document";

@@ -23,8 +23,6 @@ $lang['__text__']    = "点击这里选择中文";
 
 //** Strings
 $lang['apply_title'] = "单击此处应用选择";
-$lang['chat_enter']  = "进入聊天室";
-$lang['chat_leave']  = "离开了聊天";
 $lang['close_title'] = "点击此处关闭窗口";
 $lang['conf']        = "设置";
 $lang['conf_title']  = "单击此处更改设置";
@@ -49,8 +47,7 @@ $lang['theme_title'] = "点击此处选择主题";
 $lang['theme_miss']  = "缺少主题定义！";
 $lang['text']        = "文本";
 $lang['text_title']  = "在此输入以输入您的消息";
-$lang['up']          = "用户内容";
-$lang['up_allow']    = "允许的类型";
+$lang['up']          = "上传";
 $lang['up_arc']      = "档案";
 $lang['up_b64']      = "Base64编码";
 $lang['up_doc']      = "文献";
