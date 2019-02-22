@@ -86,7 +86,7 @@ label {
 input {
     background-color: #ccc;
     color: #333;
-    border: 1px outset #ccc;
+    border: 1px solid #999;
     margin: 8px;
     padding: 4px;
 }
@@ -104,6 +104,7 @@ input[type=submit] {
 
 input[type=file] {
     margin-bottom: 0;
+    padding: 1px;
 }
 
 #char {
@@ -118,8 +119,8 @@ input[type=file] {
 textarea {
     background-color: #ccc;
     color: #000;
-    font-size: 95%;
     border: 1px ouset #ccc;
+    font-size: 95%;
     padding: 4px;
     width: 50%;
     max-width: 400px;
@@ -128,13 +129,13 @@ textarea {
 select {
     background-color: #ccc;
     color: #333;
-    border: 1px outset #ccc;
+    border: 1px solid #ccc;
     margin: 0;
     padding: 1px;
 }
 
 .item {
-    border: 1px outset #ccc;
+    border: 1px solid #ccc;
     margin: 8px 0 16px 0;
 }
 
@@ -147,6 +148,8 @@ select {
 .item_head {
     background-color: #ccc;
     color: #333;
+    font-size: 75%;
+    font-weight: bold;
     padding: 4px;
 }
 
@@ -168,7 +171,7 @@ select {
 input:hover, textarea:hover, select:hover, .item:hover {
     background-color: #999;
     color: #000;
-    border: 1px ouset #ccc;
+    border: 1px ouset #666;
 }
 
 a:link, a:visited {
