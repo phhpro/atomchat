@@ -32,7 +32,9 @@ The provided CSS themes are probably not the most fashionable. They are kept sim
 
 ### Languages
 
-The script comes with a few demo translations. Just make a copy of `en.php` in the `lang` folder and rename it, e.g. `sv.php` for Swedish. You are welcome to submit your translation to the script's repository.
+The script attempts to auto-detect the user's language preference and checks if a translation exists. If so, the interface will use that language. Else, the default set in `$lang_def` is applied.
+
+Translations can be added by making a copy of `en.php` in the `lang` folder and renaming it, e.g. `sv.php` for Swedish, and then translating the strings. You are welcome to submit your translation to the script's repository.
 
 ### Delay
 
