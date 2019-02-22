@@ -46,6 +46,8 @@ If Javascript is disabled or not supported, or when using a text-mode browser, t
 
 ## Issues
 
-Decreasing the recommended minimum of 2000 for the polling rate in `var rate = 2000` in `chat.js` may freeze the browser.
+- Decreasing the recommended minimum of 2000 for the polling rate in `var rate = 2000` in `chat.js` may freeze the browser.
 
-Using the `body` ID instead of `push` fixes distorted rendering but obviously makes any user input impossible. This applies only when viewed without or generic styles.
+- Rendering may be distorted when viewing without or generic styles.
+
+- The pseudo `push()` function in `chat.js` is not fit to handle large numbers of simultaneous users.
