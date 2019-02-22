@@ -24,9 +24,7 @@ The definition file `emo.txt` only covers a basic set to avoid broken symbols on
 
 Image types `gif, jpeg, jpg, png` are converted to Base64 strings to minimise server requests. Only Base64 types will get a thumbnail icon. Any other types are printed as normal text links.
 
-Depending your server configuration, you may need to edit your CSP to add an exception for the `base` handler. If you can see the thumbnails, you're all golden. Else, either edit `.htaccess` in your document root; or provide one in the script's folder.
-
-Refer to the *UPLOADS* section in `conf.php` to add or remove file types. There is also an option to auto-delete old files when using daily logs.
+If you don't see the thumbnails you may need to edit your CSP to add an exception for the `base` handler. Refer to the *UPLOADS* section in `conf.php` to add or remove file types. There is also an option to auto-delete old files when using daily logs.
 
 ### Themes
 
