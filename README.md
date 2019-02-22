@@ -18,7 +18,7 @@ The only logging applies to the chat history. The script can create either daily
 
 ### Emojis
 
-The configuration file `emo.txt` only covers a basic set of definitions to avoid broken symbols on different devices and platforms.
+The definition file `emo.txt` only covers a basic set to avoid broken symbols on different devices and platforms. Chrome in particular has very poor support.
 
 ### Uploads
 

@@ -48,36 +48,32 @@ var http = null;
 function ajax()
 {
     if (window.ActiveXObject) {
-        return new ActiveXObject('Microsoft.XMLHTTP');
+        return new ActiveXObject("Microsoft.XMLHTTP");
     } else if (window.XMLHttpRequest) {
         return new XMLHttpRequest();
     } else {
-        alert('Your browser doesn\'t support AJAX!');
+        alert("Your browser doesn't support AJAX!");
         return null;
-    }
-}
-
-function stat()
-{
-    if (http.readyState == 4) {
-        document.getElementById('push').innerHTML = http.responseText;
-    }
-}
-
-function wait()
-{
-    http = ajax();
-
-    if (http != null) {
-        http.open('GET', '?' + Math.floor(Math.random() * 10000), true);
-        http.onreadystatechange = stat;
-        http.send();
     }
 }
 
 function push()
 {
-    wait();
+    http = ajax();
+
+    if (http != null) {
+        http.open("GET", "?" + Math.floor(Math.random() * 10000), true);
+        http.onreadystatechange = function() {
+
+            if (http.readyState == 4) {
+                document.getElementById("push").innerHTML
+                    = http.responseText;
+            }
+        }
+
+        http.send();
+    }
+
     setTimeout('push()', rate);
 }
 

@@ -22,45 +22,46 @@ $page       = "PHP Atomchat";
 $meta_des   = "PHP Atomchat Demo";
 $meta_key   = "PHP Atomchat Demo";
 
-//** Default language and folder
+//** Default language ID and folder
 $lang_def   = "en";
 $lang_fold  = "lang";
 
-//** Default theme and folder
+//** Default theme ID and folder
 $css_def    = "light";
 $css_fold   = "css";
 
 /**
  * Logo image, width, height, and text
- *
- * Set $logo_i = "" to skip image, $logo_t = 0 to skip text.
- *
- * Logo image type must be gif, jpeg, jpg, or png
+ * Image must be gif, jpeg, jpg, or png
+ * Set $logo_i = "" to skip image, $logo_t = 0 to skip text
  */
 $logo_i     = "logo.png";
 $logo_w     = 32;
 $logo_h     = 32;
 $logo_t     = 1;
 
-//** Let users change theme, auto-convert emojis -- 0 = NO, 1 = YES
+//** Let users change theme
 $css        = 1;
+
+//** Use emoji conversion and emoji config
 $emo        = 1;
+$emo_conf   = "emo.txt";
 
 /**
- * Maximum characters per post and date format.
+ * Maximum characters per post and date format
  * Value of "$char" must match "char" in chat.js
  */
 $char       = 1024;
 $date       = gmdate('Y-m-d H:m');
 
 /**
- * Log mode, maximum size, and folder
- *
- * Mode 0 = daily, 1 = endless -- auto-resets when size is reached
+ * Log mode, maximum size, folder, and name
+ * Mode 0 = daily, 1 = endless -- auto-resets if size <= $log_size
  */
 $log_mode   = 0;
 $log_size   = 1000000;
 $log_fold   = "log";
+$log_name   = "atomchat-log";
 
 
 /*
@@ -73,16 +74,13 @@ $log_fold   = "log";
 //** Enable uploads
 $up         = 1;
 
-/*
- * Auto-delete files after $up_old days -- 0 = NO, 1 = YES
- * Applies only when $log_mode = 0
- */
-$up_del     = 1;
-$up_old     = 30;
-
 //** Uploads folder and maximum size
 $up_fold    = "upload";
 $up_max     = 500000;
+
+//** Delete files after $up_old days -- applies only when $log_mode = 0
+$up_del     = 1;
+$up_old     = 30;
 
 //** Thumbnail width and height -- trimmed if source is larger
 $up_tnw     = 64;
@@ -90,9 +88,7 @@ $up_tnh     = 64;
 
 /**
  * Image, Base64 -- DO NOT EDIT !!!
- *
- * Convert to Base64 strings to minimise requests.
- * Only these will get thumbnails.
+ * Convert to Base64 strings to minimise requests -- thumbnails
  */
 $up_is_b64  = array(
     "gif",

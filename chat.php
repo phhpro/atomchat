@@ -30,22 +30,97 @@
 
 
 //** Version
-$ver = "20190220";
+$ver = "20190222";
 
 //** Headers
-//header('Content-Type: text/event-stream');
 header('Expires: on, 01 Jan 1970 00:00:00 GMT');
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 header('Cache-Control: no-cache');
 header('Pragma: no-cache');
 header_remove('X-Powered-By');
 
-// Config
+// Dependencies
 if (is_file('conf.php')) {
     include './conf.php';
 } else {
-    echo "Missing configuration!";
+    echo "No configuration!";
     exit;
+}
+
+if (!is_dir($lang_fold)) {
+    echo "No language folder!";
+    exit;
+}
+
+if (!is_dir($log_fold)) {
+
+    if (mkdir($log_fold) === false) {
+        echo "Cannot create log folder!";
+        exit;
+    }
+}
+
+if ($up === 1) {
+
+    if (!is_dir($up_fold)) {
+
+        if (mkdir($up_fold) === false) {
+            echo "Cannot create upload folder!";
+            exit;
+        }
+    }
+}
+
+if ($emo === 1) {
+
+    if (is_file($emo_conf)) {
+        $emo_trim = file_get_contents($emo_conf);
+
+        if (filesize($emo_conf) < 16 && trim($emo_trim) === false) {
+            echo "Bad emoji definition!";
+            exit;
+        } else {
+            $emo_parr = array();
+            $emo_sarr = array();
+            $emo_code = "";
+        }
+    } else {
+        echo "No emoji definition!";
+        exit;
+    }
+}
+
+if (get_cfg_var('session.use_strict_mode') !== 1) {
+    ini_set('session.use_strict_mode', 1);
+}
+
+/**
+ * Function sessionstat()
+ *
+ * @return bool session status
+ */
+function sessionstat()
+{
+    if (php_sapi_name() !== 'cli') {
+
+        if (version_compare(phpversion(), '5.4.0', '>=')) {
+            return session_status()
+                === PHP_SESSION_ACTIVE ? true : false;
+        } else {
+            return session_id() === '' ? false : true;
+        }
+    }
+
+    return false;
+}
+
+if (sessionstat() === false) {
+    if (!session_start()) {
+        echo "Session not supported!";
+        exit;
+    } else {
+        session_start();
+    }
 }
 
 /**
@@ -55,8 +130,8 @@ if (is_file('conf.php')) {
  */
 function rnum()
 {
-    $n = mt_rand(1000, 9999);
-    return $n;
+    $rn = mt_rand(1000, 9999);
+    return $rn;
 }
 
 /**
@@ -86,8 +161,6 @@ if (isset($_SERVER['HTTPS']) && "on" === $_SERVER['HTTPS']) {
 $host = "http$prot://" . $_SERVER['HTTP_HOST'] . "/$fold/";
 
 //** Log
-$log_name = "atomchat-log";
-
 if ($log_mode === 0) {
     $log_name = $log_name . "_" . gmdate('Y-m-d');
 }
@@ -102,7 +175,7 @@ if (is_file($log_data)) {
     }
 }
 
-//** Home screen and status init
+//** Home screen and initial status
 $home = "home.php";
 $stat = "";
 
@@ -122,126 +195,50 @@ if ($logo_t === 1) {
 
 $logo = $logo_i . $logo_t;
 
-//** Emoji
-$emo_conf = "emo.txt";
-$emo_parr = array();
-$emo_sarr = array();
-$emo_code = "";
-
-//** Session
-if (get_cfg_var('session.use_strict_mode') !== 1) {
-    ini_set('session.use_strict_mode', 1);
-}
-
-session_start();
-$_SESSION['ac_test'] = 1;
-
-if ($_SESSION['ac_test'] !== 1) {
-    echo "<p>Missing session cookie!</p>\n" .
-         "<p>Please edit your browser's cookie " .
-         "settings and then try again.</p>\n";
-    exit;
-} else {
-    unset($_SESSION['ac_test']);
-}
-
 //** Language
 $lang_mime = $lang_def;
 
-if (isset($_POST['lang_apply'])) {
-    $_SESSION['ac_lang']
-        = htmlentities($_POST['lang_id'], ENT_QUOTES, "UTF-8");
-}
-
-/**
- * Try language auto-detect
- *
- * Applies to internal strings only to render script output in user
- * language. Global page MIME is left intact, e.g. if page MIME is
- * set to "de" (German), and user selects "fr" (French), page MIME
- * remains "de" whereas all script output is rendered "fr".
- */
 if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-    $lang_sub = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-    $lang_sup = [
-        "ar",
-        "de",
-        "en",
-        "es",
-        "fr",
-        "th",
-        "zh"
-    ];
-    $lang_sub = in_array($lang_sub, $lang_sup) ? $lang_sub : "en";
-    $lang_def = $lang_sub;
+    $lang_hal = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+    $lang_usr = $lang_hal;
+    $lang_php = glob($lang_fold . "/*.php");
+
+    foreach ($lang_php as $lang_obj) {
+        $lang_obj = str_replace("lang/", "", $lang_obj);
+        $lang_obj = str_replace(".php", "", $lang_obj);
+
+        if (strpos($lang_obj, $lang_usr) === false) {
+            continue;
+        } else {
+            $lang_def = $lang_usr;
+        }
+    }
+
+    unset($lang_obj);
 }
 
 if (!isset($_SESSION['ac_lang'])) {
     $_SESSION['ac_lang'] = $lang_def;
 }
 
+if (isset($_POST['lang_apply'])) {
+    $_SESSION['ac_lang']
+        = htmlentities($_POST['lang_id'], ENT_QUOTES, "UTF-8");
+}
+
 $lang_id   = $_SESSION['ac_lang'];
 $lang_data = $lang_fold . "/" . $lang_id . ".php";
 
+if (is_file($lang_data)) {
+    $lang_trim = file_get_contents($lang_data);
 
-//** Folders
-if (!is_dir($lang_fold)) {
-    echo "Missing language folder!";
-    exit;
-}
-
-if (!is_dir($log_fold)) {
-
-    if (mkdir($log_fold) === false) {
-        echo "Failed to create log folder!";
-        exit;
-    }
-}
-
-if ($up === 1) {
-
-    if (!is_dir($up_fold)) {
-
-        if (mkdir($up_fold) === false) {
-            echo "Failed to create upload folder!";
-            exit;
-        }
-    }
-}
-
-//** Files
-if (is_file($lang_data) || $emo === 1) {
-
-    if (is_file($lang_data)) {
-        $file_data = $lang_data;
-        $file_text = "language file";
-    }
-
-    if ($emo === 1) {
-        $file_data = $emo_conf;
-        $file_text = "emoji configuration";
-    }
-
-    $file_trim = file_get_contents($file_data);
-
-    if (filesize($file_data) <16 && trim($file_trim) === false) {
-        echo "Invalid $file_text!";
-        exit;
+    if (filesize($lang_data) < 16 && trim($lang_trim) === false) {
+        $stat = "Bad language file!";
+    } else {
+        include $lang_data;
     }
 } else {
-    echo "Missing $file_text!";
-    exit;
-}
-
-//** Link language
-require $lang_data;
-$lang_id   = $_SESSION['ac_lang'];
-$lang_user = $lang_fold . "/" . $lang_id . ".php";
-
-if (is_file($lang_user)) {
-    include $lang_user;
-} else {
-    $stat = $lang['lang_miss'];
+    $stat = "No language file!";
 }
 
 //** Login
@@ -249,13 +246,12 @@ if (isset($_POST['login'])) {
     $name = htmlentities($_POST['name'], ENT_QUOTES, "UTF-8");
 
     if ($name === "") {
-        header("Location: $host#MISSING_NAME");
+        header("Location: $host#NO_NAME");
         exit;
     } else {
         $_SESSION['ac_name'] = $name . "_" . rnum();
         $text  = "            <div class=item_log>$date " .
-                 $_SESSION['ac_name'] . " " . $lang['chat_enter'] .
-                 "</div>\n";
+                 $_SESSION['ac_name'] . " LOGIN</div>\n";
 
         if (is_file($log_data)) {
             $text .= file_get_contents($log_data);
@@ -268,7 +264,7 @@ if (isset($_POST['login'])) {
     }
 }
 
-//** Save log -- download
+//** Save -- download log
 if (isset($_POST['save'])) {
     header('Content-type: text/html');
     header(
@@ -282,11 +278,12 @@ if (isset($_POST['save'])) {
 //** Logout
 if (isset($_POST['quit'])) {
     $text  = "            <div class=item_log>$date " .
-             $_SESSION['ac_name'] . " " . $lang['chat_leave'] .
-             "</div>\n";
+             $_SESSION['ac_name'] . " LOGOUT</div>\n";
     $text .= file_get_contents($log_data);
     file_put_contents($log_data, $text);
     unset($_SESSION['ac_name']);
+    unset($_SESSION['ac_css']);
+    unset($_SESSION['ac_lang']);
     header("Location: $host#LOGOUT");
     exit;
 }
@@ -351,7 +348,7 @@ if (isset($_POST['post'])) {
             $up_size = $_FILES['file']['size'];
 
             if ($up_size > $up_max) {
-                header("Location: $host#INVALID_FILESIZE");
+                header("Location: $host#BAD_FILESIZE");
                 exit;
             }
 
@@ -375,7 +372,7 @@ if (isset($_POST['post'])) {
                                "width=$up_tnw height=$up_tnh " .
                                "alt=\"\"/></a></p>";
                 } else {
-                    header("Location: $host#INVALID_IMAGE");
+                    header("Location: $host#BAD_IMAGE");
                     exit;
                 }
             } elseif (in_array($up_type, $up_is_arc)
@@ -388,7 +385,7 @@ if (isset($_POST['post'])) {
                            "title=\"" . $lang['up_open'] . "\">" .
                            "$up_text</a></p>";
             } else {
-                header("Location: $host#INVALID_FILETYPE");
+                header("Location: $host#BAD_FILETYPE");
                 exit;
             }
 
@@ -433,7 +430,7 @@ if (isset($_POST['post'])) {
         header("Location: $host#POST");
         exit;
     } else {
-        header("Location: $host#INVALID_POST");
+        header("Location: $host#BAD_POST");
         exit;
     }
 }
@@ -442,15 +439,15 @@ if (isset($_POST['css_apply'])) {
     $css_id = htmlentities($_POST['css_id'], ENT_QUOTES, "UTF-8");
 
     if ($css_id !== "") {
-        $_SESSION['ac_theme'] = $css_id;
+        $_SESSION['ac_css'] = $css_id;
     }
 }
 
-if (isset($_SESSION['ac_theme'])) {
-    $css_sel = $_SESSION['ac_theme'];
+if (isset($_SESSION['ac_css'])) {
+    $css_sel = $_SESSION['ac_css'];
 } else {
     $css_sel              = $css_def;
-    $_SESSION['ac_theme'] = $css_sel;
+    $_SESSION['ac_css'] = $css_sel;
 }
 
 $css_file = $css_fold . "/" . $css_sel . ".css";
@@ -478,7 +475,7 @@ echo "<!DOCTYPE html>\n" .
      "            <h1>$logo</h1>\n" .
      "        </header>\n";
 
-//** Config
+//** Settings
 if (isset($_POST['conf'])) {
     echo "        <article>\n" .
          "            <h2>" . $lang['conf']. "</h2>\n" .
@@ -487,13 +484,13 @@ if (isset($_POST['conf'])) {
 
          //** Language
          "                <div>\n" .
-         "                    <p><label for=name_id>" .
-         $lang['lang'] . "</label></p>\n" .
-         "                    <select name=lang_id " .
+         "                    <p>\n" .
+         "                        <label for=name_id>" .
+         $lang['lang'] . "</label>\n" .
+         "                        <select name=lang_id " .
          "title=\"" . $lang['lang_title']. "\">\n";
 
-    $lang_fold = "lang/";
-    $lang_list = glob($lang_fold . "*.php");
+    $lang_list = glob($lang_fold . "/*.php");
     sort($lang_list);
 
     foreach ($lang_list as $lang_item) {
@@ -511,24 +508,26 @@ if (isset($_POST['conf'])) {
         $lang_text = str_replace("\";\n", "", $lang_text);
         $lang_link = basename($lang_item);
         $lang_link = str_replace(".php", "", $lang_link);
-        echo "                        <option value=\"$lang_link\" " .
-             "lang=\"$lang_link\" " .
+        echo "                            <option " .
+             "value=\"$lang_link\" lang=\"$lang_link\" " .
              "title=\"$lang_text\">$lang_name</option>\n";
     }
 
     unset($lang_item);
-    echo "                    </select>\n" .
-         "                    <input type=submit name=lang_apply " .
-         "value=\"#\" " .
+    echo "                        </select>\n" .
+         "                        <input type=submit " .
+         "name=lang_apply value=\"#\" " .
          "title=\"" . $lang['apply_title'] . "\"/>\n" .
+         "                    </p>\n" .
          "                </div>\n";
 
     //** Theme
     if ($css === 1) {
         echo "                <div>\n" .
-             "                    <p><label for=css_id>" .
-             $lang['theme'] . "</label></p>\n" .
-             "                    <select name=css_id " .
+             "                    <p>\n" .
+             "                        <label for=css_id>" .
+             $lang['theme'] . "</label>\n" .
+             "                        <select name=css_id " .
              "title=\"" . $lang['theme_title'] . "\">\n";
 
         $css_list = glob($css_fold . "/*.css");
@@ -538,11 +537,11 @@ if (isset($_POST['conf'])) {
             $css_link = basename($css_item);
             $css_link = str_replace(".css", "", $css_link);
             $css_text = str_replace(array("-", "_"), " ", $css_link);
-            echo "                        <option value=\"".
+            echo "                            <option value=\"".
                  "$css_link\" title=\"" . $lang['theme_title'] . " " .
                  ucwords($css_text) . "\">" . ucwords($css_text);
 
-            if ($css_link === $_SESSION['ac_theme']) {
+            if ($css_link === $_SESSION['ac_css']) {
                 echo " [x]";
             }
 
@@ -550,10 +549,11 @@ if (isset($_POST['conf'])) {
         }
 
         unset($css_item);
-        echo "                    </select>\n" .
-             "                    <input type=submit name=css_apply " .
-             "value=\"#\" " .
+        echo "                        </select>\n" .
+             "                        <input type=submit " .
+             "name=css_apply value=\"#\" " .
              "title=\"" . $lang['apply_title'] . "\"/>\n" .
+             "                    </p>\n" .
              "                </div>\n";
     }
 
@@ -592,8 +592,6 @@ if (isset($_POST['conf'])) {
         echo "                <h2>" . $lang['up'] . "</h2>\n" .
              "                <p>" .
              $lang['up_max'] . " $up_max</p>\n" .
-             "                <p><strong>" .
-             $lang['up_allow'] . "</strong></p>\n" .
 
         //** Image, Base64
              "                <ul>\n" .
@@ -718,7 +716,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
 
          //** Text
          "                <textarea name=text id=text " .
-         "rows=3 cols=40 maxlength=$char " .
+         "rows=2 cols=40 maxlength=$char " .
          "title=\"" . $lang['text_title'] . "\" " .
          "onkeydown=chars(this.form); ".
          "onkeypress=chars(this.form); " .
@@ -746,7 +744,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
 
          //** Post
          "                    <input type=submit name=post " .
-         "value=\"&gt;\" " .
+         "value=\"#\" " .
          "title=\"" . $lang['post_title'] . "\"/>\n" .
          "                </div>\n";
 
@@ -774,11 +772,10 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
          $lang['noscript'] . "</noscript>\n" .
          "            </div>\n";
 } else {
-    //** Home
     echo "        <article>\n";
 
     if (is_file($home)) {
-        include "./" . $home;
+        include "./$home";
     }
 
     //** Login
