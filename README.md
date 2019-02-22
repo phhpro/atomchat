@@ -42,7 +42,7 @@ The default post delay and refresh rate are 2 seconds. See below: Issues.
 
 ## Limitations
 
-If Javascript is disabled or not supported, or when using a text-mode browser, the page needs to be manually refreshed to execute a selected action or to view any new posts. 
+If Javascript is disabled or not supported, or when using a text-mode browser, the page needs to be manually refreshed to execute the selected action or to view any new posts. 
 
 ## Issues
 
