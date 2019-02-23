@@ -399,9 +399,9 @@ if (isset($_POST['post'])) {
                 header("Location: $host#WRITE_ERROR");
                 exit;
             }
-        }
 
-        unlink($up_file);
+            unlink($up_file);
+        }
     }
 
     if ($text !== "" && $up_link === "") {
