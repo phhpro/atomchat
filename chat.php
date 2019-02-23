@@ -811,19 +811,16 @@ echo "            <p id=by><a href=\" " .
 if ($up_del === 1) {
     $up_old = $up_old * 24 * 60 * 60;
 
-    if (file_exists($up_fold)) {
+    foreach (new DirectoryIterator($up_fold) as $up_obj) {
 
-        foreach (new DirectoryIterator($up_fold) as $up_obj) {
+        if ($up_obj -> isDot()) {
+            continue;
+        }
 
-            if ($up_obj -> isDot()) {
-                continue;
-            }
-
-            if ($up_obj -> isFile()
-                && time() - $up_obj -> getMTime() >= $up_old
-            ) {
-                unlink($up_obj -> getRealPath());
-            }
+        if ($up_obj -> isFile()
+            && time() - $up_obj -> getMTime() >= $up_old
+        ) {
+            unlink($up_obj -> getRealPath());
         }
     }
 }
