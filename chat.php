@@ -30,7 +30,7 @@
 
 
 //** Version
-$ver = "20190222";
+$ver = "20190223";
 
 //** Headers
 header('Expires: on, 01 Jan 1970 00:00:00 GMT');
@@ -116,7 +116,7 @@ function sessionstat()
 
 if (sessionstat() === false) {
     if (!session_start()) {
-        echo "Session not supported!";
+        echo "Cannot create session!";
         exit;
     } else {
         session_start();
@@ -166,9 +166,10 @@ if ($log_mode === 0) {
 }
 
 $log_data = $log_fold . "/" . $log_name . ".html";
-$log_stat = filesize($log_data);
 
 if (is_file($log_data)) {
+    $log_stat = filesize($log_data);
+
 
     if ($log_stat > $log_size) {
         unlink($log_data);
@@ -223,7 +224,7 @@ if (!isset($_SESSION['ac_lang'])) {
 
 if (isset($_POST['lang_apply'])) {
     $_SESSION['ac_lang']
-        = htmlentities($_POST['lang_id'], ENT_QUOTES, "UTF-8");
+        = htmlentities($_POST['lang_id'], ENT_QUOTES, 'UTF-8');
 }
 
 $lang_id   = $_SESSION['ac_lang'];
@@ -233,7 +234,8 @@ if (is_file($lang_data)) {
     $lang_trim = file_get_contents($lang_data);
 
     if (filesize($lang_data) < 16 && trim($lang_trim) === false) {
-        $stat = "Bad language file!";
+        $stat      = "Bad language file: $lang_id";
+        $lang_data = str_replace($lang_id, $lang_def, $lang_data);
     } else {
         include $lang_data;
     }
@@ -243,21 +245,21 @@ if (is_file($lang_data)) {
 
 //** Login
 if (isset($_POST['login'])) {
-    $name = htmlentities($_POST['name'], ENT_QUOTES, "UTF-8");
+    $name = htmlentities($_POST['name'], ENT_QUOTES, 'UTF-8');
 
     if ($name === "") {
         header("Location: $host#NO_NAME");
         exit;
     } else {
         $_SESSION['ac_name'] = $name . "_" . rnum();
-        $text  = "            <div class=item_log>$date " .
-                 $_SESSION['ac_name'] . " LOGIN</div>\n";
+        $text = "            <div class=item_log>$date " .
+                $_SESSION['ac_name'] . " LOGIN</div>\n";
 
         if (is_file($log_data)) {
             $text .= file_get_contents($log_data);
         }
 
-        $stat  = "";
+        $stat = "";
         file_put_contents($log_data, $text);
         header("Location: $host#LOGIN");
         exit;
@@ -293,8 +295,8 @@ $pass = 0;
 
 //** Post
 if (isset($_POST['post'])) {
-    $name = htmlentities($_POST['name'], ENT_QUOTES, "UTF-8");
-    $text = htmlentities($_POST['text'], ENT_QUOTES, "UTF-8");
+    $name = htmlentities($_POST['name'], ENT_QUOTES, 'UTF-8');
+    $text = htmlentities($_POST['text'], ENT_QUOTES, 'UTF-8');
 
     if ($text !== "") {
         $pass = 1;
@@ -360,17 +362,15 @@ if (isset($_POST['post'])) {
 
                     if ($up_iw <= $up_tnw) {
                         $up_tnw = $up_iw;
-                    }
-
-                    if ($up_ih <= $up_tnh) {
+                    } elseif ($up_ih <= $up_tnh) {
                         $up_tnh = $up_ih;
+                    } else {
+                        $up_link = "<p><a href=\"$up_open\" " .
+                                   "title=\"" . $lang['up_open'] .
+                                   "\"><img src=" . b64enc($up_name) .
+                                   "width=$up_tnw height=$up_tnh " .
+                                   "alt=\"\"/></a></p>";
                     }
-
-                    $up_link = "<p><a href=\"$up_open\" " .
-                               "title=\"" . $lang['up_open'] . "\">" .
-                               "<img src=" . b64enc($up_name) .
-                               "width=$up_tnw height=$up_tnh " .
-                               "alt=\"\"/></a></p>";
                 } else {
                     header("Location: $host#BAD_IMAGE");
                     exit;
@@ -406,14 +406,12 @@ if (isset($_POST['post'])) {
 
     if ($text !== "" && $up_link === "") {
         $post = $text;
-    }
-
-    if ($text !== "" && $up_link !== "") {
+    } elseif ($text !== "" && $up_link !== "") {
         $post = $text . $up_link;
-    }
-
-    if ($text === "" && $up_link !== "") {
+    } elseif ($text === "" && $up_link !== "") {
         $post = $up_link;
+    } else {
+        $pass = 0;
     }
 
     if ($pass === 1) {
@@ -436,7 +434,7 @@ if (isset($_POST['post'])) {
 }
 
 if (isset($_POST['css_apply'])) {
-    $css_id = htmlentities($_POST['css_id'], ENT_QUOTES, "UTF-8");
+    $css_id = htmlentities($_POST['css_id'], ENT_QUOTES, 'UTF-8');
 
     if ($css_id !== "") {
         $_SESSION['ac_css'] = $css_id;
@@ -446,7 +444,7 @@ if (isset($_POST['css_apply'])) {
 if (isset($_SESSION['ac_css'])) {
     $css_sel = $_SESSION['ac_css'];
 } else {
-    $css_sel              = $css_def;
+    $css_sel            = $css_def;
     $_SESSION['ac_css'] = $css_sel;
 }
 
@@ -470,14 +468,14 @@ echo "<!DOCTYPE html>\n" .
      "type=\"image/png\"/>\n" .
      "        <link rel=stylesheet href=\"$host$css_file\"/>\n" .
      "    </head>\n" .
-     "    <body id=body>\n" .
+     "    <body>\n" .
      "        <header>\n" .
      "            <h1>$logo</h1>\n" .
      "        </header>\n";
 
 //** Settings
 if (isset($_POST['conf'])) {
-    echo "        <article>\n" .
+    echo "        <article id=conf>\n" .
          "            <h2>" . $lang['conf']. "</h2>\n" .
          "            <form action=\"$host#CHAT\" method=POST " .
          "accept-charset=\"UTF-8\">\n" .
@@ -695,7 +693,7 @@ if (isset($_POST['conf'])) {
 
 //** Check name session
 if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
-    echo "        <div id=push>\n";
+    echo "        <article id=push>\n";
 
     if (is_file($log_data)) {
         include $log_data;
@@ -704,7 +702,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
     }
 
     //** Navigation
-    echo "        </div>\n" .
+    echo "        </article>\n" .
          "        <nav>\n" .
          "            <form action=\"$host#CHAT\" name=chat " .
          "method=POST accept-charset=\"UTF-8\" " .
