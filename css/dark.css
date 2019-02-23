@@ -4,7 +4,7 @@ body {
     background-color: #000;
     color: #666;
     font-family: sans-serif;
-    font-size: 95%;
+    font-size: 100%;
 }
 
 header {
@@ -26,30 +26,21 @@ h1 img {
     vertical-align: middle;
 }
 
-#push {
+article {
     background-color: #000;
     color: #666;
+    font-size: 95%;
     padding: 4px;
     position: fixed;
     top: 48px;
     right: 12px;
     bottom: 240px;
-    left: 12px;
+    left: 10px;
     overflow: auto;
-    font-size: 95%;
 }
 
-article {
-    background-color: #000;
-    color: #666;
-    padding: 4px;
-    position: fixed;
-    top: 48px;
-    right: 12px;
+#conf {
     bottom: 36px;
-    left: 14px;
-    overflow: auto;
-    font-size: 95%;
     z-index: 1000;
 }
 
@@ -119,8 +110,8 @@ input[type=file] {
 textarea {
     background-color: #333;
     color: #999;
-    border: 1px solid #333;
     font-size: 95%;
+    border: 1px solid #333;
     padding: 4px;
     width: 50%;
     max-width: 400px;
@@ -171,7 +162,7 @@ select {
 input:hover, textarea:hover, select:hover, .item:hover {
     background-color: #999;
     color: #000;
-    border: 1px ouset #999;
+    border: 1px solid #666;
 }
 
 a:link, a:visited {
