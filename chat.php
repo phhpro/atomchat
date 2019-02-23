@@ -124,17 +124,6 @@ if (sessionstat() === false) {
 }
 
 /**
- * Function rnum()
- *
- * @return integer random number
- */
-function rnum()
-{
-    $rn = mt_rand(1000, 9999);
-    return $rn;
-}
-
-/**
  * Function b64enc()
  *
  * @param string $b64_src source file
@@ -143,7 +132,6 @@ function rnum()
  */
 function b64enc($b64_src)
 {
-    $b64_src = $b64_src;
     $b64_ext = pathinfo($b64_src, PATHINFO_EXTENSION);
     $b64_get = file_get_contents($b64_src);
     $b64_str = "\"data:image/" . $b64_ext .
@@ -151,10 +139,18 @@ function b64enc($b64_src)
     return chunk_split($b64_str);
 }
 
+//** Base64 types
+$b64_type  = array(
+    "gif",
+    "jpeg",
+    "jpg",
+    "png"
+);
+
 //** Protocol and URL
 $prot = "";
 
-if (isset($_SERVER['HTTPS']) && "on" === $_SERVER['HTTPS']) {
+if (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS']) {
     $prot = "s";
 }
 
@@ -205,7 +201,7 @@ if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
     $lang_php = glob($lang_fold . "/*.php");
 
     foreach ($lang_php as $lang_obj) {
-        $lang_obj = str_replace("lang/", "", $lang_obj);
+        $lang_obj = str_replace($lang_fold . "/", "", $lang_obj);
         $lang_obj = str_replace(".php", "", $lang_obj);
 
         if (strpos($lang_obj, $lang_usr) === false) {
@@ -234,7 +230,7 @@ if (is_file($lang_data)) {
     $lang_trim = file_get_contents($lang_data);
 
     if (filesize($lang_data) < 16 && trim($lang_trim) === false) {
-        $stat      = "Bad language file: $lang_id";
+        $stat      = "Bad language file: " . $lang_id;
         $lang_data = str_replace($lang_id, $lang_def, $lang_data);
     } else {
         include $lang_data;
@@ -251,7 +247,7 @@ if (isset($_POST['login'])) {
         header("Location: $host#NO_NAME");
         exit;
     } else {
-        $_SESSION['ac_name'] = $name . "_" . rnum();
+        $_SESSION['ac_name'] = $name . "_" . mt_rand($rn_min, $rn_max);
         $text = "            <div class=item_log>$date " .
                 $_SESSION['ac_name'] . " LOGIN</div>\n";
 
@@ -334,46 +330,90 @@ if (isset($_POST['post'])) {
     }
 
     if ($up === 1) {
-        $up_base = basename($_FILES['file']['name']);
-        $up_file = $up_fold . "/" . $up_base;
-        $up_type = strtolower(pathinfo($up_file, PATHINFO_EXTENSION));
-        $_SESSION['ac_rand'] = rnum();
-        $up_rand = $_SESSION['ac_name'] . "-" .
-                   $_SESSION['ac_rand'] . "." . $up_type;
-        $up_save = str_replace($up_base, $up_rand, $up_file);
-        $up_text = str_replace("$up_fold/", "", $up_save);
-        $up_open = $host . $up_save;
 
         if (!empty($_FILES['file']['name'])) {
-            $up_name = $_FILES['file']['tmp_name'];
-            $up_temp = getimagesize($_FILES['file']['tmp_name']);
+            $up_base = basename($_FILES['file']['name']);
+            $up_temp = $_FILES['file']['tmp_name'];
+            $up_gimg = getimagesize($_FILES['file']['tmp_name']);
             $up_size = $_FILES['file']['size'];
+            $up_file = $up_fold . "/" . $up_base;
+            $up_type
+                = strtolower(pathinfo($up_file, PATHINFO_EXTENSION));
+            $up_rand = mt_rand() . "." . $up_type;
+            $up_save = str_replace($up_base, $up_rand, $up_file);
+            $up_open = $host . $up_save;
 
             if ($up_size > $up_max) {
                 header("Location: $host#BAD_FILESIZE");
                 exit;
-            }
+            } else {
 
-            if (in_array($up_type, $up_is_b64)) {
-
-                if ($up_temp !== false) {
-                    $up_iw = $up_temp[0];
-                    $up_ih = $up_temp[1];
-
-                    if ($up_iw <= $up_tnw) {
-                        $up_tnw = $up_iw;
-                    } elseif ($up_ih <= $up_tnh) {
-                        $up_tnh = $up_ih;
+                if (move_uploaded_file(
+                    $_FILES['file']['tmp_name'], $up_file
+                )
+                ) {
+                    if (copy($up_file, $up_save)) {
+                        $pass = 1;
                     } else {
-                        $up_link = "<p><a href=\"$up_open\" " .
-                                   "title=\"" . $lang['up_open'] .
-                                   "\"><img src=" . b64enc($up_name) .
-                                   "width=$up_tnw height=$up_tnh " .
-                                   "alt=\"\"/></a></p>";
+                        header("Location: $host#WRITE_ERROR");
+                        exit;
                     }
                 } else {
                     header("Location: $host#BAD_IMAGE");
                     exit;
+                }
+
+                unlink($up_file);
+            }
+
+            if (in_array($up_type, $b64_type)) {
+
+                if ($up_gimg !== false) {
+                    $up_ico = "th_" . basename($up_save);
+                    copy($up_save, $up_ico);
+
+                    if ($up_type === "jpeg" || $up_type === "jpg") {
+                        $up_src = imagecreatefromjpeg($up_ico);
+                    } elseif ($up_type === "png") {
+                        $up_src = imagecreatefrompng($up_ico);
+                    } else {
+                        $up_src = imagecreatefromgif($up_ico);
+                    }
+
+                    $up_iw = imagesx($up_src);
+                    $up_ih = imagesy($up_src);
+                    $up_wh = min($up_tnw / $up_iw, $up_tnh / $up_ih);
+                    $up_tw = ceil($up_wh * $up_iw);
+                    $up_th = ceil($up_wh * $up_ih);
+                    $up_tn = imagecreatetruecolor($up_tw, $up_th);
+
+                    imagecopyresampled(
+                        $up_tn, $up_src,
+                        0, 0, 0, 0,
+                        $up_tw, $up_th, $up_iw, $up_ih
+                    );
+
+                    $up_dim = getimagesize($up_tn);
+                    $up_tnw = $up_dim[0];
+                    $up_tnh = $up_dim[1];
+
+                    if ($up_type === "jpeg" || $up_type === "jpg") {
+                        imagejpeg($up_tn, $up_ico, 60);
+                    } elseif ($up_type === "png") {
+                        imagepng($up_ico);
+                    } else {
+                        imagegif($up_ico);
+                    }
+
+                    $up_link = "<p><a href=\"$up_open\" " .
+                               "title=\"" . $lang['up_open'] .
+                               "\"><img src=" . b64enc($up_ico) .
+                               "width=$up_tnw height=$up_tnh " .
+                               "alt=\"\"/></a></p>";
+
+                    imagedestroy($up_src);
+                    imagedestroy($up_tn);
+                    unlink($up_ico);
                 }
             } elseif (in_array($up_type, $up_is_arc)
                 || in_array($up_type, $up_is_doc)
@@ -383,24 +423,12 @@ if (isset($_POST['post'])) {
             ) {
                 $up_link = "<p><a href=\"$up_open\" " .
                            "title=\"" . $lang['up_open'] . "\">" .
-                           "$up_text</a></p>";
+                           str_replace("$up_fold/", "", $up_save) .
+                           "</a></p>";
             } else {
                 header("Location: $host#BAD_FILETYPE");
                 exit;
             }
-
-            if (move_uploaded_file(
-                $_FILES['file']['tmp_name'], $up_file
-            )
-            ) {
-                copy($up_file, $up_save);
-                $pass = 1;
-            } else {
-                header("Location: $host#WRITE_ERROR");
-                exit;
-            }
-
-            unlink($up_file);
         }
     }
 
@@ -597,7 +625,7 @@ if (isset($_POST['conf'])) {
              $lang['up_b64'] . "</strong>\n" .
              "                        <ul>\n";
 
-        foreach ($up_is_b64 as $up_b64) {
+        foreach ($b64_type as $up_b64) {
             echo "                            <li>$up_b64</li>\n";
         }
 

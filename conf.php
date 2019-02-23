@@ -26,7 +26,8 @@ $meta_key   = "PHP Atomchat Demo";
 $lang_def   = "en";
 $lang_fold  = "lang";
 
-//** Default theme ID and folder
+//** Let users change theme, default ID and folder
+$css        = 1;
 $css_def    = "light";
 $css_fold   = "css";
 
@@ -40,9 +41,6 @@ $logo_w     = 32;
 $logo_h     = 32;
 $logo_t     = 1;
 
-//** Let users change theme
-$css        = 1;
-
 //** Use emoji conversion and emoji config
 $emo        = 1;
 $emo_conf   = "emo.txt";
@@ -53,6 +51,13 @@ $emo_conf   = "emo.txt";
  */
 $char       = 1024;
 $date       = gmdate('Y-m-d H:m');
+
+/**
+ * Randum number to prevent dupes
+ * First value of minimum must be 1
+ */
+$rn_min     = 100;
+$rn_max     = 900;
 
 /**
  * Log mode, maximum size, folder, and name
@@ -78,26 +83,15 @@ $up         = 1;
 $up_fold    = "upload";
 $up_max     = 500000;
 
-//** Delete files after $up_old days -- applies only when $log_mode = 0
+//** Delete files after $up_old days -- requires $log_mode = 0
 $up_del     = 1;
 $up_old     = 30;
 
-//** Thumbnail width and height -- trimmed if source is larger
-$up_tnw     = 64;
-$up_tnh     = 64;
+//** Thumbnail width and height
+$up_tnw     = 120;
+$up_tnh     = 90;
 
-/**
- * Image, Base64 -- DO NOT EDIT !!!
- * Convert to Base64 strings to minimise requests -- thumbnails
- */
-$up_is_b64  = array(
-    "gif",
-    "jpeg",
-    "jpg",
-    "png"
-);
-
-//** Image, other -- no thumbnails
+//** Image -- gif, jpeg, jpg, and png are handled internally by Base64
 $up_is_img  = array(
     "bmp",
     "ico"
