@@ -198,6 +198,10 @@ a:hover, a:active {
     right: 24px;
 }
 
+hr {
+    display: none;
+}
+
 @media screen and (max-width: 800px) {
     body {
         font-size: 85%;
