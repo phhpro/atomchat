@@ -2,12 +2,12 @@
 /**
  * PHP Version 5 and above
  *
- * Language file Dutch
+ * Language file Dutch -- D Schouten <david@schouten.io>
  *
  * @category  PHP_Chat
  * @package   PHP_Atomchat
- * @author    D Schouten <david@schouten.io>
- * @copyright 2015 - 2019 D Schouten
+ * @author    P H Claus <phhpro@gmail.com>
+ * @copyright 2015 - 2019 P H Claus
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GPLv3
  * @version   GIT: Latest
  * @link      https://github.com/phhpro/atomchat
