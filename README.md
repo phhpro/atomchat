@@ -22,13 +22,13 @@ The definition file `emo.txt` only covers a basic set to avoid broken symbols on
 
 ### Uploads
 
-Image types `gif, jpeg, jpg, png` are converted to Base64 strings to minimise server requests. Only Base64 types will get a thumbnail icon. Any other types are printed as normal text links.
+Image types `gif, jpeg, jpg, png` are converted to Base64 strings to minimise server requests, and only these will get auto-scaled thumbnails. Any other types are printed as normal text links.
 
-If you don't see the thumbnails you may need to edit your CSP to add an exception for the `base` handler. Refer to the *UPLOADS* section in `conf.php` to add or remove file types. There is also an option to auto-delete old files when using daily logs.
+You may need to edit your CSP to add an exception for the `base` handler if you don't see the thumbnails. Refer to the *UPLOADS* section in `conf.php` regarding file types. There's also an option to auto-delete old files when using daily logs.
 
 ### Themes
 
-The provided CSS themes are probably not the most fashionable. They are kept simple and primarily serve as guidance.
+The included CSS themes are probably not the most fashionable. They are kept simple and primarily aim to provide guidance.
 
 ### Languages
 
@@ -36,18 +36,14 @@ The script attempts to auto-detect the user's language preference and checks if 
 
 Translations can be added by making a copy of `en.php` in the `lang` folder and renaming it, e.g. `sv.php` for Swedish, and then translating the strings. You are welcome to submit your translation to the script's repository.
 
-### Delay
-
-The default post delay and refresh rate are 2 seconds. See below: Issues.
-
 ## Limitations
 
-If Javascript is disabled or not supported, or when using a text-mode browser, the page needs to be manually refreshed to execute the selected action or to view any new posts. 
+If JavaScript is disabled or not supported, or when using a text-mode browser, the page needs to be manually refreshed to execute the selected action or to view any new posts. 
 
 ## Issues
 
-- Decreasing the recommended minimum of 2000 for the polling rate in `var rate = 2000` in `chat.js` may freeze the browser.
+- Decreasing the recommended minimum of the refresh rate in `$rate` may freeze the browser.
 
-- Rendering may be distorted when viewing without or generic styles.
+- Distorted rendering when viewing without or generic styles.
 
 - The pseudo `push()` function in `chat.js` is not fit to handle large numbers of simultaneous users.

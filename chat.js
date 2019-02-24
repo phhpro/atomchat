@@ -1,7 +1,7 @@
 /*
  * PHP Version 5 and above
  *
- * Javascript helper
+ * JavaScript helper
  *
  * @category  PHP_Chat
  * @package   PHP_Atomchat
@@ -10,27 +10,6 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GPLv3
  * @version   GIT: Latest
  * @link      https://github.com/phhpro/atomchat
- */
-
-
-/*
- ***********************************************************************
- *                                                   BEGIN USER CONFIG *
- ***********************************************************************
- */
-
-
-// Post delay and refresh rate -- recommended 2000 or more
-var rate = 2000;
-
-// Maximum chars per post -- must match "$char" in config.php
-var char = 1024;
-
-
-/*
- ***********************************************************************
- *                                                     END USER CONFIG *
- ***********************************************************************
  */
 
 
@@ -63,7 +42,8 @@ function push()
 
     if (http != null) {
         http.open("GET", "?" + Math.floor(Math.random() * 10000), true);
-        http.onreadystatechange = function() {
+        http.onreadystatechange = function()
+        {
 
             if (http.readyState == 4) {
                 document.getElementById("push").innerHTML

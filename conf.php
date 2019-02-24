@@ -26,13 +26,13 @@ $meta_key   = "PHP Atomchat Demo";
 $lang_def   = "en";
 $lang_fold  = "lang";
 
-//** Let users change theme, default ID and folder
+//** Let users change theme, default ID, folder
 $css        = 1;
 $css_def    = "light";
 $css_fold   = "css";
 
 /**
- * Logo image, width, height, and text
+ * Logo image, width, height, text
  * Image must be gif, jpeg, jpg, or png
  * Set $logo_i = "" to skip image, $logo_t = 0 to skip text
  */
@@ -41,15 +41,19 @@ $logo_w     = 32;
 $logo_h     = 32;
 $logo_t     = 1;
 
-//** Use emoji conversion and emoji config
+//** Use emoji conversion, emoji definition
 $emo        = 1;
 $emo_conf   = "emo.txt";
 
-/**
- * Maximum characters per post and date format
- * Value of "$char" must match "char" in chat.js
+/*
+ * Characters per post and refresh rate
+ * Refresh rate in milli seconds -- 1000 ms = 1 s
+ * Recommended minimum are 2000  -- lower value may freeze browser
  */
 $char       = 1024;
+$rate       = 2000;
+
+//** Date format
 $date       = gmdate('Y-m-d H:m');
 
 /**
@@ -87,11 +91,12 @@ $up_max     = 500000;
 $up_del     = 1;
 $up_old     = 30;
 
-//** Thumbnail width and height
-$up_tnw     = 120;
-$up_tnh     = 90;
+//** Thumbnail maximum width, height -- auto-scale
+$up_tns     = 100;
 
-//** Image -- gif, jpeg, jpg, and png are handled internally by Base64
+//** File types -- gif, jpeg, jpg, png are being processed internally
+
+//** Image
 $up_is_img  = array(
     "bmp",
     "ico"
@@ -139,3 +144,8 @@ $up_is_doc  = array(
     "pdf",
     "txt"
 );
+
+
+//** Bind JavaScript -- DO NOT EDIT
+$js_char = "var char = $char;";
+$js_rate = "var rate = $rate;";

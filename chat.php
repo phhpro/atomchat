@@ -30,7 +30,10 @@
 
 
 //** Version
-$ver = "20190223";
+$ver = "20190224";
+
+//** Required to bypass "Headers already sent" warning
+ob_start();
 
 //** Headers
 header('Expires: on, 01 Jan 1970 00:00:00 GMT');
@@ -134,7 +137,7 @@ function b64enc($b64_src)
 {
     $b64_ext = pathinfo($b64_src, PATHINFO_EXTENSION);
     $b64_get = file_get_contents($b64_src);
-    $b64_str = "\"data:image/" . $b64_ext .
+    $b64_str = "\"\ndata:image/" . $b64_ext .
                ";base64," . base64_encode($b64_get) . "\" ";
     return chunk_split($b64_str);
 }
@@ -382,7 +385,7 @@ if (isset($_POST['post'])) {
 
                     $up_iw = imagesx($up_src);
                     $up_ih = imagesy($up_src);
-                    $up_wh = min($up_tnw / $up_iw, $up_tnh / $up_ih);
+                    $up_wh = min($up_tns / $up_iw, $up_tns / $up_ih);
                     $up_tw = ceil($up_wh * $up_iw);
                     $up_th = ceil($up_wh * $up_ih);
                     $up_tn = imagecreatetruecolor($up_tw, $up_th);
@@ -392,10 +395,6 @@ if (isset($_POST['post'])) {
                         0, 0, 0, 0,
                         $up_tw, $up_th, $up_iw, $up_ih
                     );
-
-                    $up_dim = getimagesize($up_tn);
-                    $up_tnw = $up_dim[0];
-                    $up_tnh = $up_dim[1];
 
                     if ($up_type === "jpeg" || $up_type === "jpg") {
                         imagejpeg($up_tn, $up_ico, 60);
@@ -408,7 +407,7 @@ if (isset($_POST['post'])) {
                     $up_link = "<p><a href=\"$up_open\" " .
                                "title=\"" . $lang['up_open'] .
                                "\"><img src=" . b64enc($up_ico) .
-                               "width=$up_tnw height=$up_tnh " .
+                               "width=$up_tw height=$up_th " .
                                "alt=\"\"/></a></p>";
 
                     imagedestroy($up_src);
@@ -443,14 +442,12 @@ if (isset($_POST['post'])) {
     }
 
     if ($pass === 1) {
-        $post  = "            <div class=item>\n" .
-                 "                <div class=item_head>\n" .
-                 "                    <span class=item_date>" .
-                 "$date</span> <span class=item_name>" .
-                 $_SESSION['ac_name'] . "</span>\n" .
-                 "                </div>\n" .
-                 "                <pre class=item_text>$post</pre>\n" .
-                 "            </div>\n";
+        $post  = "<div class=item>\n" .
+                 "    <div class=item_head><span class=item_date>" .
+                 $date . "</span> <span class=item_name>" .
+                 $_SESSION['ac_name'] . "</span></div>\n" .
+                 "    <pre class=item_text>$post</pre>\n" .
+                 "</div>\n<hr/>\n";
         $post .= file_get_contents($log_data);
         file_put_contents($log_data, $post);
         header("Location: $host#POST");
@@ -793,6 +790,10 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
     echo "            </form>\n" .
          "            <div id=stat>\n" .
          "                <div>$stat</div>\n" .
+         "                <script>\n" .
+         "                $js_char\n" .
+         "                $js_rate\n" .
+         "                </script>\n" .
          "                <script src=\"chat.js\"></script>\n" .
          "                <noscript>" .
          $lang['noscript'] . "</noscript>\n" .

@@ -20,10 +20,12 @@
                 for low-volume and individual websites.
             </p>
             <noscript>
+                <p><strong>
+                    JavaScript is disabled or not supported!
+                </strong></p>
                 <p>
-                    Javascript is disabled or not supported! You need
-                    to manually refresh the page to execute a selected
-                    action or view any new posts. The same is true for
-                    most text-mode browsers.
+                    You'll need to manually refresh the page to execute
+                    the selected action or view any new posts. The same
+                    is true for most text-mode browsers.
                 </p>
             </noscript>

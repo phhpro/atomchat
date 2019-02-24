@@ -2,7 +2,7 @@
 /**
  * PHP Version 5 and above
  *
- * Preloader -- custom pre-requisites, access control, etc.
+ * Preloader
  *
  * @category  PHP_Chat
  * @package   PHP_Atomchat
@@ -14,7 +14,9 @@
  */
 
 
-//** Required to bypass "Headers already sent" warning
-ob_start();
-
+/*
+ * Per default, this page simply loads the main chat script. However,
+ * you can add supplementary conditions if need be, e.g. the site; or
+ * script; were down for maintenance, or check special pre-requisites.
+ */
 require './chat.php';
