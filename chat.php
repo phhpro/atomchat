@@ -741,9 +741,9 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
          "                <textarea name=text id=text " .
          "rows=2 cols=40 maxlength=$char " .
          "title=\"" . $lang['text_title'] . "\" " .
-         "onkeydown=chars(this.form); ".
-         "onkeypress=chars(this.form); " .
-         "onkeyup=chars(this.form);></textarea>\n" .
+         "onkeydown=\"chars(this.form);\" ".
+         "onkeypress=\"chars(this.form);\" " .
+         "onkeyup=\"chars(this.form);\"></textarea>\n" .
          "                <div>\n" .
 
          //** Name -- hidden session token
@@ -791,8 +791,8 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
          "            <div id=stat>\n" .
          "                <div>$stat</div>\n" .
          "                <script>\n" .
-         "                $js_char\n" .
-         "                $js_rate\n" .
+         "                var char = $char;\n" .
+         "                var rate = $rate;\n" .
          "                </script>\n" .
          "                <script src=\"chat.js\"></script>\n" .
          "                <noscript>" .

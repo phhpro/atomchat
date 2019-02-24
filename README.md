@@ -32,13 +32,13 @@ The included CSS themes are probably not the most fashionable. They are kept sim
 
 ### Languages
 
-The script attempts to auto-detect the user's language preference and checks if a translation exists. If so, the interface will use that language. Else, the default set in `$lang_def` is applied.
+The script attempts to auto-detect the user's language preference and checks if a translation exists. If so, the interface will use that language. Else, the value of `$lang_def` is applied.
 
 Translations can be added by making a copy of `en.php` in the `lang` folder and renaming it, e.g. `sv.php` for Swedish, and then translating the strings. You are welcome to submit your translation to the script's repository.
 
 ### Limitations And Issues
 
-- If JavaScript is disabled or not supported, or when using a text-mode browser, the page needs to be manually refreshed to execute the selected action or to view any new posts. 
+- If JavaScript is disabled or not supported, or when using a text-mode browser, the page needs manual refreshing to execute the selected action or to view any new posts. 
 
 - Decreasing the recommended minimum of the refresh rate in `$rate` may freeze the browser.
 

@@ -144,8 +144,3 @@ $up_is_doc  = array(
     "pdf",
     "txt"
 );
-
-
-//** Bind JavaScript -- DO NOT EDIT
-$js_char = "var char = $char;";
-$js_rate = "var rate = $rate;";
