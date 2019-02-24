@@ -12,11 +12,15 @@
  * @version   GIT: Latest
  * @link      https://github.com/phhpro/atomchat
  */
+
+
 //** Init array
 $lang = array();
+
 //** Name and text
 $lang['__name__']    = "Nederlands";
 $lang['__text__']    = "Klik hier om Nederlands te selecteren";
+
 //** Strings
 $lang['apply_title'] = "Klik hier om de selectie toe te passen";
 $lang['close_title'] = "Klik hier om het scherm af te sluiten";
