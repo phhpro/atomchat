@@ -36,11 +36,9 @@ The script attempts to auto-detect the user's language preference and checks if 
 
 Translations can be added by making a copy of `en.php` in the `lang` folder and renaming it, e.g. `sv.php` for Swedish, and then translating the strings. You are welcome to submit your translation to the script's repository.
 
-## Limitations
+## Limitations And Issues
 
-If JavaScript is disabled or not supported, or when using a text-mode browser, the page needs to be manually refreshed to execute the selected action or to view any new posts. 
-
-## Issues
+- If JavaScript is disabled or not supported, or when using a text-mode browser, the page needs to be manually refreshed to execute the selected action or to view any new posts. 
 
 - Decreasing the recommended minimum of the refresh rate in `$rate` may freeze the browser.
 
