@@ -14,7 +14,7 @@
 
 ### Logging
 
-The only logging applies to the chat history. The script can create either daily or endless logs. The setting is in `$log_mode` in `conf.php`. The log auto-resets after reaching the value of `$log_size` defining the maximimum size. Downloaded logs can be viewed offline with any HTML capable application.
+The only logging applies to the chat history. The script can create either daily logs or one continously growing endless log. Additional options exist to set a maximum size, low-size warning trigger, and to auto-reset the log. Downloaded logs can be viewed offline with any HTML capable application. The default are unmetered daily logs.
 
 ### Emojis
 
@@ -22,9 +22,7 @@ The definition file `emo.txt` only covers a basic set to avoid broken symbols on
 
 ### Uploads
 
-Image types `gif, jpeg, jpg, png` are converted to Base64 strings to minimise server requests, and only these will get auto-scaled thumbnails. Any other types are printed as normal text links.
-
-You may need to edit your CSP to add an exception for the `base` handler if you don't see the thumbnails. Refer to the *UPLOADS* section in `conf.php` regarding file types. There's also an option to auto-delete old files when using daily logs.
+Image types `gif, jpeg, jpg, png` are converted to Base64 strings to minimise server requests. Only these will get auto-scaled thumbnails. Any other types are printed as normal text links. You may need to edit your CSP to add an exception for the `base` handler if you don't see the thumbnails. Refer to the *UPLOADS* section regarding file types.
 
 ### Themes
 
@@ -32,7 +30,7 @@ The included CSS themes are probably not the most fashionable. They are kept sim
 
 ### Languages
 
-The script attempts to auto-detect the user's language preference and checks if a translation exists. If so, the interface will use that language. Else, the value of `$lang_def` is applied. Refer to `TRANSLATE.md` if you want to add a new translation.
+The script attempts to auto-detect the user's language preference and checks if a translation exists. If so, the interface will use that language. Else, the value of `$lang_def` is applied. The user can change language settings at any time. Refer to `TRANSLATE.md` if you want to add a new translation.
 
 ### Limitations And Issues
 
@@ -44,4 +42,4 @@ The script attempts to auto-detect the user's language preference and checks if 
 
 - Mobile usability requires at least a 5 inch screen.
 
-- The current pseudo `push()` function in `chat.js` is polling continously to fetch updated contents and is therefore not fit to handle large numbers of simultaneous users. YMMV, depending how generous your server is.
+- The current pseudo `push()` function in `chat.js` is polling continously to fetch updated contents and is therefore not fit to handle large numbers of simultaneous users -- which has never been the purpose of this script anyway. YMMV, depending how generous your server is.

@@ -166,15 +166,20 @@ if ($log_mode === 0) {
 
 $log_data = $log_fold . "/" . $log_name . ".html";
 
-if (is_file($log_data)) {
-    $log_stat = filesize($log_data);
+if ($log_auto === 1) {
 
-    if ($log_size - $log_stat <= $log_size / 100 * $log_warn) {
-        $log_stat = "<strong>$log_stat</strong>";
-    }
+    if (is_file($log_data)) {
+        $log_stat = filesize($log_data);
+        $log_temp = $log_size - $log_stat;
+        $log_warn = $log_size / 100 * $log_warn;
 
-    if ($log_stat > $log_size) {
-        unlink($log_data);
+        if ($log_temp <= $log_warn) {
+            $log_stat = "<strong>$log_stat</strong>";
+        }
+
+        if ($log_temp <= 0) {
+            unlink($log_data);
+        }
     }
 }
 
@@ -783,7 +788,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
     }
 
     //** Log status
-    if (is_file($log_data)) {
+    if (is_file($log_data) && $log_auto === 1) {
         echo "                <div><small>" . $lang['reset'] .
              " $log_stat / $log_size</small></div>\n";
     }

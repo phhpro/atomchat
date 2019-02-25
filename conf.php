@@ -59,21 +59,19 @@ $date       = gmdate('Y-m-d H:m');
 
 /**
  * Randum number suffix to prevent dupes
- * Uses mt_rand() and hence first value of minimum must be 1
+ * Uses mt_rand() and hence first digit must be 1
  */
 $rn_min     = 100;
 $rn_max     = 900;
 
-/**
- * Log name, folder, mode, maximum size, low size warning trigger
- * Mode 0 = daily, 1 = endless
- * Log auto-resets when size equal or greater $log_size
- * Low size warning trigger given in percent of $log_size
- */
+//** Log name, folder, mode -- mode 0 = daily, 1 = endless
 $log_fold   = "log";
 $log_name   = "atomchat-log";
 $log_mode   = 0;
-$log_size   = 1000000;
+
+//** Auto reset, maximum size, low size warning -- percent of $log_size
+$log_auto   = 0;
+$log_size   = 100000;
 $log_warn   = 10;
 
 
