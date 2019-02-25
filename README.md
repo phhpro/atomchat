@@ -44,4 +44,4 @@ The script attempts to auto-detect the user's language preference and checks if 
 
 - Mobile usability requires at least a 5 inch screen.
 
-- The current pseudo `push()` function in `chat.js` is polling continously to fetch updated contents and therefore not fit to handle large numbers of simultaneous users. YMMV, depending how generous your server is.
+- The current pseudo `push()` function in `chat.js` is polling continously to fetch updated contents and is therefore not fit to handle large numbers of simultaneous users. YMMV, depending how generous your server is.
