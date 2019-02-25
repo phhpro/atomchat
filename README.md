@@ -32,7 +32,7 @@ The included CSS themes are probably not the most fashionable. They are kept sim
 
 ### Languages
 
-The script attempts to auto-detect the user's language preference and checks if a translation exists. If so, the interface will use that language. Else, the value of `$lang_def` is applied. Refer to `TRANSLATE` if you want to add a new translation.
+The script attempts to auto-detect the user's language preference and checks if a translation exists. If so, the interface will use that language. Else, the value of `$lang_def` is applied. Refer to `TRANSLATE.md` if you want to add a new translation.
 
 ### Limitations And Issues
 
