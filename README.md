@@ -14,7 +14,7 @@
 
 ### Logging
 
-The only logging applies to the chat history. The script can create either daily or endless logs. The setting is in `$log_mode` in `conf.php`, where you can also change the default maximum size. The log will auto-reset after reaching the maximimum size limit.
+The only logging applies to the chat history. The script can create either daily or endless logs. The setting is in `$log_mode` in `conf.php`. The log auto-resets after reaching the value of `$log_size` defining the maximimum size. Downloaded logs can be viewed offline with any HTML capable application.
 
 ### Emojis
 
@@ -32,9 +32,7 @@ The included CSS themes are probably not the most fashionable. They are kept sim
 
 ### Languages
 
-The script attempts to auto-detect the user's language preference and checks if a translation exists. If so, the interface will use that language. Else, the value of `$lang_def` is applied.
-
-Translations can be added by making a copy of `en.php` in the `lang` folder and renaming it, e.g. `sv.php` for Swedish, and then translating the strings. You are welcome to submit your translation to the script's repository.
+The script attempts to auto-detect the user's language preference and checks if a translation exists. If so, the interface will use that language. Else, the value of `$lang_def` is applied. Refer to `TRANSLATE` if you want to add a new translation.
 
 ### Limitations And Issues
 
@@ -44,4 +42,6 @@ Translations can be added by making a copy of `en.php` in the `lang` folder and 
 
 - Distorted rendering when viewing without or generic styles.
 
-- The pseudo `push()` function in `chat.js` is not fit to handle large numbers of simultaneous users.
+- Mobile usability requires at least a 5 inch screen.
+
+- The current pseudo `push()` function in `chat.js` is polling continously to fetch updated contents and therefore not fit to handle large numbers of simultaneous users. YMMV, depending how generous your server is.

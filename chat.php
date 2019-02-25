@@ -30,9 +30,9 @@
 
 
 //** Version
-$ver = "20190224";
+$ver = "20190225";
 
-//** Required to bypass "Headers already sent" warning
+//** Required to get around "Headers already sent" warning
 ob_start();
 
 //** Headers
@@ -169,6 +169,9 @@ $log_data = $log_fold . "/" . $log_name . ".html";
 if (is_file($log_data)) {
     $log_stat = filesize($log_data);
 
+    if ($log_size - $log_stat <= $log_size / 100 * $log_warn) {
+        $log_stat = "<strong>$log_stat</strong>";
+    }
 
     if ($log_stat > $log_size) {
         unlink($log_data);
@@ -283,8 +286,6 @@ if (isset($_POST['quit'])) {
     $text .= file_get_contents($log_data);
     file_put_contents($log_data, $text);
     unset($_SESSION['ac_name']);
-    unset($_SESSION['ac_css']);
-    unset($_SESSION['ac_lang']);
     header("Location: $host#LOGOUT");
     exit;
 }
@@ -619,7 +620,7 @@ if (isset($_POST['conf'])) {
         //** Image, Base64
              "                <ul>\n" .
              "                    <li><strong>" .
-             $lang['up_b64'] . "</strong>\n" .
+             $lang['up_is_b64'] . "</strong>\n" .
              "                        <ul>\n";
 
         foreach ($b64_type as $up_b64) {
@@ -634,7 +635,7 @@ if (isset($_POST['conf'])) {
         //** Image, other
              "                <ul>\n" .
              "                    <li><strong>" .
-             $lang['up_img'] . "</strong>\n" .
+             $lang['up_is_img'] . "</strong>\n" .
              "                        <ul>\n";
 
         foreach ($up_is_img as $up_img) {
@@ -649,7 +650,7 @@ if (isset($_POST['conf'])) {
         //** Audio
              "                <ul>\n" .
              "                    <li><strong>" .
-             $lang['up_snd'] . "</strong>\n" .
+             $lang['up_is_snd'] . "</strong>\n" .
              "                        <ul>\n";
 
         foreach ($up_is_snd as $up_snd) {
@@ -664,7 +665,7 @@ if (isset($_POST['conf'])) {
         //** Video
              "                <ul>\n" .
              "                    <li><strong>" .
-             $lang['up_vid'] . "</strong>\n" .
+             $lang['up_is_vid'] . "</strong>\n" .
              "                        <ul>\n";
 
         foreach ($up_is_vid as $up_vid) {
@@ -679,7 +680,7 @@ if (isset($_POST['conf'])) {
         //** Document
              "                <ul>\n" .
              "                    <li><strong>" .
-             $lang['up_doc'] . "</strong>\n" .
+             $lang['up_is_doc'] . "</strong>\n" .
              "                        <ul>\n";
 
         foreach ($up_is_doc as $up_doc) {
@@ -694,7 +695,7 @@ if (isset($_POST['conf'])) {
         //** Archive
              "                <ul>\n" .
              "                    <li><strong>" .
-             $lang['up_arc'] . "</strong>\n" .
+             $lang['up_is_arc'] . "</strong>\n" .
              "                        <ul>\n";
 
         foreach ($up_is_arc as $up_arc) {
@@ -783,7 +784,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
 
     //** Log status
     if (is_file($log_data)) {
-        echo "                <div><small>" . $lang['log_reset'] .
+        echo "                <div><small>" . $lang['reset'] .
              " $log_stat / $log_size</small></div>\n";
     }
 

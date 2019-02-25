@@ -14,6 +14,9 @@
  */
 
 
+//** Integer values 0 = NO, 1 = YES unless otherwise stated
+
+
 //** Script folder and title
 $fold       = "atomchat";
 $page       = "PHP Atomchat";
@@ -26,7 +29,7 @@ $meta_key   = "PHP Atomchat Demo";
 $lang_def   = "en";
 $lang_fold  = "lang";
 
-//** Let users change theme, default ID, folder
+//** Let users change theme, default style and folder
 $css        = 1;
 $css_def    = "light";
 $css_fold   = "css";
@@ -46,31 +49,32 @@ $emo        = 1;
 $emo_conf   = "emo.txt";
 
 /*
- * Characters per post and refresh rate
+ * Characters per post, refresh rate and date format
  * Refresh rate in milli seconds -- 1000 ms = 1 s
- * Recommended minimum are 2000  -- lower value may freeze browser
+ * Recommended minimum 2000  -- lower value may freeze browser
  */
 $char       = 1024;
 $rate       = 2000;
-
-//** Date format
 $date       = gmdate('Y-m-d H:m');
 
 /**
- * Randum number to prevent dupes
- * First value of minimum must be 1
+ * Randum number suffix to prevent dupes
+ * Uses mt_rand() and hence first value of minimum must be 1
  */
 $rn_min     = 100;
 $rn_max     = 900;
 
 /**
- * Log mode, maximum size, folder, and name
- * Mode 0 = daily, 1 = endless -- auto-resets if size <= $log_size
+ * Log name, folder, mode, maximum size, low size warning trigger
+ * Mode 0 = daily, 1 = endless
+ * Log auto-resets when size equal or greater $log_size
+ * Low size warning trigger given in percent of $log_size
  */
-$log_mode   = 0;
-$log_size   = 1000000;
 $log_fold   = "log";
 $log_name   = "atomchat-log";
+$log_mode   = 0;
+$log_size   = 1000000;
+$log_warn   = 10;
 
 
 /*
@@ -87,7 +91,7 @@ $up         = 1;
 $up_fold    = "upload";
 $up_max     = 500000;
 
-//** Delete files after $up_old days -- requires $log_mode = 0
+//** Delete files after $up_old days -- only when $log_mode = 0
 $up_del     = 1;
 $up_old     = 30;
 
