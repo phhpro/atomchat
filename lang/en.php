@@ -2,7 +2,7 @@
 /**
  * PHP Version 5 and above
  *
- * Language file Chinese Simplified
+ * Language file
  *
  * @category  PHP_Chat
  * @package   PHP_Atomchat
@@ -11,8 +11,8 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GPLv3
  * @version   GIT: Latest
  * @link      https://github.com/phhpro/atomchat
+ * @language  English -- P H Claus <phhpro@gmail.com>
  */
-
 
 //** Init array
 $lang = array();
@@ -29,31 +29,28 @@ $lang['conf_title']  = "Click here to change settings";
 $lang['emo']         = "Emoji";
 $lang['first']       = "The first entry is all yours.";
 $lang['get']         = "Click here to get a free copy of this script";
-$lang['info']        = "Info";
 $lang['lang']        = "Language";
 $lang['lang_title']  = "Click here to select language";
-$lang['lang_miss']   = "Missing language file!";
-$lang['log_reset']   = "Reset";
 $lang['login_title'] = "Click here to login";
 $lang['name']        = "Name";
 $lang['name_title']  = "Type here to enter your name";
 $lang['name_info']   = "Enter preferred name and press button.";
-$lang['noscript']    = "Javascript functions not available!";
+$lang['noscript']    = "JavaScript functions not available!";
 $lang['post_title']  = "Click here to post your message";
 $lang['quit_title']  = "Click here to end the session";
-$lang['save_title']  = "Click here to save the session";
+$lang['reset']       = "Reset";
+$lang['save_title']  = "Click here to downlaod the current log";
 $lang['theme']       = "Theme";
 $lang['theme_title'] = "Click here to select theme";
-$lang['theme_miss']  = "Missing theme definition!";
 $lang['text']        = "Text";
 $lang['text_title']  = "Type here to enter your message";
 $lang['up']          = "Uploads";
-$lang['up_arc']      = "Archive";
-$lang['up_b64']      = "Base64";
-$lang['up_doc']      = "Document";
-$lang['up_img']      = "Image";
+$lang['up_is_arc']   = "Archive";
+$lang['up_is_b64']   = "Base64";
+$lang['up_is_doc']   = "Document";
+$lang['up_is_img']   = "Image";
+$lang['up_is_snd']   = "Audio";
+$lang['up_is_vid']   = "Video";
 $lang['up_max']      = "Maximum size";
 $lang['up_open']     = "Click here to open this file";
 $lang['up_select']   = "Click here to select a file";
-$lang['up_snd']      = "Audio";
-$lang['up_vid']      = "Video";
