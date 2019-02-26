@@ -42,10 +42,10 @@ If you need -- or just think it's *cool* -- to log in as super user, you can do 
 
 - If JavaScript is disabled or not supported, or when using a text-mode browser, the page needs manual refreshing to execute the selected action or to view any new posts. 
 
-- The current pseudo `push()` function in `chat.js` is really quite a PITA. If any JS guru is reading this: Help wanted, tha.
+- The current pseudo `push()` function in `chat.js` is a real PITA. If any JS guru is reading this: Help wanted, tha.
 
     - Distorted text above and below the log screen when switching off styles. For some obscure reason it's shredding the overlay by about 4px.
 
     - Setting `$rate` below 2000 (still) has potential to hang (at least) the browser.
 
-    - It's polling continously to fetch updated contents and hence putting quite a tad of extra stress on the server. A recent test between 5 users doubling as 10 with multiple logins from desktop and mobile didn't produce any noticable lag, but that might have been just a lucky day. YMMV, depending how generous your server.
+    - It's polling continously to fetch updated contents and hence putting quite a tad of extra stress on the server. A recent test between 5 users doubling as 10 with multiple logins from desktop and mobile didn't produce any noticable lag, but that might have been just a lucky day. YMMV
