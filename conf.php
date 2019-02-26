@@ -2,7 +2,7 @@
 /**
  * PHP Version 5 and above
  *
- * User configuration
+ * Configuration -- Integers 0 = NO, 1 = YES unless otherwise stated
  *
  * @category  PHP_Chat
  * @package   PHP_Atomchat
@@ -14,8 +14,11 @@
  */
 
 
-//** Integer values 0 = NO, 1 = YES unless otherwise stated
-
+/*
+ ***********************************************************************
+ *                                                                SELF *
+ ***********************************************************************
+ */
 
 //** Script folder and title
 $fold       = "atomchat";
@@ -25,6 +28,12 @@ $page       = "PHP Atomchat";
 $meta_des   = "PHP Atomchat Demo";
 $meta_key   = "PHP Atomchat Demo";
 
+/*
+ ***********************************************************************
+ *                                                              BASICS *
+ ***********************************************************************
+ */
+
 //** Default language ID and folder
 $lang_def   = "en";
 $lang_fold  = "lang";
@@ -33,6 +42,16 @@ $lang_fold  = "lang";
 $css        = 1;
 $css_def    = "light";
 $css_fold   = "css";
+
+//** Use emoji conversion, emoji definition
+$emo        = 1;
+$emo_conf   = "emo.txt";
+
+/*
+ ***********************************************************************
+ *                                                                LOGO *
+ ***********************************************************************
+ */
 
 /**
  * Logo image, width, height, text
@@ -44,9 +63,11 @@ $logo_w     = 32;
 $logo_h     = 32;
 $logo_t     = 1;
 
-//** Use emoji conversion, emoji definition
-$emo        = 1;
-$emo_conf   = "emo.txt";
+/*
+ ***********************************************************************
+ *                                                                POST *
+ ***********************************************************************
+ */
 
 /*
  * Characters per post, refresh rate and date format
@@ -64,6 +85,12 @@ $date       = gmdate('Y-m-d H:m');
 $rn_min     = 100;
 $rn_max     = 900;
 
+/*
+ ***********************************************************************
+ *                                                                 LOG *
+ ***********************************************************************
+ */
+
 //** Log name, folder, mode -- mode 0 = daily, 1 = endless
 $log_fold   = "log";
 $log_name   = "atomchat-log";
@@ -74,13 +101,32 @@ $log_auto   = 0;
 $log_size   = 100000;
 $log_warn   = 10;
 
+/*
+ ***********************************************************************
+ *                                                          SUPER USER *
+ ***********************************************************************
+ */
+
+/*
+ * Super user prefix and suffix
+ *
+ * Provides an extra button to reset log without leaving the session.
+ *
+ * Prefix is your public user name visible to everybody.
+ * Suffix doubles as password and is obviously not visible.
+ *
+ * To login as super user enter prefix and suffix without spaces and
+ * exactly as they appear here, e.g. atomchat is not ATOMCHAT. Unless
+ * both values match you'll be logged in as user, just not super user.
+ */
+$su_pfx     = "atom";
+$su_sfx     = "chat";
 
 /*
  ***********************************************************************
  *                                                             UPLOADS *
  ***********************************************************************
  */
-
 
 //** Enable uploads
 $up         = 1;
@@ -96,7 +142,7 @@ $up_old     = 30;
 //** Thumbnail maximum width, height -- auto-scale
 $up_tns     = 100;
 
-//** File types -- gif, jpeg, jpg, png are being processed internally
+//** File types -- gif, jpeg, jpg, png are managed internally
 
 //** Image
 $up_is_img  = array(
