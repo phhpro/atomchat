@@ -39,9 +39,10 @@ function ajax()
 function push()
 {
     http = ajax();
+    data = data + "?" + Math.floor(Math.random() * 10000);
 
     if (http != null) {
-        http.open("GET", "?" + Math.floor(Math.random() * 10000), true);
+        http.open("GET", data, true);
         http.onreadystatechange = function()
         {
 

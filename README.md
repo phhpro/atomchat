@@ -34,7 +34,7 @@ The script attempts to auto-detect the user's language preference and checks if 
 
 ### Super User
 
-If you need -- or just think it's *cool* -- to log in as super user, you can do just that, though the script is pretty much the same except for an additional button to reset the log on the fly. May come in handy when using auto-reset. Refer to the *SUPER USER* section for more info.
+Logging in as super user gives you an extra button to reset the log on the fly. May come in handy when using auto-reset. Refer to the *SUPER USER* section for details.
 
 ### Limitations And Issues
 
@@ -42,10 +42,4 @@ If you need -- or just think it's *cool* -- to log in as super user, you can do 
 
 - If JavaScript is disabled or not supported, or when using a text-mode browser, the page needs manual refreshing to execute the selected action or to view any new posts. 
 
-- The current pseudo `push()` function in `chat.js` is a real PITA. If any JS guru is reading this: Help wanted, tha.
-
-    - Distorted text above and below the log screen when switching off styles. For some obscure reason it's shredding the overlay by about 4px.
-
-    - Setting `$rate` below 2000 (still) has potential to hang (at least) the browser.
-
-    - It's polling continously to fetch updated contents and hence putting quite a tad of extra stress on the server. A recent test between 5 users doubling as 10 with multiple logins from desktop and mobile didn't produce any noticable lag, but that might have been just a lucky day. YMMV
+- Setting `$rate` below 2000 may freeze the browser.

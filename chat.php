@@ -30,7 +30,7 @@
 
 
 //** Version
-$ver = "20190226";
+$ver = "20190227";
 
 //** Required to get around "Headers already sent" warning
 ob_start();
@@ -544,12 +544,15 @@ if (isset($_POST['post'])) {
 
     if ($pass === 1) {
         $post  = "<div class=item>\n" .
-                 "    <div class=item_head><span class=item_date>" .
-                 $date . "</span> <span class=item_name>" .
-                 $_SESSION['ac_name'] . "</span></div>\n" .
-                 "    <pre class=item_text>" .
-                 chunk_split($post) . "</pre>\n" .
-                 "</div>\n<hr/>\n";
+                 "    <div class=item_head>\n" .
+                 "        <span class=item_date>$date</span> \n" .
+                 "        <span class=item_name>" .
+                 $_SESSION['ac_name'] . "</span>\n" .
+                 "    </div>\n" .
+                 "    <pre class=item_text>\n" .
+                 chunk_split($post) . "    </pre>\n" .
+                 "</div>\n" .
+                 "<hr/>\n";
         $post .= file_get_contents($log_data);
         file_put_contents($log_data, $post);
         go('POST');
@@ -899,6 +902,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
          "                <script>\n" .
          "                var char = $char;\n" .
          "                var rate = $rate;\n" .
+         "                var data = \"$log_data\";\n" .
          "                </script>\n" .
          "                <script src=\"chat.js\"></script>\n" .
          "                <noscript>" .
