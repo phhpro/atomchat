@@ -229,7 +229,7 @@ if ($log_auto === 1 && is_file($log_data)) {
  */
 
 if ($logo_i !== "") {
-    $logo_i = "<img src=" . b64enc($logo_i) .
+    $logo_i = "<img src=" . chunk_split(b64enc($logo_i), 68) .
               "width=$logo_w height=$logo_h alt=\"\"/> ";
 } else {
     $logo_i = "";
@@ -405,6 +405,7 @@ if (isset($_POST['post'])) {
     $text = htmlentities($_POST['text'], ENT_QUOTES, 'UTF-8');
 
     if ($text !== "") {
+        $text = wordwrap($text, 68);
         $pass = 1;
 
         if ($emo === 1) {
@@ -508,7 +509,8 @@ if (isset($_POST['post'])) {
 
                     $up_link = "<br/><a href=\"$up_open\" " .
                                "title=\"" . $lang['up_open'] .
-                               "\"><img src=" . b64enc($up_ico) .
+                               "\"><img src=" .
+                               chunk_split(b64enc($up_ico), 68) .
                                "width=$up_tw height=$up_th " .
                                "alt=\"\"/></a>";
 
@@ -524,7 +526,7 @@ if (isset($_POST['post'])) {
             ) {
                 $up_link = "<a href=\"$up_open\" " .
                            "title=\"" . $lang['up_open'] . "\">" .
-                           str_replace("$up_fold/", "", $up_save) .
+                           str_replace($up_fold . "/", "", $up_save) .
                            "</a>";
             } else {
                 go('INVALID_FILETYPE');
@@ -550,7 +552,8 @@ if (isset($_POST['post'])) {
                  $_SESSION['ac_name'] . "</span>\n" .
                  "    </div>\n" .
                  "    <pre class=item_text>\n" .
-                 chunk_split($post) . "    </pre>\n" .
+                 "$post\n" .
+                 "    </pre>\n" .
                  "</div>\n" .
                  "<hr/>\n";
         $post .= file_get_contents($log_data);
