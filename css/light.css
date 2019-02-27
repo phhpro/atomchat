@@ -7,11 +7,6 @@ body {
     font-size: 100%;
 }
 
-header {
-    background-color: #fff;
-    color: #000;
-}
-
 h1 {
     font-size: 95%;
 }
@@ -21,8 +16,6 @@ h1 img {
 }
 
 article {
-    background-color: #fff;
-    color: #000;
     font-size: 95%;
 }
 
@@ -41,8 +34,6 @@ nav {
     color: #000;
     font-size: 95%;
     text-align: center;
-    margin-top: 8px;
-    padding-top: 8px;
     position: fixed;
     right: 0;
     bottom: 0;
@@ -86,6 +77,8 @@ input[type=submit] {
 }
 
 input[type=file] {
+    background-color: #ccc;
+    color: #333;
     margin-bottom: 0;
     padding: 1px;
 }
