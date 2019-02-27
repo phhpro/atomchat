@@ -10,12 +10,6 @@ body {
 header {
     background-color: #fff;
     color: #000;
-    margin: 0 12px;
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 35px;
-    left: 0;
 }
 
 h1 {
@@ -30,18 +24,17 @@ article {
     background-color: #fff;
     color: #000;
     font-size: 95%;
-    padding: 4px;
-    position: fixed;
-    top: 48px;
-    right: 12px;
-    bottom: 240px;
-    left: 10px;
     overflow: auto;
 }
 
 #conf {
-    bottom: 36px;
     z-index: 1000;
+}
+
+#close {
+    position: fixed;
+    top: 4px;
+    right: 4px;
 }
 
 nav {
@@ -188,12 +181,6 @@ a:hover, a:active {
 
 .emo {
     font-size: 135%;
-}
-
-#close {
-    position: fixed;
-    top: 50px;
-    right: 24px;
 }
 
 hr {
