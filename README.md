@@ -40,6 +40,6 @@ Logging in as super user gives you an extra button to reset the log on the fly. 
 
 - Mobile usability requires at least a 5 inch screen.
 
-- If JavaScript is disabled or not supported, or when using a text-mode browser, the page needs manual refreshing to execute the selected action or to view any new posts. 
+- If JavaScript is not available, or when using a text-mode browser, the page needs manual refreshing to execute the selected action or to view any new posts. 
 
 - Setting `$rate` below 2000 may freeze the browser.
