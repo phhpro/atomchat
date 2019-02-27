@@ -1,0 +1,192 @@
+@charset "UTF-8";
+
+body {
+    background-color: #363;
+    color: #cc9;
+    font-family: sans-serif;
+    font-size: 100%;
+}
+
+h1 {
+    font-size: 95%;
+}
+
+h1 img {
+    vertical-align: middle;
+}
+
+article {
+    font-size: 95%;
+}
+
+#conf {
+    z-index: 1000;
+}
+
+#close {
+    position: fixed;
+    top: 4px;
+    right: 4px;
+}
+
+nav {
+    background-color: #363;
+    color: #cc9;
+    font-size: 95%;
+    text-align: center;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+#login {
+    z-index: 1001;
+}
+
+#stat, #by {
+    font-size: 85%;
+}
+
+h2 {
+    font-size: 115%;
+    margin: 0;
+}
+
+label {
+    font-weight: bold;
+}
+
+input {
+    background-color: #996;
+    color: #333;
+    border: 1px solid #999;
+    margin: 8px;
+    padding: 4px;
+}
+
+input[type=submit] {
+    font-family: monospace;
+    font-size: 125%;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+input[type=file] {
+    background-color: #996;
+    color: #333;
+    margin-bottom: 0;
+    padding: 1px;
+}
+
+#char {
+    background-color: transparent;
+    color: #cc9;
+    text-align: center;
+    border: 0;
+    margin: 4px 0 0 0;
+    padding: 0;
+}
+
+textarea {
+    background-color: #996;
+    color: #333;
+    font-size: 95%;
+    border: 1px solid #999;
+    padding: 4px;
+    width: 50%;
+    max-width: 400px;
+}
+
+select {
+    background-color: #996;
+    color: #333;
+    border: 1px solid #999;
+    margin: 0;
+    padding: 1px;
+}
+
+.item {
+    border: 1px solid #666;
+    margin: 8px 0 16px 0;
+}
+
+.item_log {
+    background-color: transparent;
+    color: #999;
+    padding: 4px;
+}
+
+.item_head {
+    background-color: #996;
+    color: #333;
+    font-size: 75%;
+    font-weight: bold;
+    padding: 6px;
+}
+
+.item:hover .item_head {
+    background-color: #996;
+    color: #000;
+}
+
+.item_name {
+    float: right;
+}
+
+.item_text {
+    white-space: pre-wrap;
+    margin: 0;
+    padding: 6px;
+}
+
+input:hover, textarea:hover, select:hover, .item:hover {
+    background-color: #cc9;
+    color: #000;
+    border: 1px solid #666;
+}
+
+a:link, a:visited {
+    background-color: transparent;
+    color: #cc9;
+    text-decoration: none;
+}
+
+a:hover, a:active {
+    background-color: transparent;
+    color: #cc3;
+}
+
+.item:hover a:link, .item:hover a:visited {
+    background-color: transparent;
+    color: #363;
+}
+
+.item:hover a:hover, .item:hover a:active {
+    background-color: transparent;
+    color: #000;
+}
+
+.emo {
+    font-size: 135%;
+}
+
+hr {
+    display: none;
+}
+
+@media screen and (max-width: 800px) {
+    body {
+        font-size: 85%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    textarea {
+        width: 80%;
+    }
+}
