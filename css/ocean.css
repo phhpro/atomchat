@@ -24,7 +24,6 @@ article {
     background-color: #ccf;
     color: #00c;
     font-size: 95%;
-    overflow: auto;
 }
 
 #conf {
@@ -94,7 +93,7 @@ input[type=file] {
     color: #00c;
     text-align: center;
     border: 0;
-    margin: 4px;
+    margin: 4px 0 0 0;
     padding: 0;
 }
 
