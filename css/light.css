@@ -9,10 +9,7 @@ body {
 
 h1 {
     font-size: 95%;
-}
-
-h1 img {
-    vertical-align: middle;
+    text-align: center;
 }
 
 article {
@@ -79,7 +76,7 @@ input[type=submit] {
 input[type=file] {
     background-color: #ccc;
     color: #333;
-    margin-bottom: 0;
+    margin: 0;
     padding: 1px;
 }
 
@@ -177,6 +174,37 @@ a:hover, a:active {
 
 hr {
     display: none;
+}
+
+#anim span {
+    display: inline-block;
+    vertical-align: middle;
+    width: 4px;
+    height: 4px;
+    background-color: #000;
+    color: #fff;
+    border-radius: 50%;
+    animation: anim 0.9s infinite alternate;
+}
+
+#anim span:nth-of-type(2) {
+    animation-delay: 0.3s;
+}
+
+#anim span:nth-of-type(3) {
+    animation-delay: 0.6s;
+}
+
+@keyframes anim {
+    0% {
+        opacity: 0.9;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0.1;
+        transform: translateY(-8px);
+    }
 }
 
 @media screen and (max-width: 800px) {
