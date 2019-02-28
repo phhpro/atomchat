@@ -43,9 +43,9 @@ function push()
 
     if (http != null) {
         http.open("GET", data, true);
+
         http.onreadystatechange = function()
         {
-
             if (http.readyState == 4) {
                 document.getElementById("push").innerHTML
                     = http.responseText;

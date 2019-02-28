@@ -30,7 +30,7 @@
 
 
 //** Version
-$ver = "20190227";
+$ver = "20190228";
 
 //** Required to get around "Headers already sent" warning
 ob_start();
@@ -107,6 +107,17 @@ if (isset($exit) && !empty($exit)) {
 $su   = $su_pfx . $su_sfx;
 $home = "home.php";
 $stat = "";
+
+//defaultMuted
+
+setcookie('ac_test', 'test');
+
+if (count($_COOKIE) > 0) {
+    $cook_stat = 1;
+    $cook_time = time() + (86400 * 30);
+}
+
+setcookie('ac_test', '', time() - 3600);
 
 /**
  ***********************************************************************
@@ -224,50 +235,34 @@ if ($log_auto === 1 && is_file($log_data)) {
 
 /**
  ***********************************************************************
- *                                                                LOGO *
- ***********************************************************************
- */
-
-if ($logo_i !== "") {
-    $logo_i = "<img src=" . chunk_split(b64enc($logo_i), 68) .
-              "width=$logo_w height=$logo_h alt=\"\"/> ";
-} else {
-    $logo_i = "";
-}
-
-if ($logo_t === 1) {
-    $logo_t = $page;
-} else {
-    $logo_t = "";
-}
-
-$logo = $logo_i . $logo_t;
-
-/**
- ***********************************************************************
  *                                                            LANGUAGE *
  ***********************************************************************
  */
 
 $lang_mime = $lang_def;
 
-if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-    $lang_hal = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-    $lang_usr = $lang_hal;
-    $lang_php = glob($lang_fold . "/*.php");
+if (!isset($_COOKIE['ac_lang'])) {
 
-    foreach ($lang_php as $lang_obj) {
-        $lang_obj = str_replace($lang_fold . "/", "", $lang_obj);
-        $lang_obj = str_replace(".php", "", $lang_obj);
+    if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+        $lang_hal = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+        $lang_usr = $lang_hal;
+        $lang_php = glob($lang_fold . "/*.php");
 
-        if (strpos($lang_obj, $lang_usr) === false) {
-            continue;
-        } else {
-            $lang_def = $lang_usr;
+        foreach ($lang_php as $lang_obj) {
+            $lang_obj = str_replace($lang_fold . "/", "", $lang_obj);
+            $lang_obj = str_replace(".php", "", $lang_obj);
+
+            if (strpos($lang_obj, $lang_usr) === false) {
+                continue;
+            } else {
+                $lang_def = $lang_usr;
+            }
         }
-    }
 
-    unset($lang_obj);
+        unset($lang_obj);
+    }
+} else {
+    $lang_def = $_COOKIE['ac_lang'];
 }
 
 if (!isset($_SESSION['ac_lang'])) {
@@ -281,6 +276,10 @@ if (isset($_POST['lang_apply'])) {
 
 $lang_id   = $_SESSION['ac_lang'];
 $lang_data = $lang_fold . "/" . $lang_id . ".php";
+
+if ($cook_stat === 1) {
+    setcookie('ac_lang', $lang_id, $cook_time, '/');
+}
 
 if (is_file($lang_data)) {
     $lang_trim = file_get_contents($lang_data);
@@ -343,7 +342,7 @@ if (isset($_POST['quit'])) {
 
 /**
  ***********************************************************************
- *                                                               THEME *
+ *                                                                 CSS *
  ***********************************************************************
  */
 
@@ -352,10 +351,16 @@ if (isset($_POST['css_apply'])) {
 
     if ($css_id !== "") {
         $_SESSION['ac_css'] = $css_id;
+
+        if ($cook_stat === 1) {
+            $_COOKIE['ac_css']  = $css_id;
+        }
     }
 }
 
-if (isset($_SESSION['ac_css'])) {
+if (isset($_COOKIE['ac_css'])) {
+    $css_sel = $_COOKIE['ac_css'];
+} elseif (isset($_SESSION['ac_css'])) {
     $css_sel = $_SESSION['ac_css'];
 } else {
     $css_sel            = $css_def;
@@ -363,6 +368,10 @@ if (isset($_SESSION['ac_css'])) {
 }
 
 $css_file = $css_fold . "/" . $css_sel . ".css";
+
+if ($cook_stat === 1) {
+    setcookie('ac_css', $_SESSION['ac_css'], $cook_time, '/');
+}
 
 /**
  ***********************************************************************
@@ -556,6 +565,7 @@ if (isset($_POST['post'])) {
                  "    </pre>\n" .
                  "</div>\n" .
                  "<hr/>\n";
+
         $post .= file_get_contents($log_data);
         file_put_contents($log_data, $post);
         go('POST');
@@ -589,7 +599,8 @@ echo "<!DOCTYPE html>\n" .
      "    </head>\n" .
      "    <body>\n" .
      "        <header>\n" .
-     "            <h1>$logo</h1>\n" .
+     "            <h1 id=anim>" .
+     "<span></span><span></span><span></span> PHP Atom Chat</h1>\n" .
      "        </header>\n";
 
 /**
