@@ -18,7 +18,7 @@
 $lang = array();
 
 //** Name and text
-$lang['__name__']    = "русский";
+$lang['__name__']    = "Pусский";
 $lang['__text__']    = "Нажмите здесь, чтобы выбрать русский";
 
 //** Strings
