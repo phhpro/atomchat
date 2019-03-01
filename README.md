@@ -43,3 +43,5 @@ Logging in as super user gives you an extra button to reset the log on the fly. 
 - If JavaScript is not available, or when using a text-mode browser, the page needs manual refreshing to execute the selected action or to view any new posts. 
 
 - Setting `$rate` below 2000 may freeze the browser.
+
+- No bell on new posts. Audio working on desktop and mobile for sender but only text gets pushed to receiver.

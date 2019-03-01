@@ -12,20 +12,14 @@
  * @version   GIT: Latest
  * @link      https://github.com/phhpro/atomchat
  */
-?>
-            <h2>Welcome to PHP Atomchat</h2>
-            <p>
-                <strong>PHP Atomchat</strong> is a 
-                <strong>free PHP chat script</strong> 
-                for low-volume and individual websites.
-            </p>
-            <noscript>
-                <p><strong>
-                    JavaScript is disabled or not supported!
-                </strong></p>
-                <p>
-                    You'll need to manually refresh the page to execute
-                    the selected action or view any new posts. The same
-                    is true for most text-mode browsers.
-                </p>
-            </noscript>
+
+
+echo "            <h2>" . $lang['welcome'] . "</h2>\n" .
+     "            <p>" . $lang['about'] . "</p>\n" .
+     "            <h3>" . $lang['cook_perm'] . "</h3>\n" .
+     "            <p>" . $lang['cook_info'] . "</p>\n" .
+     "            <noscript>\n" .
+     "                <h3>" . $lang['js_warn'] . "</h3>\n" .
+     "                <p>" . $lang['js_info'] . "</p>\n" .
+     "                <p>" . $lang['js_text'] . "</p>\n" .
+     "            </noscript>\n";

@@ -30,7 +30,7 @@
 
 
 //** Version
-$ver = "20190228";
+$ver = "20190301";
 
 //** Required to get around "Headers already sent" warning
 ob_start();
@@ -277,7 +277,7 @@ if (isset($_POST['lang_apply'])) {
 $lang_id   = $_SESSION['ac_lang'];
 $lang_data = $lang_fold . "/" . $lang_id . ".php";
 
-if ($cook_stat === 1) {
+if ($cook_perm === 1 && $cook_stat === 1) {
     setcookie('ac_lang', $lang_id, $cook_time, '/');
 }
 
@@ -290,54 +290,6 @@ if (is_file($lang_data)) {
     } else {
         include $lang_data;
     }
-}
-
-/**
- ***********************************************************************
- *                                                               LOGIN *
- ***********************************************************************
- */
-
-if (isset($_POST['login'])) {
-    $name = htmlentities($_POST['name'], ENT_QUOTES, 'UTF-8');
-
-    if ($name === "") {
-        go('MISSING_NAME');
-    } else {
-
-        if ($name === $su) {
-            $_SESSION['ac_name'] = $su_pfx;
-        } else {
-            $_SESSION['ac_name']
-                = $name . "_" . mt_rand($rn_min, $rn_max);
-        }
-
-        $text = "            <div class=item_log>$date " .
-                $_SESSION['ac_name'] . " LOGIN</div>\n";
-
-        if (is_file($log_data)) {
-            $text .= file_get_contents($log_data);
-        }
-
-        $stat = "";
-        file_put_contents($log_data, $text);
-        go('LOGIN');
-    }
-}
-
-/**
- ***********************************************************************
- *                                                              LOGOUT *
- ***********************************************************************
- */
-
-if (isset($_POST['quit'])) {
-    $text  = "            <div class=item_log>$date " .
-             $_SESSION['ac_name'] . " LOGOUT</div>\n";
-    $text .= file_get_contents($log_data);
-    file_put_contents($log_data, $text);
-    unset($_SESSION['ac_name']);
-    go('LOGOUT');
 }
 
 /**
@@ -438,7 +390,7 @@ if (isset($_POST['post'])) {
                     $text = trim(
                         str_replace(
                             $emo_calt,
-                            "<span class=emo>$emo_ckey</span>",
+                            "<span class=\"emo\">$emo_ckey</span>",
                             $text
                         )
                     );
@@ -520,7 +472,7 @@ if (isset($_POST['post'])) {
                                "title=\"" . $lang['up_open'] .
                                "\"><img src=" .
                                chunk_split(b64enc($up_ico), 68) .
-                               "width=$up_tw height=$up_th " .
+                               "width=\"$up_tw\" height=\"$up_th\" " .
                                "alt=\"\"/></a>";
 
                     imagedestroy($up_src);
@@ -554,13 +506,13 @@ if (isset($_POST['post'])) {
     }
 
     if ($pass === 1) {
-        $post  = "<div class=item>\n" .
-                 "    <div class=item_head>\n" .
-                 "        <span class=item_date>$date</span> \n" .
-                 "        <span class=item_name>" .
+        $post  = "<div class=\"item\">\n" .
+                 "    <div class=\"item_head\">\n" .
+                 "        <span class=\"item_date\">$date</span> \n" .
+                 "        <span class=\"item_name\">" .
                  $_SESSION['ac_name'] . "</span>\n" .
                  "    </div>\n" .
-                 "    <pre class=item_text>\n" .
+                 "    <pre class=\"item_text\">\n" .
                  "$post\n" .
                  "    </pre>\n" .
                  "</div>\n" .
@@ -576,6 +528,60 @@ if (isset($_POST['post'])) {
 
 /**
  ***********************************************************************
+ *                                                               LOGIN *
+ ***********************************************************************
+ */
+
+if (isset($_POST['login'])) {
+    $name      = htmlentities($_POST['name'], ENT_QUOTES, 'UTF-8');
+    $cook_perm = htmlentities($_POST['cook_perm'], ENT_QUOTES, 'UTF-8');
+
+    if ($name === "") {
+        go('MISSING_NAME');
+    } else {
+
+        if ($name === $su) {
+            $_SESSION['ac_name'] = $su_pfx;
+        } else {
+            $_SESSION['ac_name']
+                = $name . "_" . mt_rand($rn_min, $rn_max);
+        }
+
+        $text = "            <div class=\"item_log\">$date " .
+                $_SESSION['ac_name'] . " LOGIN</div>\n";
+
+        if (is_file($log_data)) {
+            $text .= file_get_contents($log_data);
+        }
+
+        $stat = "";
+        file_put_contents($log_data, $text);
+
+        if (isset($cook_perm)) {
+            $cook_perm = 1;
+        }
+
+        go('LOGIN');
+    }
+}
+
+/**
+ ***********************************************************************
+ *                                                              LOGOUT *
+ ***********************************************************************
+ */
+
+if (isset($_POST['quit'])) {
+    $text  = "            <div class=\"item_log\">$date " .
+             $_SESSION['ac_name'] . " LOGOUT</div>\n";
+    $text .= file_get_contents($log_data);
+    file_put_contents($log_data, $text);
+    unset($_SESSION['ac_name']);
+    go('LOGOUT');
+}
+
+/**
+ ***********************************************************************
  *                                                        BEGIN MARKUP *
  ***********************************************************************
  */
@@ -585,21 +591,21 @@ echo "<!DOCTYPE html>\n" .
      "    <head>\n" .
      "        <title>$page</title>\n" .
      "        <meta charset=\"UTF-8\"/>\n" .
-     "        <meta name=language content=\"$lang_mime\"/>\n" .
-     "        <meta name=description " .
+     "        <meta name=\"language\" content=\"$lang_mime\"/>\n" .
+     "        <meta name=\"description\" " .
      "content=\"$meta_des - PHP Atomchat free PHP chat scripts\"/>\n" .
-     "        <meta name=keywords " .
+     "        <meta name=\"keywords\" " .
      "content=\"$meta_key,PHP Atomchat,free PHP chat scripts\"/>\n" .
-     "        <meta name=robots content=\"noodp, noydir\"/>\n" .
-     "        <meta name=viewport content=\"width=device-width, " .
+     "        <meta name=\"robots\" content=\"noodp, noydir\"/>\n" .
+     "        <meta name=\"viewport\" content=\"width=device-width, " .
      "height=device-height, initial-scale=1\"/>\n" .
-     "        <link rel=icon href=\"" . $host . "favicon.png\" " .
+     "        <link rel=\"icon\" href=\"" . $host . "favicon.png\" " .
      "type=\"image/png\"/>\n" .
-     "        <link rel=stylesheet href=\"$host$css_file\"/>\n" .
+     "        <link rel=\"stylesheet\" href=\"$host$css_file\"/>\n" .
      "    </head>\n" .
      "    <body>\n" .
-     "        <header>\n" .
-     "            <h1 id=anim>" .
+     "        <header class=\"block\">\n" .
+     "            <h1 id=\"anim\">" .
      "<span></span><span></span><span></span> PHP Atom Chat</h1>\n" .
      "        </header>\n";
 
@@ -610,17 +616,22 @@ echo "<!DOCTYPE html>\n" .
  */
 
 if (isset($_POST['conf'])) {
-    echo "        <article id=conf>\n" .
-         "            <h2>" . $lang['conf']. "</h2>\n" .
-         "            <form action=\"$host#CHAT\" method=POST " .
+    echo "        <article class=\"block\" id=\"conf\">\n" .
+         "            <form action=\"$host#CHAT\" method=\"POST\" " .
          "accept-charset=\"UTF-8\">\n" .
+         "                <h2>" . $lang['conf'] .
+
+         //** Close
+         "                    <input type=\"submit\" " .
+         "value=\"x\" title=\"" . $lang['close'] . "\"/>\n" .
+         "                </h2>\n" .
 
          //** Language
          "                <div>\n" .
          "                    <p>\n" .
-         "                        <label for=name_id>" .
+         "                        <label for=\"name_id\">" .
          $lang['lang'] . "</label>\n" .
-         "                        <select name=lang_id " .
+         "                        <select name=\"lang_id\" " .
          "title=\"" . $lang['lang_title']. "\">\n";
 
     $lang_list = glob($lang_fold . "/*.php");
@@ -648,9 +659,9 @@ if (isset($_POST['conf'])) {
 
     unset($lang_item);
     echo "                        </select>\n" .
-         "                        <input type=submit " .
-         "name=lang_apply value=\"#\" " .
-         "title=\"" . $lang['apply_title'] . "\"/>\n" .
+         "                        <input type=\"submit\" " .
+         "name=\"lang_apply\" value=\"#\" " .
+         "title=\"" . $lang['apply'] . "\"/>\n" .
          "                    </p>\n" .
          "                </div>\n";
 
@@ -658,9 +669,9 @@ if (isset($_POST['conf'])) {
     if ($css === 1) {
         echo "                <div>\n" .
              "                    <p>\n" .
-             "                        <label for=css_id>" .
+             "                        <label for=\"css_id\">" .
              $lang['theme'] . "</label>\n" .
-             "                        <select name=css_id " .
+             "                        <select name=\"css_id\" " .
              "title=\"" . $lang['theme_title'] . "\">\n";
 
         $css_list = glob($css_fold . "/*.css");
@@ -683,9 +694,9 @@ if (isset($_POST['conf'])) {
 
         unset($css_item);
         echo "                        </select>\n" .
-             "                        <input type=submit " .
-             "name=css_apply value=\"#\" " .
-             "title=\"" . $lang['apply_title'] . "\"/>\n" .
+             "                        <input type=\"submit\" " .
+             "name=\"css_apply\" value=\"#\" " .
+             "title=\"" . $lang['apply'] . "\"/>\n" .
              "                    </p>\n" .
              "                </div>\n";
     }
@@ -701,9 +712,8 @@ if (isset($_POST['conf'])) {
         }
 
         fclose($emo_open);
-        echo "                <p><strong>" .
-             $lang['emo'] . "</strong></p>\n" .
-             "                <pre class=emo>\n";
+        echo "                <h3>" . $lang['emo'] . "</h3>\n" .
+             "                <pre class=\"emo\">\n";
 
         foreach ($emo_parr as $emo_code) {
  
@@ -712,7 +722,7 @@ if (isset($_POST['conf'])) {
                 $emo_sarr[] = $emo_line;
                 $emo_calt   = $emo_line[0];
                 $emo_ckey   = $emo_line[1];
-                echo "$emo_calt <span class=emo>$emo_ckey</span>\n";
+                echo "$emo_calt <span class=\"emo\">$emo_ckey</span>\n";
             }
         }
 
@@ -722,7 +732,7 @@ if (isset($_POST['conf'])) {
 
     //** Upload
     if ($up === 1) {
-        echo "                <h2>" . $lang['up'] . "</h2>\n" .
+        echo "                <h3>" . $lang['up'] . "</h3>\n" .
              "                <p>" .
              $lang['up_max'] . " $up_max</p>\n" .
 
@@ -817,12 +827,13 @@ if (isset($_POST['conf'])) {
              "                </ul>\n";
     }
 
-    echo "                <div id=close>\n" .
-         "                    <input type=submit " .
-         "value=\"x\" " . 
-         "title=\"" . $lang['close_title'] . "\"/>\n" .
-         "                </div>\n" .
-         "            </form>\n" .
+    //** Credits
+    if (is_file('credits.php')) {
+        echo "                <h3>" . $lang['credits'] . "</h3>\n";
+        include 'credits.php';
+    }
+
+    echo "            </form>\n" .
          "        </article>\n";
 }
 
@@ -833,7 +844,7 @@ if (isset($_POST['conf'])) {
  */
 
 if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
-    echo "        <article id=push>\n";
+    echo "        <article class=\"block\" id=\"push\">\n";
 
     if (is_file($log_data)) {
         include $log_data;
@@ -843,18 +854,18 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
 
     //** Navigation
     echo "        </article>\n" .
-         "        <nav>\n" .
-         "            <form action=\"$host#CHAT\" name=chat " .
-         "method=POST accept-charset=\"UTF-8\" " .
+         "        <nav class=\"block\">\n" .
+         "            <form action=\"$host#CHAT\" name=\"chat\" " .
+         "method=\"POST\" accept-charset=\"UTF-8\" " .
          "enctype=\"multipart/form-data\">\n" .
          "                <div>\n" .
          "                    " . $lang['text'] . " " .
-         "<input disabled id=char size=4 value=\"$char\"/>\n" .
+         "<input disabled id=\"char\" size=\"4\" value=\"$char\"/>\n" .
          "                </div>\n" .
 
          //** Text
-         "                <textarea name=text id=text " .
-         "rows=2 cols=40 maxlength=$char " .
+         "                <textarea name=\"text\" id=\"text\" " .
+         "rows=\"2\" cols=\"40\" maxlength=\"$char\" " .
          "title=\"" . $lang['text_title'] . "\" " .
          "onkeydown=\"chars(this.form);\" ".
          "onkeypress=\"chars(this.form);\" " .
@@ -862,42 +873,42 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
          "                <div>\n" .
 
          //** Name -- hidden session token
-         "                    <input type=hidden name=name " .
+         "                    <input type=\"hidden\" name=\"name\" " .
          "value=\"" . $_SESSION['ac_name'] . "\"/>\n";
 
     //** Reset log -- super user only
     if ($_SESSION['ac_name'] === $su_pfx) {
-        echo "                    <input type=submit name=reset " .
-             "value=\"=\" " .
+        echo "                    <input type=\"submit\" " .
+             "name=\"reset\" value=\"=\" " .
              "title=\"" . $lang['reset'] . "\"/>\n";
     }
 
          //** Quit
-    echo "                    <input type=submit name=quit " .
-         "value=\"x\" " .
+    echo "                    <input type=\"submit\" name=\"quit\" " .
+         "id=\"quit\" value=\"x\" " .
          "title=\"" . $lang['quit_title'] . "\"/>\n" .
 
          //** Conf
-         "                    <input type=submit name=conf " .
-         "value=\"?\" " .
+         "                    <input type=\"submit\" name=\"conf\" " .
+         "id=\"conf\" value=\"?\" " .
          "title=\"" . $lang['conf_title'] . "\"/>\n" .
 
          //** Save
-         "                    <input type=submit name=save " .
-         "value=\"v\" " .
-         "title=\"" . $lang['save_title'] . "\"/>\n" .
+         "                    <input type=\"submit\" name=\"save\" " .
+         "id=id=\"save\" value=\"v\" " .
+         "title=\"" . $lang['save'] . "\"/>\n" .
 
          //** Post
-         "                    <input type=submit name=post " .
-         "value=\"#\" " .
-         "title=\"" . $lang['post_title'] . "\"/>\n" .
+         "                    <input type=\"submit\" name=\"post\" " .
+         "id=\"post\" value=\"#\" " .
+         "title=\"" . $lang['post'] . "\"/>\n" .
          "                </div>\n";
 
     //** Upload
     if ($up === 1) {
         echo "                <div>\n" .
-             "                    <input type=file name=file " .
-             "title=\"" . $lang['up_select'] . "\"/>\n" .
+             "                    <input type=\"file\" " .
+             "name=\"file\" title=\"" . $lang['up_select'] . "\"/>\n" .
              "                    <div><small>" .
              $lang['up_max'] . " $up_max</small></div>\n" .
              "                </div>\n";
@@ -911,7 +922,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
 
     //** Default status and JS helper
     echo "            </form>\n" .
-         "            <div id=stat>\n" .
+         "            <div id=\"stat\">\n" .
          "                <div>$stat</div>\n" .
          "                <script>\n" .
          "                var char = $char;\n" .
@@ -920,7 +931,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
          "                </script>\n" .
          "                <script src=\"chat.js\"></script>\n" .
          "                <noscript>" .
-         $lang['noscript'] . "</noscript>\n" .
+         $lang['js_warn'] . "</noscript>\n" .
          "            </div>\n";
 } else {
     /**
@@ -929,7 +940,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
     ********************************************************************
     */
 
-    echo "        <article>\n";
+    echo "        <article class=\"block\">\n";
 
     if (is_file($home)) {
         include "./$home";
@@ -937,23 +948,33 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
 
     $stat = $lang['name_info'];
     echo "        </article>\n" .
-         "        <nav id=login>\n" .
-         "            <form action=\"$host#LOGIN\" method=POST " .
+         "        <nav class=\"block\" id=\"login\">\n" .
+         "            <form action=\"$host#LOGIN\" method=\"POST\" " .
          "accept-charset=\"UTF-8\">\n" .
          "                <div>\n" .
-         "                    <label for=name>" .
+
+         //** Name
+         "                    <label for=\"name\">" .
          $lang['name'] . "</label>\n" .
-         "                    <input name=name id=name maxlength=16 " .
-         "title=\"" . $lang['name_title'] . "\"/>\n" .
-         "                    <input type=submit name=login " .
-         "value=\"&gt;\" " .
-         "title=\"" . $lang['login_title'] . "\"/>\n" .
+         "                    <input name=\"name\" id=\"name\" " .
+         "maxlength=\"16\" title=\"" . $lang['name_title'] . "\"/> \n" .
+
+         //** Cookie permissions
+         "                    <input type=\"checkbox\" checked " .
+         "name=\"cook_perm\" id=\"cook_perm\" ".
+         "title=\"" . $lang['cook_title'] . "\"/> \n" .
+
+         //** Login
+         "                    <input type=\"submit\" name=\"login\" " .
+         "value=\"&gt;\" title=\"" . $lang['login'] . "\"/>\n" .
          "                </div>\n" .
          "            </form>\n" .
-         "            <div id=stat>\n" .
+
+         //** Status and NOSCRIPT info
+         "            <div id=\"stat\">\n" .
          "                <div>$stat</div>\n" .
          "                <noscript>" .
-         $lang['noscript'] . "</noscript>\n" .
+         $lang['js_warn'] . "</noscript>\n" .
          "            </div>\n";
 }
 
@@ -963,9 +984,9 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
  ***********************************************************************
  */
 
-echo "            <p id=by><a href=\" " .
+echo "            <div id=\"by\"><a href=\" " .
      "https://github.com/phhpro/atomchat\" " .
-     "title=\"" . $lang['get'] . "\">PHP Atomchat v$ver</a></p>\n" .
+     "title=\"" . $lang['get'] . "\">PHP Atomchat v$ver</a></div>\n" .
      "        </nav>\n" .
      "    </body>\n" .
      "</html>\n";
