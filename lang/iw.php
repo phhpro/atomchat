@@ -11,7 +11,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GPLv3
  * @version   GIT: Latest
  * @link      https://github.com/phhpro/atomchat
- * @language  Hebrew -- P H Claus <phhpro@gmail.com>
+ * @language  Hebrew
  */
 
 //** Init array
@@ -22,24 +22,31 @@ $lang['__name__']    = "עברית";
 $lang['__text__']    = "לחץ כאן כדי לבחור עברית";
 
 //** Strings
-$lang['apply_title'] = "לחץ כאן כדי להחיל את הבחירה";
-$lang['close_title'] = "לחץ כאן כדי לסגור את המסך";
+$lang['about']       = "חינם PHP סקריפט צ 'אט עבור נפח נמוך אתרי אינטרנט בודדים.";
+$lang['apply']       = "לחץ כאן כדי להחיל את הבחירה";
+$lang['close']       = "לחץ כאן כדי לסגור את המסך";
 $lang['conf']        = "הגדרות";
 $lang['conf_title']  = "לחץ כאן כדי לשנות את ההגדרות";
+$lang['cook_info']   = "סמן את התיבה כדי לקבל קובצי Cookie אם אתה רוצה שהסקריפט יזכור את הגדרות השפה וההגדרות שלך.";
+$lang['cook_perm']   = "הרשאות Cookie";
+$lang['cook_title']  = "סמן כדי לקבל קובצי Cookie כדי לאחסן הגדרות שפה וערכות נושא";
+$lang['credits']     = "נקודות זכות";
 $lang['emo']         = "Emoji";
 $lang['first']       = "הערך הראשון הוא כולו שלך.";
 $lang['get']         = "לחץ כאן כדי לקבל עותק חינם של סקריפט זה";
+$lang['js_info']     = "עליך לרענן ידנית את הדף כדי לבצע את הפעולה שנבחרה או להציג פוסטים חדשים.";
+$lang['js_text']     = "אותו הדבר חל על רוב הדפדפנים במצב טקסט.";
+$lang['js_warn']     = "JavaScript אינו זמין!";
 $lang['lang']        = "שפה";
 $lang['lang_title']  = "לחץ כאן כדי לבחור שפה";
-$lang['login_title'] = "לחץ כאן כדי להתחבר";
+$lang['login']       = "לחץ כאן כדי להתחבר";
 $lang['name']        = "שם";
 $lang['name_title']  = "הקלד כאן כדי להזין את שמך";
 $lang['name_info']   = "הזן את השם המועדף ולחץ על הלחצן.";
-$lang['noscript']    = "פונקציות JavaScript אינן זמינות!";
-$lang['post_title']  = "לחץ כאן כדי לפרסם את ההודעה שלך";
-$lang['quit_title']  = "לחץ כאן כדי לסיים את ההפעלה";
+$lang['post']        = "לחץ כאן כדי לפרסם את ההודעה שלך";
+$lang['quit']        = "לחץ כאן כדי לסיים את ההפעלה";
 $lang['reset']       = "אפס";
-$lang['save_title']  = "לחץ כאן כדי להוריד את היומן הנוכחי";
+$lang['save']        = "לחץ כאן כדי להוריד את היומן הנוכחי";
 $lang['theme']       = "נושא";
 $lang['theme_title'] = "לחץ כאן כדי לבחור נושא";
 $lang['text']        = "טקסט";
@@ -54,3 +61,4 @@ $lang['up_is_vid']   = "וידאו";
 $lang['up_max']      = "גודל מקסימלי";
 $lang['up_open']     = "לחץ כאן כדי לפתוח קובץ זה";
 $lang['up_select']   = "לחץ כאן כדי לבחור קובץ";
+$lang['welcome']     = "ברוכים הבאים PHP אטום צ'אט";

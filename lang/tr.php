@@ -11,7 +11,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GPLv3
  * @version   GIT: Latest
  * @link      https://github.com/phhpro/atomchat
- * @language  Turkish -- P H Claus <phhpro@gmail.com>
+ * @language  Turkish
  */
 
 //** Init array
@@ -22,24 +22,31 @@ $lang['__name__']    = "Türkçe";
 $lang['__text__']    = "Türkçe seçmek için buraya tıklayın";
 
 //** Strings
-$lang['apply_title'] = "Seçimi uygulamak için buraya tıklayın";
-$lang['close_title'] = "Bu ekranı kapatmak için buraya tıklayın";
+$lang['about']       = "Düşük hacimli ve bireysel web siteleri için ücretsiz PHP sohbet komut dosyası.";
+$lang['apply']       = "Seçimi uygulamak için buraya tıklayın";
+$lang['close']       = "Bu ekranı kapatmak için buraya tıklayın";
 $lang['conf']        = "Ayarlar";
 $lang['conf_title']  = "Ayarları değiştirmek için buraya tıklayın";
+$lang['cook_info']   = "Komut dosyasının dilinizi ve tema ayarlarınızı hatırlamasını istiyorsanız, çerezleri kabul etmek için lütfen kutuyu işaretleyin.";
+$lang['cook_perm']   = "Çerez İzinleri";
+$lang['cook_title']  = "Dil ve tema ayarlarını saklamak için çerezleri kabul etmek için işaretleyin";
+$lang['credits']     = "Kredi";
 $lang['emo']         = "Emoji";
 $lang['first']       = "İlk giriş sizindir.";
 $lang['get']         = "Bu betiğin ücretsiz bir kopyasını almak için buraya tıklayın";
+$lang['js_info']     = "Seçilen eylemi yürütmek veya yeni yayınları görüntülemek için sayfayı el ile yenilemeniz gerekir.";
+$lang['js_text']     = "Aynısı çoğu metin modu tarayıcısı için de geçerlidir.";
+$lang['js_warn']     = "JavaScript mevcut değil!";
 $lang['lang']        = "Dil";
 $lang['lang_title']  = "Dil seçmek için buraya tıklayın";
-$lang['login_title'] = "Giriş yapmak için buraya tıklayın";
+$lang['login']       = "Giriş yapmak için buraya tıklayın";
 $lang['name']        = "Isim";
 $lang['name_title']  = "Adınızı girmek için buraya yazın";
 $lang['name_info']   = "Tercih edilen ismi girin ve düğmesine basın.";
-$lang['noscript']    = "JavaScript fonksiyonları mevcut değil!";
-$lang['post_title']  = "Mesajınızı göndermek için buraya tıklayın";
-$lang['quit_title']  = "Oturumu sonlandırmak için buraya tıklayın";
+$lang['post']        = "Mesajınızı göndermek için buraya tıklayın";
+$lang['quit']        = "Oturumu sonlandırmak için buraya tıklayın";
 $lang['reset']       = "Reset";
-$lang['save_title']  = "Mevcut günlüğü indirmek için buraya tıklayın";
+$lang['save']        = "Mevcut günlüğü indirmek için buraya tıklayın";
 $lang['theme']       = "Tema";
 $lang['theme_title'] = "Temayı seçmek için buraya tıklayın";
 $lang['text']        = "Metin";
@@ -54,3 +61,4 @@ $lang['up_is_vid']   = "Video";
 $lang['up_max']      = "En büyük boy";
 $lang['up_open']     = "Bu dosyayı açmak için buraya tıklayın";
 $lang['up_select']   = "Bir dosya seçmek için buraya tıklayın";
+$lang['welcome']     = "PHP Atom Sohbetine Hoş Geldiniz";

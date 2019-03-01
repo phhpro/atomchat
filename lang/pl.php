@@ -11,7 +11,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GPLv3
  * @version   GIT: Latest
  * @link      https://github.com/phhpro/atomchat
- * @language  Polish -- P H Claus <phhpro@gmail.com>
+ * @language  Polish
  */
 
 //** Init array
@@ -22,24 +22,31 @@ $lang['__name__']    = "Polskie";
 $lang['__text__']    = "Kliknij tutaj, aby wybrać polski";
 
 //** Strings
-$lang['apply_title'] = "Kliknij tutaj, aby zastosować wybór";
-$lang['close_title'] = "Kliknij tutaj, aby zamknąć ten ekran";
+$lang['about']       = "Darmowy skrypt czat PHP dla małych i indywidualnych stron.";
+$lang['apply']       = "Kliknij tutaj, aby zastosować wybór";
+$lang['close']       = "Kliknij tutaj, aby zamknąć ten ekran";
 $lang['conf']        = "Ustawienia";
 $lang['conf_title']  = "Kliknij tutaj, aby zmienić ustawienia";
+$lang['cook_info']   = "Zaznacz to pole, aby akceptować pliki cookie, jeśli chcesz, aby skrypt pamiętał Twoje ustawienia języka i motywu.";
+$lang['cook_perm']   = "Uprawnienia do plików cookie";
+$lang['cook_title']  = "Zaznacz, aby akceptować pliki cookie do przechowywania ustawień języka i motywu";
+$lang['credits']     = "Kredyty";
 $lang['emo']         = "Emoji";
 $lang['first']       = "Pierwszy wpis jest twój.";
 $lang['get']         = "Kliknij tutaj, aby otrzymać bezpłatną kopię tego skryptu";
+$lang['js_info']     = "Musisz ręcznie odświeżyć stronę, aby wykonać wybraną akcję lub wyświetlić nowe posty.";
+$lang['js_text']     = "To samo dotyczy większości przeglądarek w trybie tekstowym.";
+$lang['js_warn']     = "JavaScript nie jest dostępny!";
 $lang['lang']        = "Język";
 $lang['lang_title']  = "Kliknij tutaj, aby wybrać język";
-$lang['login_title'] = "Kliknij tutaj aby się zalogować";
+$lang['login']       = "Kliknij tutaj aby się zalogować";
 $lang['name']        = "Imię";
 $lang['name_title']  = "Wpisz tutaj, aby wpisać swoje imię i nazwisko";
 $lang['name_info']   = "Wprowadź preferowaną nazwę i naciśnij przycisk.";
-$lang['noscript']    = "Funkcje JavaScript nie są dostępne!";
-$lang['post_title']  = "Kliknij tutaj, aby opublikować swoją wiadomość";
-$lang['quit_title']  = "Kliknij tutaj, aby zakończyć sesję";
+$lang['post']        = "Kliknij tutaj, aby opublikować swoją wiadomość";
+$lang['quit']        = "Kliknij tutaj, aby zakończyć sesję";
 $lang['reset']       = "Nastawić";
-$lang['save_title']  = "Kliknij tutaj, aby pobrać aktualny dziennik";
+$lang['save']        = "Kliknij tutaj, aby pobrać aktualny dziennik";
 $lang['theme']       = "Motyw";
 $lang['theme_title'] = "Kliknij tutaj, aby wybrać motyw";
 $lang['text']        = "Tekst";
@@ -54,3 +61,4 @@ $lang['up_is_vid']   = "Wideo";
 $lang['up_max']      = "Największy rozmiar";
 $lang['up_open']     = "Kliknij tutaj, aby otworzyć ten plik";
 $lang['up_select']   = "Kliknij tutaj, aby wybrać plik";
+$lang['welcome']     = "Witamy na czacie PHP Atom";

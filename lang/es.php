@@ -11,7 +11,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GPLv3
  * @version   GIT: Latest
  * @link      https://github.com/phhpro/atomchat
- * @language  Spanish -- P H Claus <phhpro@gmail.com>
+ * @language  Spanish
  */
 
 //** Init array
@@ -22,24 +22,31 @@ $lang['__name__']    = "Español";
 $lang['__text__']    = "Haga click aquí para seleccionar al Español";
 
 //** Strings
-$lang['apply_title'] = "Haga clic aquí para aplicar la seleccion";
-$lang['close_title'] = "Haga clic aquí para cerrar esta ventana";
+$lang['about']       = "Script de chat PHP gratuito para sitios web individuales y de bajo volumen.";
+$lang['apply']       = "Haga clic aquí para aplicar la seleccion";
+$lang['close']       = "Haga clic aquí para cerrar esta ventana";
 $lang['conf']        = "Ajustes";
 $lang['conf_title']  = "Haga clic aquí para cambiar la configuración";
+$lang['cook_info']   = "Marque la casilla para aceptar cookies si desea que el script recuerde la configuración de su idioma y tema.";
+$lang['cook_perm']   = "Permisos de cookies";
+$lang['cook_title']  = "Marque para aceptar cookies para almacenar configuraciones de idioma y tema";
+$lang['credits']     = "Creditos";
 $lang['emo']         = "Emoji";
 $lang['first']       = "El primer mensaje es todo suja.";
 $lang['get']         = "Haga clic aquí para obtener una copia gratuita de este script";
+$lang['js_info']     = "Debe actualizar manualmente la página para ejecutar la acción seleccionada o ver cualquier publicación nueva.";
+$lang['js_text']     = "Lo mismo se aplica a la mayoría de los navegadores en modo texto.";
+$lang['js_warn']     = "JavaScript no está disponible!";
 $lang['lang']        = "Idioma";
 $lang['lang_title']  = "Haga clic aquí para seleccionar idioma";
-$lang['login_title'] = "Haga clic aquí para iniciar sesión";
+$lang['login']       = "Haga clic aquí para iniciar sesión";
 $lang['name']        = "Nombre";
 $lang['name_title']  = "Escribe aquí para ingresar su nombre";
 $lang['name_info']   = "Ingrese el nombre preferido y presione el botón.";
-$lang['noscript']    = "¡Funciones de JavaScript no disponibles!";
-$lang['post_title']  = "Haga clic aquí para publicar su mensaje";
-$lang['quit_title']  = "Haga clic aquí para salir de la sesión";
+$lang['post']        = "Haga clic aquí para publicar su mensaje";
+$lang['quit']        = "Haga clic aquí para salir de la sesión";
 $lang['reset']       = "Restablecimiento";
-$lang['save_title']  = "Haga clic aquí para descargar el registro actual";
+$lang['save']        = "Haga clic aquí para descargar el registro actual";
 $lang['theme']       = "Tema";
 $lang['theme_title'] = "Haga clic aquí para seleccionar tema";
 $lang['text']        = "Texto";
@@ -54,3 +61,4 @@ $lang['up_is_vid']   = "Vídeo";
 $lang['up_max']      = "Tamaño máximo";
 $lang['up_open']     = "Haga clic aquí para abrir este archivo";
 $lang['up_select']   = "Haga clic aquí para seleccionar un archivo";
+$lang['welcome']     = "Bienvenido a PHP Atom Chat";

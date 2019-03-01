@@ -11,7 +11,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.en.html GPLv3
  * @version   GIT: Latest
  * @link      https://github.com/phhpro/atomchat
- * @language  English -- P H Claus <phhpro@gmail.com>
+ * @language  English
  */
 
 //** Init array
@@ -22,24 +22,31 @@ $lang['__name__']    = "English";
 $lang['__text__']    = "Click here to select English";
 
 //** Strings
-$lang['apply_title'] = "Click here to apply the selection";
-$lang['close_title'] = "Click here to close this screen";
+$lang['about']       = "Free PHP chat script for low-volume and individual websites.";
+$lang['apply']       = "Click here to apply the selection";
+$lang['close']       = "Click here to close this screen";
 $lang['conf']        = "Settings";
 $lang['conf_title']  = "Click here to change settings";
+$lang['cook_info']   = "Please check the box to accept cookies if you would like the script to remember your language and theme settings.";
+$lang['cook_perm']   = "Cookie Permissions";
+$lang['cook_title']  = "Check to accept cookies to store language and theme settings";
+$lang['credits']     = "Credits";
 $lang['emo']         = "Emoji";
 $lang['first']       = "The first entry is all yours.";
 $lang['get']         = "Click here to get a free copy of this script";
+$lang['js_info']     = "You need to manually refresh the page to execute the selected action or view any new posts.";
+$lang['js_text']     = "The same applies to most text-mode browsers.";
+$lang['js_warn']     = "JavaScript not available!";
 $lang['lang']        = "Language";
 $lang['lang_title']  = "Click here to select language";
-$lang['login_title'] = "Click here to login";
+$lang['login']       = "Click here to login";
 $lang['name']        = "Name";
 $lang['name_title']  = "Type here to enter your name";
 $lang['name_info']   = "Enter preferred name and press button.";
-$lang['noscript']    = "JavaScript functions not available!";
-$lang['post_title']  = "Click here to post your message";
-$lang['quit_title']  = "Click here to end the session";
+$lang['post']        = "Click here to post your message";
+$lang['quit']        = "Click here to end the session";
 $lang['reset']       = "Reset";
-$lang['save_title']  = "Click here to download the current log";
+$lang['save']        = "Click here to download the current log";
 $lang['theme']       = "Theme";
 $lang['theme_title'] = "Click here to select theme";
 $lang['text']        = "Text";
@@ -54,3 +61,4 @@ $lang['up_is_vid']   = "Video";
 $lang['up_max']      = "Maximum size";
 $lang['up_open']     = "Click here to open this file";
 $lang['up_select']   = "Click here to select a file";
+$lang['welcome']     = "Welcome to PHP Atom Chat";
