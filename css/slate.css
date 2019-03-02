@@ -1,14 +1,14 @@
 @charset "UTF-8";
 
 body {
-    background-color: #363;
-    color: #cc9;
+    background-color: #999;
+    color: #333;
     font-family: sans-serif;
 }
 
 .block {
-    background-color: #363;
-    color: #cc9;
+    background-color: #999;
+    color: #333;
     max-width: 600px;
     margin: 0 auto;
     padding: 4px;
@@ -119,11 +119,11 @@ ul li ul li {
     font-weight: normal;
 }
 
-input {
-    background-color: #996;
-    background-image: linear-gradient(#363, #cc9);
+input, .overlay {
+    background-color: #999;
+    background-image: linear-gradient(#666, #ccc);
     color: #333;
-    border: 1px solid #999;
+    border: 1px solid #666;
     vertical-align: middle;
 }
 
@@ -146,27 +146,27 @@ input[type=file] {
 #char {
     background-color: transparent;
     background-image: none;
-    color: #cc9;
+    color: #000;
     text-align: center;
     border: 0;
     padding: 0 0 2px 0;
 }
 
 textarea {
-    background-color: #996;
-    background-image: linear-gradient(#363, #cc9);
+    background-color: #999;
+    background-image: linear-gradient(#666, #ccc);
     color: #333;
     font-size: 95%;
-    border: 1px solid #999;
+    border: 1px solid #666;
     padding: 4px;
-    max-width: 65%;
+    width: 65%;
 }
 
 select {
-    background-color: #996;
-    background-image: linear-gradient(#363, #cc9);
+    background-color: #999;
+    background-image: linear-gradient(#666, #ccc);
     color: #333;
-    border: 1px solid #999;
+    border: 1px solid #666;
     margin: 0;
     padding: 1px;
 }
@@ -177,16 +177,16 @@ select {
 }
 
 .item_head {
-    background-color: #996;
-    color: #333;
+    background-color: #666;
+    color: #000;
     font-size: 85%;
     font-weight: bold;
     padding: 2px;
 }
 
 .item:hover .item_head {
-    background-color: #996;
-    color: #000;
+    background-color: #333;
+    color: #ccc;
 }
 
 .item_name {
@@ -201,20 +201,20 @@ select {
 
 .item_log {
     background-color: transparent;
-    color: #999;
+    color: #666;
     font-size: 95%;
 }
 
 input:hover, textarea:hover, select:hover, .item:hover {
-    background-color: #cc9;
-    background-image: linear-gradient(#363, #996);
+    background-color: #ccc;
+    background-image: linear-gradient(#ccc, #666);
     color: #000;
-    border: 1px solid #663;
+    border: 1px solid #666;
 }
 
 a:link, a:visited {
     background-color: transparent;
-    color: #fff;
+    color: #333;
     text-decoration: none;
 }
 
@@ -236,8 +236,8 @@ hr {
     vertical-align: middle;
     width: 4px;
     height: 4px;
-    background-color: #cc9;
-    color: #363;
+    background-color: #333;
+    color: #999;
     border-radius: 50%;
     animation: anim 0.9s infinite alternate;
 }

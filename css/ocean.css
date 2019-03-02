@@ -15,15 +15,16 @@ body {
 }
 
 article {
+    font-size: 95%;
     position: fixed;
-    top: 2em;
+    top: 2.2em;
     right: 0;
-    bottom: 2em;
+    bottom: 9.5em;
     left: 0;
     overflow: auto;
 }
 
-#conf, #login {
+#settings, #login {
     z-index: 2;
 }
 
@@ -39,10 +40,6 @@ h2 {
     margin: 0;
 }
 
-h2 input {
-    float: right;
-}
-
 h3 {
     font-size: 100%;
     margin: 0;
@@ -55,14 +52,71 @@ nav {
     right: 0;
     bottom: 0;
     left: 0;
+    height: 9em;
 }
 
-#stat, #by {
+#home {
+    bottom: 5.5em;
+}
+
+#login {
+    height: 5em;
+}
+
+#post {
+    position: absolute;
+    top: 0.2em;
+    right: 0;
+}
+#conf {
+    position: absolute;
+    bottom: 2.9em;
+    right: 0;
+}
+
+#quit {
+    position: absolute;
+    top: 0.2em;
+    left: 0;
+}
+
+#save {
+    position: absolute;
+    bottom: 2.9em;
+    left: 0;
+}
+
+#reset {
+    position: absolute;
+    bottom: 0.5em;
+    left: 0;
+}
+
+.flr {
+    float: right;
+}
+
+.s {
     font-size: 85%;
 }
 
-label {
+#by {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    font-size: 85%;
+    text-align: center;
+    padding: 4px;
+    z-index: 2;
+}
+
+label, ul li {
     font-weight: bold;
+}
+
+ul li ul li {
+    font-weight: normal;
 }
 
 input {
@@ -70,27 +124,23 @@ input {
     background-image: linear-gradient(#99c, #9cc);
     color: #339;
     border: 1px solid #99f;
-    margin: 8px;
-    padding: 4px;
+    vertical-align: middle;
 }
 
 input[type=submit] {
     font-family: monospace;
-    font-size: 125%;
+    font-size: 135%;
     font-weight: bold;
     text-align: center;
-    vertical-align: middle;
     width: 32px;
     height: 32px;
+    margin: 8px;
+    padding: 4px;
     border-radius: 50%;
 }
 
-input[type=file], input[type=checkbox] {
-    background-color: #9cc;
-    color: #009;
-    margin: 0;
-    padding: 1px;
-    vertical-align: middle;
+input[type=file] {
+    max-width: 65%;
 }
 
 #char {
@@ -99,8 +149,7 @@ input[type=file], input[type=checkbox] {
     color: #00c;
     text-align: center;
     border: 0;
-    margin: 4px 0 0 0;
-    padding: 0;
+    padding: 0 0 2px 0;
 }
 
 textarea {
@@ -110,7 +159,7 @@ textarea {
     font-size: 95%;
     border: 1px solid #99f;
     padding: 4px;
-    max-width: 400px;
+    width: 65%;
 }
 
 select {
@@ -130,9 +179,9 @@ select {
 .item_head {
     background-color: #99f;
     color: #009;
-    font-size: 75%;
+    font-size: 85%;
     font-weight: bold;
-    padding: 4px;
+    padding: 2px;
 }
 
 .item:hover .item_head {
@@ -147,14 +196,13 @@ select {
 .item_text {
     white-space: pre-wrap;
     margin: 0;
-    padding: 4px;
+    padding: 2px;
 }
 
 .item_log {
     background-color: transparent;
     color: #669;
     font-size: 95%;
-    padding: 4px;
 }
 
 input:hover, textarea:hover, select:hover, .item:hover {
@@ -172,17 +220,7 @@ a:link, a:visited {
 
 a:hover, a:active {
     background-color: transparent;
-    color: #99f;
-}
-
-.item:hover a:link, .item:hover a:visited {
-    background-color: transparent;
-    color: #00c;
-}
-
-.item:hover a:hover, .item:hover a:active {
-    background-color: transparent;
-    color: #99f;
+    color: #003;
 }
 
 .emo {
@@ -226,6 +264,18 @@ hr {
 
 @media screen and (max-width: 800px) {
     body {
+        font-size: 85%;
+    }
+
+    article {
+        font-size: 100%;
+    }
+
+    .item_text {
+        font-size: 125%;
+    }
+
+    input {
         font-size: 85%;
     }
 }
