@@ -30,7 +30,7 @@
 
 
 //** Version
-$ver = "20190301";
+$ver = "20190302";
 
 //** Required to get around "Headers already sent" warning
 ob_start();
@@ -101,26 +101,6 @@ if (isset($exit) && !empty($exit)) {
 
 /**
  ***********************************************************************
- *                                                              BASICS *
- ***********************************************************************
- */
-$su   = $su_pfx . $su_sfx;
-$home = "home.php";
-$stat = "";
-
-//defaultMuted
-
-setcookie('ac_test', 'test');
-
-if (count($_COOKIE) > 0) {
-    $cook_stat = 1;
-    $cook_time = time() + (86400 * 30);
-}
-
-setcookie('ac_test', '', time() - 3600);
-
-/**
- ***********************************************************************
  *                                                           FUNCTIONS *
  ***********************************************************************
  */
@@ -160,7 +140,7 @@ if (sessionstat() === false && !session_start()) {
  *
  * @param string $b64_src source
  *
- * @return string data block
+ * @return string data blob
  */
 function b64enc($b64_src)
 {
@@ -219,17 +199,11 @@ if ($log_mode === 0) {
 
 $log_data = $log_fold . "/" . $log_name . ".html";
 
-if ($log_auto === 1 && is_file($log_data)) {
-    $log_stat = filesize($log_data);
-    $log_temp = $log_size - $log_stat;
-    $log_warn = $log_size / 100 * $log_warn;
+if (is_file($log_data) && $log_auto === 1) {
 
-    if ($log_temp <= $log_warn) {
-        $log_stat = "<strong>$log_stat</strong>";
-    }
-
-    if ($log_temp <= 0) {
+    if ($log_size - filesize($log_data) <= 0) {
         unlink($log_data);
+        file_put_contents($log_data, $init);
     }
 }
 
@@ -241,55 +215,74 @@ if ($log_auto === 1 && is_file($log_data)) {
 
 $lang_mime = $lang_def;
 
-if (!isset($_COOKIE['ac_lang'])) {
+if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+    $lang_hal = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+    $lang_usr = $lang_hal;
+    $lang_php = glob($lang_fold . "/*.php");
 
-    if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-        $lang_hal = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-        $lang_usr = $lang_hal;
-        $lang_php = glob($lang_fold . "/*.php");
+    foreach ($lang_php as $lang_obj) {
+        $lang_obj = str_replace($lang_fold . "/", "", $lang_obj);
+        $lang_obj = str_replace(".php", "", $lang_obj);
 
-        foreach ($lang_php as $lang_obj) {
-            $lang_obj = str_replace($lang_fold . "/", "", $lang_obj);
-            $lang_obj = str_replace(".php", "", $lang_obj);
-
-            if (strpos($lang_obj, $lang_usr) === false) {
-                continue;
-            } else {
-                $lang_def = $lang_usr;
-            }
+        if (strpos($lang_obj, $lang_usr) === false) {
+            continue;
+        } else {
+            $lang_id = $lang_usr;
         }
-
-        unset($lang_obj);
     }
-} else {
-    $lang_def = $_COOKIE['ac_lang'];
-}
 
-if (!isset($_SESSION['ac_lang'])) {
-    $_SESSION['ac_lang'] = $lang_def;
+    unset($lang_obj);    
 }
 
 if (isset($_POST['lang_apply'])) {
-    $_SESSION['ac_lang']
-        = htmlentities($_POST['lang_id'], ENT_QUOTES, 'UTF-8');
+    $lang_id = htmlentities($_POST['lang_id'], ENT_QUOTES, 'UTF-8');
+    $_SESSION['ac_lang'] = $lang_id;
+
+    if (isset($_COOKIE['ac_lang'])) {
+        setcookie('ac_lang', $lang_id, $cook_time, '/');
+    }
+
+    $lang_id = $_SESSION['ac_lang'];
+} else {
+
+    if (isset($_COOKIE['ac_lang'])) {
+        $lang_id = $_COOKIE['ac_lang'];
+    } elseif (isset($_SESSION['ac_lang'])) {
+        $lang_id = $_SESSION['ac_lang'];
+    } else {
+        $lang_id = $lang_def;
+    }
 }
 
-$lang_id   = $_SESSION['ac_lang'];
 $lang_data = $lang_fold . "/" . $lang_id . ".php";
 
-if ($cook_perm === 1 && $cook_stat === 1) {
-    setcookie('ac_lang', $lang_id, $cook_time, '/');
-}
-
 if (is_file($lang_data)) {
-    $lang_trim = file_get_contents($lang_data);
+    include $lang_data;
+} else {
+    /*
+     * Handle exception when the selected file has been removed
+     * before it could be loaded. Shouldn't really happen, but
+     * better save than sorry.
+     *
+     * This loads the default to prevent a ghost screen without
+     * text. If for whatever obscure reason that one's gone too,
+     * the script gracefully dies right here.
+     */
+    $_SESSION['ac_lang'] = $lang_def;
 
-    if (filesize($lang_data) < 16 && trim($lang_trim) === false) {
-        $stat      = "Invalid language file: " . $lang_id;
-        $lang_data = str_replace($lang_id, $lang_def, $lang_data);
-    } else {
-        include $lang_data;
+    if (isset($_COOKIE['ac_lang'])) {
+        setcookie('ac_lang', $lang_def, $cook_time, '/');
     }
+
+    include $lang_fold . '/' . $lang_def . '.php';
+
+    echo "<p>The requested file is no longer available!</p>\n" .
+         "<p><a href=\"$host\" title=\"Click here to try loading " .
+         "the default settings\">Click here to try loading the " .
+         "default settings.</a></p>\n" .
+         "<p>If that fails, and you know how to contact the site " .
+         "owner, now would be a good moment.</p>";
+    exit;
 }
 
 /**
@@ -304,26 +297,33 @@ if (isset($_POST['css_apply'])) {
     if ($css_id !== "") {
         $_SESSION['ac_css'] = $css_id;
 
-        if ($cook_stat === 1) {
-            $_COOKIE['ac_css']  = $css_id;
+        if (isset($_COOKIE['ac_css'])) {
+            setcookie('ac_css', $css_id, $cook_time, '/');
         }
+
+        $css_id = $_SESSION['ac_css'];
+    }
+} else {
+
+    if (isset($_COOKIE['ac_css'])) {
+        $css_id = $_COOKIE['ac_css'];
+    } elseif (isset($_SESSION['ac_css'])) {
+        $css_id = $_SESSION['ac_css'];
+    } else {
+        $css_id = $css_def;
     }
 }
 
-if (isset($_COOKIE['ac_css'])) {
-    $css_sel = $_COOKIE['ac_css'];
-} elseif (isset($_SESSION['ac_css'])) {
-    $css_sel = $_SESSION['ac_css'];
-} else {
-    $css_sel            = $css_def;
-    $_SESSION['ac_css'] = $css_sel;
-}
+$css_file = $css_fold . "/" . $css_id . ".css";
 
-$css_file = $css_fold . "/" . $css_sel . ".css";
+/**
+ ***********************************************************************
+ *                                                                MISC *
+ ***********************************************************************
+ */
 
-if ($cook_stat === 1) {
-    setcookie('ac_css', $_SESSION['ac_css'], $cook_time, '/');
-}
+$su   = $su_pfx . $su_sfx;
+$init = "<div class=\"item_log\">LOG INIT $date</div>\n";
 
 /**
  ***********************************************************************
@@ -349,6 +349,7 @@ if (isset($_POST['save'])) {
 
 if (isset($_POST['reset']) && is_file($log_data)) {
     unlink($log_data);
+    file_put_contents($log_data, $init);
     go('RESET_LOG');
 }
 
@@ -547,21 +548,35 @@ if (isset($_POST['login'])) {
                 = $name . "_" . mt_rand($rn_min, $rn_max);
         }
 
-        $text = "            <div class=\"item_log\">$date " .
+        $text = "<div class=\"item_log\">$date " .
                 $_SESSION['ac_name'] . " LOGIN</div>\n";
 
         if (is_file($log_data)) {
             $text .= file_get_contents($log_data);
         }
 
-        $stat = "";
         file_put_contents($log_data, $text);
 
-        if (isset($cook_perm)) {
-            $cook_perm = 1;
-        }
+        if (!isset($_COOKIE['ac_cook'])) {
 
-        go('LOGIN');
+            if (isset($cook_perm)) {
+                setcookie('ac_cook', '1');
+
+                if (count($_COOKIE) > 0) {
+                    $cook_time = time() + (86400 * 30);
+                    setcookie('ac_cook', '1', $cook_time, '/');
+                    setcookie('ac_lang', $lang_def, $cook_time, '/');
+                    setcookie('ac_css', $css_def, $cook_time, '/');
+                    $_SESSION['ac_lang'] = $_COOKIE['ac_lang'];
+                    $_SESSION['ac_css']  = $_COOKIE['ac_css'];
+                }
+            } else {
+                $_SESSION['ac_lang'] = $lang_def;
+                $_SESSION['ac_css']  = $css_def;
+            }
+
+            go('LOGIN');
+        }
     }
 }
 
@@ -572,7 +587,7 @@ if (isset($_POST['login'])) {
  */
 
 if (isset($_POST['quit'])) {
-    $text  = "            <div class=\"item_log\">$date " .
+    $text  = "<div class=\"item_log\">$date " .
              $_SESSION['ac_name'] . " LOGOUT</div>\n";
     $text .= file_get_contents($log_data);
     file_put_contents($log_data, $text);
@@ -611,265 +626,268 @@ echo "<!DOCTYPE html>\n" .
 
 /**
  ***********************************************************************
- *                                                       CONFIG SCREEN *
- ***********************************************************************
- */
-
-if (isset($_POST['conf'])) {
-    echo "        <article class=\"block\" id=\"conf\">\n" .
-         "            <form action=\"$host#CHAT\" method=\"POST\" " .
-         "accept-charset=\"UTF-8\">\n" .
-         "                <h2>" . $lang['conf'] .
-
-         //** Close
-         "                    <input type=\"submit\" " .
-         "value=\"x\" title=\"" . $lang['close'] . "\"/>\n" .
-         "                </h2>\n" .
-
-         //** Language
-         "                <div>\n" .
-         "                    <p>\n" .
-         "                        <label for=\"name_id\">" .
-         $lang['lang'] . "</label>\n" .
-         "                        <select name=\"lang_id\" " .
-         "title=\"" . $lang['lang_title']. "\">\n";
-
-    $lang_list = glob($lang_fold . "/*.php");
-    sort($lang_list);
-
-    foreach ($lang_list as $lang_item) {
-        $lang_file = file_get_contents($lang_item);
-        $lang_line = file($lang_item);
-        $lang_name = $lang_line[20];
-        $lang_name = str_replace(
-            "\$lang['__name__']    = \"", "", $lang_name
-        );
-        $lang_name = str_replace("\";\n", "", $lang_name);
-        $lang_text = $lang_line[21];
-        $lang_text = str_replace(
-            "\$lang['__text__']    = \"", "", $lang_text
-        );
-        $lang_text = str_replace("\";\n", "", $lang_text);
-        $lang_link = basename($lang_item);
-        $lang_link = str_replace(".php", "", $lang_link);
-        echo "                            <option " .
-             "value=\"$lang_link\" lang=\"$lang_link\" " .
-             "title=\"$lang_text\">$lang_name</option>\n";
-    }
-
-    unset($lang_item);
-    echo "                        </select>\n" .
-         "                        <input type=\"submit\" " .
-         "name=\"lang_apply\" value=\"#\" " .
-         "title=\"" . $lang['apply'] . "\"/>\n" .
-         "                    </p>\n" .
-         "                </div>\n";
-
-    //** Theme
-    if ($css === 1) {
-        echo "                <div>\n" .
-             "                    <p>\n" .
-             "                        <label for=\"css_id\">" .
-             $lang['theme'] . "</label>\n" .
-             "                        <select name=\"css_id\" " .
-             "title=\"" . $lang['theme_title'] . "\">\n";
-
-        $css_list = glob($css_fold . "/*.css");
-        sort($css_list);
-
-        foreach ($css_list as $css_item) {
-            $css_link = basename($css_item);
-            $css_link = str_replace(".css", "", $css_link);
-            $css_text = str_replace(array("-", "_"), " ", $css_link);
-            echo "                            <option value=\"".
-                 "$css_link\" title=\"" . $lang['theme_title'] . " " .
-                 ucwords($css_text) . "\">" . ucwords($css_text);
-
-            if ($css_link === $_SESSION['ac_css']) {
-                echo " [x]";
-            }
-
-            echo "</option>\n";
-        }
-
-        unset($css_item);
-        echo "                        </select>\n" .
-             "                        <input type=\"submit\" " .
-             "name=\"css_apply\" value=\"#\" " .
-             "title=\"" . $lang['apply'] . "\"/>\n" .
-             "                    </p>\n" .
-             "                </div>\n";
-    }
-
-    //** Emoji
-    if ($emo === 1) {
-        $emo_open = fopen($emo_conf, 'r');
-
-        while (!feof($emo_open)) {
-            $emo_line   = fgets($emo_open);
-            $emo_line   = trim($emo_line);
-            $emo_parr[] = $emo_line;
-        }
-
-        fclose($emo_open);
-        echo "                <h3>" . $lang['emo'] . "</h3>\n" .
-             "                <pre class=\"emo\">\n";
-
-        foreach ($emo_parr as $emo_code) {
- 
-            if ($emo_code !== "") { 
-                $emo_line   = explode("|", $emo_code);
-                $emo_sarr[] = $emo_line;
-                $emo_calt   = $emo_line[0];
-                $emo_ckey   = $emo_line[1];
-                echo "$emo_calt <span class=\"emo\">$emo_ckey</span>\n";
-            }
-        }
-
-        unset($emo_code);
-        echo "                </pre>\n";
-    }
-
-    //** Upload
-    if ($up === 1) {
-        echo "                <h3>" . $lang['up'] . "</h3>\n" .
-             "                <p>" .
-             $lang['up_max'] . " $up_max</p>\n" .
-
-        //** Image, Base64
-             "                <ul>\n" .
-             "                    <li><strong>" .
-             $lang['up_is_b64'] . "</strong>\n" .
-             "                        <ul>\n";
-
-        foreach ($b64_type as $up_b64) {
-            echo "                            <li>$up_b64</li>\n";
-        }
-
-        unset($up_doc);
-        echo "                        </ul>\n" .
-             "                    </li>\n" .
-             "                </ul>\n" .
-
-        //** Image, other
-             "                <ul>\n" .
-             "                    <li><strong>" .
-             $lang['up_is_img'] . "</strong>\n" .
-             "                        <ul>\n";
-
-        foreach ($up_is_img as $up_img) {
-            echo "                            <li>$up_img</li>\n";
-        }
-
-        unset($up_img);
-        echo "                        </ul>\n" .
-             "                    </li>\n" .
-             "                </ul>\n" .
-
-        //** Audio
-             "                <ul>\n" .
-             "                    <li><strong>" .
-             $lang['up_is_snd'] . "</strong>\n" .
-             "                        <ul>\n";
-
-        foreach ($up_is_snd as $up_snd) {
-            echo "                            <li>$up_snd</li>\n";
-        }
-
-        unset($up_snd);
-        echo "                        </ul>\n" .
-             "                    </li>\n" .
-             "                </ul>\n" .
-
-        //** Video
-             "                <ul>\n" .
-             "                    <li><strong>" .
-             $lang['up_is_vid'] . "</strong>\n" .
-             "                        <ul>\n";
-
-        foreach ($up_is_vid as $up_vid) {
-            echo "                            <li>$up_vid</li>\n";
-        }
-
-        unset($up_vid);
-        echo "                        </ul>\n" .
-             "                    </li>\n" .
-             "                </ul>\n" .
-
-        //** Document
-             "                <ul>\n" .
-             "                    <li><strong>" .
-             $lang['up_is_doc'] . "</strong>\n" .
-             "                        <ul>\n";
-
-        foreach ($up_is_doc as $up_doc) {
-            echo "                            <li>$up_doc</li>\n";
-        }
-
-        unset($up_doc);
-        echo "                        </ul>\n" .
-             "                    </li>\n" .
-             "                </ul>\n" .
-
-        //** Archive
-             "                <ul>\n" .
-             "                    <li><strong>" .
-             $lang['up_is_arc'] . "</strong>\n" .
-             "                        <ul>\n";
-
-        foreach ($up_is_arc as $up_arc) {
-            echo "                            <li>$up_arc</li>\n";
-        }
-
-        unset($up_arc);
-        echo "                        </ul>\n" .
-             "                    </li>\n" .
-             "                </ul>\n";
-    }
-
-    //** Credits
-    if (is_file('credits.php')) {
-        echo "                <h3>" . $lang['credits'] . "</h3>\n";
-        include 'credits.php';
-    }
-
-    echo "            </form>\n" .
-         "        </article>\n";
-}
-
-/**
- ***********************************************************************
- *                                                         CHAT SCREEN *
+ *                                                             CHATLOG *
  ***********************************************************************
  */
 
 if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
-    echo "        <article class=\"block\" id=\"push\">\n";
+    echo "        <form action=\"$host#CHAT\" name=\"chat\" " .
+         "method=\"POST\" accept-charset=\"UTF-8\" " .
+         "enctype=\"multipart/form-data\">\n" .
+         "            <article class=\"block\" id=\"push\">\n";
 
     if (is_file($log_data)) {
         include $log_data;
     } else {
-        $stat = $lang['first'];
+        file_put_contents($log_data, $init);
+        include $log_data;
     }
 
-    //** Navigation
-    echo "        </article>\n" .
-         "        <nav class=\"block\">\n" .
-         "            <form action=\"$host#CHAT\" name=\"chat\" " .
-         "method=\"POST\" accept-charset=\"UTF-8\" " .
-         "enctype=\"multipart/form-data\">\n" .
-         "                <div>\n" .
-         "                    " . $lang['text'] . " " .
-         "<input disabled id=\"char\" size=\"4\" value=\"$char\"/>\n" .
-         "                </div>\n" .
+    echo "            </article>\n";
 
+    /**
+     *******************************************************************
+     *                                                        SETTINGS *
+     *******************************************************************
+     */
+
+    if (isset($_POST['conf'])) {
+        echo "            <article class=\"block\" id=\"settings\">\n" .
+             "                <h2>" . $lang['conf'] . "\n" .
+
+             //** Close
+             "                    <input type=\"submit\" value=\"x\" " .
+             "title=\"" . $lang['close'] . "\" class=\"flr\"/>\n" .
+             "                </h2>\n" .
+
+             //** Language
+             "                <div>\n" .
+             "                    <label for=\"lang_id\">" .
+             $lang['lang'] . "</label>\n" .
+             "                    <select name=\"lang_id\" " .
+             "title=\"" . $lang['lang_title']. "\">\n";
+
+        $lang_list = glob($lang_fold . "/*.php");
+        sort($lang_list);
+
+        foreach ($lang_list as $lang_item) {
+            $lang_file = file_get_contents($lang_item);
+            $lang_line = file($lang_item);
+            $lang_name = $lang_line[20];
+            $lang_name = str_replace(
+                "\$lang['__name__']    = \"", "", $lang_name
+            );
+            $lang_name = str_replace("\";\n", "", $lang_name);
+            $lang_text = $lang_line[21];
+            $lang_text = str_replace(
+                "\$lang['__text__']    = \"", "", $lang_text
+            );
+            $lang_text = str_replace("\";\n", "", $lang_text);
+            $lang_link = basename($lang_item);
+            $lang_link = str_replace(".php", "", $lang_link);
+            echo "                        <option " .
+                 "value=\"$lang_link\" lang=\"$lang_link\" " .
+                 "title=\"$lang_text\">$lang_name</option>\n";
+        }
+
+        unset($lang_item);
+        echo "                    </select>\n" .
+             "                    <input type=\"submit\" " .
+             "name=\"lang_apply\" value=\"#\" " .
+             "title=\"" . $lang['apply'] . "\"/>\n" .
+             "                </div>\n";
+
+        //** Theme
+        if ($css === 1) {
+            echo "                <div>\n" .
+                 "                    <label for=\"css_id\">" .
+                 $lang['theme'] . "</label>\n" .
+                 "                    <select name=\"css_id\" " .
+                 "title=\"" . $lang['theme_title'] . "\">\n";
+
+            $css_list = glob($css_fold . "/*.css");
+            sort($css_list);
+
+            foreach ($css_list as $css_item) {
+                $css_link = basename($css_item);
+                $css_link = str_replace(".css", "", $css_link);
+                $css_text = str_replace(array("-", "_"), " ", $css_link);
+                echo "                        <option value=\"".
+                     "$css_link\" title=\"" . $lang['theme_title'] . " " .
+                     ucwords($css_text) . "\">" . ucwords($css_text);
+
+                if ($css_link === $_SESSION['ac_css']) {
+                    echo " [x]";
+                }
+
+                echo "</option>\n";
+            }
+
+            unset($css_item);
+            echo "                    </select>\n" .
+                 "                    <input type=\"submit\" " .
+                 "name=\"css_apply\" value=\"#\" " .
+                 "title=\"" . $lang['apply'] . "\"/>\n" .
+                 "                </div>\n";
+        }
+
+        //** Emoji
+        if ($emo === 1) {
+            $emo_open = fopen($emo_conf, 'r');
+
+            while (!feof($emo_open)) {
+                $emo_line   = fgets($emo_open);
+                $emo_line   = trim($emo_line);
+                $emo_parr[] = $emo_line;
+            }
+
+            fclose($emo_open);
+            echo "                <h3>" . $lang['emo'] . "</h3>\n" .
+                 "                <pre class=\"emo\">\n";
+
+            foreach ($emo_parr as $emo_code) {
+     
+                if ($emo_code !== "") { 
+                    $emo_line   = explode("|", $emo_code);
+                    $emo_sarr[] = $emo_line;
+                    $emo_calt   = $emo_line[0];
+                    $emo_ckey   = $emo_line[1];
+                    echo $emo_calt .
+                         "<span class=\"emo\">$emo_ckey</span>\n";
+                }
+            }
+
+            unset($emo_code);
+            echo "                </pre>\n";
+        }
+
+        //** Upload
+        if ($up === 1) {
+            echo "                <h3>" . $lang['up'] . "</h3>\n" .
+                 "                <p>" .
+                 $lang['up_max'] . " $up_max</p>\n" .
+
+            //** Image, Base64
+                 "                <ul>\n" .
+                 "                    <li>" . $lang['up_is_b64'] . "\n" .
+                 "                        <ul>\n";
+
+            foreach ($b64_type as $up_b64) {
+                echo "                            <li>$up_b64</li>\n";
+            }
+
+            unset($up_doc);
+            echo "                        </ul>\n" .
+                 "                    </li>\n" .
+                 "                </ul>\n" .
+
+            //** Image, other
+                 "                <ul>\n" .
+                 "                    <li>" . $lang['up_is_img'] . "\n" .
+                 "                        <ul>\n";
+
+            foreach ($up_is_img as $up_img) {
+                echo "                            <li>$up_img</li>\n";
+            }
+
+            unset($up_img);
+            echo "                        </ul>\n" .
+                 "                    </li>\n" .
+                 "                </ul>\n" .
+
+            //** Audio
+                 "                <ul>\n" .
+                 "                    <li>" . $lang['up_is_snd'] . "\n" .
+                 "                        <ul>\n";
+
+            foreach ($up_is_snd as $up_snd) {
+                echo "                            <li>$up_snd</li>\n";
+            }
+
+            unset($up_snd);
+            echo "                        </ul>\n" .
+                 "                    </li>\n" .
+                 "                </ul>\n" .
+
+            //** Video
+                 "                <ul>\n" .
+                 "                    <li>" . $lang['up_is_vid'] . "\n" .
+                 "                        <ul>\n";
+
+            foreach ($up_is_vid as $up_vid) {
+                echo "                            <li>$up_vid</li>\n";
+            }
+
+            unset($up_vid);
+            echo "                        </ul>\n" .
+                 "                    </li>\n" .
+                 "                </ul>\n" .
+
+            //** Document
+                 "                <ul>\n" .
+                 "                    <li>" . $lang['up_is_doc'] . "\n" .
+                 "                        <ul>\n";
+
+            foreach ($up_is_doc as $up_doc) {
+                echo "                            <li>$up_doc</li>\n";
+            }
+
+            unset($up_doc);
+            echo "                        </ul>\n" .
+                 "                    </li>\n" .
+                 "                </ul>\n" .
+
+            //** Archive
+                 "                <ul>\n" .
+                 "                    <li>" . $lang['up_is_arc'] . "\n" .
+                 "                        <ul>\n";
+
+            foreach ($up_is_arc as $up_arc) {
+                echo "                            <li>$up_arc</li>\n";
+            }
+
+            unset($up_arc);
+            echo "                        </ul>\n" .
+                 "                    </li>\n" .
+                 "                </ul>\n";
+        }
+
+        //** Credits
+        if (is_file('credits.php')) {
+            echo "                <h3>" . $lang['credits'] . "</h3>\n";
+            include 'credits.php';
+        }
+
+        echo "        </article>\n";
+    }
+
+    /**
+     *******************************************************************
+     *                                                          NAVBAR *
+     *******************************************************************
+     */
+    echo "            <nav class=\"block\">\n" .
+         "                <div class=\"s\">\n" .
+         "                    " . $lang['text'] . " <input disabled " .
+         "id=\"char\" size=\"4\" value=\"$char\"/>\n" .
+         "                </div>\n" .
          //** Text
          "                <textarea name=\"text\" id=\"text\" " .
-         "rows=\"2\" cols=\"40\" maxlength=\"$char\" " .
+         "rows=\"2\" cols=\"45\" maxlength=\"$char\" " .
          "title=\"" . $lang['text_title'] . "\" " .
          "onkeydown=\"chars(this.form);\" ".
          "onkeypress=\"chars(this.form);\" " .
-         "onkeyup=\"chars(this.form);\"></textarea>\n" .
+         "onkeyup=\"chars(this.form);\">";
+
+    if (!empty($_POST['text'])) {
+        $text_tmp = $_POST['text'];
+    }
+
+    if (isset($text_tmp)) {
+        echo $text_tmp;
+    }
+
+    echo "</textarea>\n" .
          "                <div>\n" .
 
          //** Name -- hidden session token
@@ -879,7 +897,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
     //** Reset log -- super user only
     if ($_SESSION['ac_name'] === $su_pfx) {
         echo "                    <input type=\"submit\" " .
-             "name=\"reset\" value=\"=\" " .
+             "name=\"reset\" id=\"reset\" value=\"=\" " .
              "title=\"" . $lang['reset'] . "\"/>\n";
     }
 
@@ -888,15 +906,15 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
          "id=\"quit\" value=\"x\" " .
          "title=\"" . $lang['quit_title'] . "\"/>\n" .
 
+         //** Save
+         "                    <input type=\"submit\" name=\"save\" " .
+         "id=\"save\" value=\"v\" " .
+         "title=\"" . $lang['save'] . "\"/>\n" .
+
          //** Conf
          "                    <input type=\"submit\" name=\"conf\" " .
          "id=\"conf\" value=\"?\" " .
          "title=\"" . $lang['conf_title'] . "\"/>\n" .
-
-         //** Save
-         "                    <input type=\"submit\" name=\"save\" " .
-         "id=id=\"save\" value=\"v\" " .
-         "title=\"" . $lang['save'] . "\"/>\n" .
 
          //** Post
          "                    <input type=\"submit\" name=\"post\" " .
@@ -907,50 +925,48 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
     //** Upload
     if ($up === 1) {
         echo "                <div>\n" .
-             "                    <input type=\"file\" " .
-             "name=\"file\" title=\"" . $lang['up_select'] . "\"/>\n" .
-             "                    <div><small>" .
-             $lang['up_max'] . " $up_max</small></div>\n" .
+             "                    <input type=\"file\" name=\"file\" " .
+             "title=\"" . $lang['up_select'] . "\"/>\n" .
+             "                    <div class=\"s\">" .
+             $lang['up_max'] . " $up_max</div>\n" .
              "                </div>\n";
     }
 
-    //** Log status
-    if (is_file($log_data) && $log_auto === 1) {
-        echo "                <div><small>" . $lang['reset'] .
-             " $log_stat / $log_size</small></div>\n";
-    }
-
-    //** Default status and JS helper
-    echo "            </form>\n" .
-         "            <div id=\"stat\">\n" .
-         "                <div>$stat</div>\n" .
-         "                <script>\n" .
-         "                var char = $char;\n" .
-         "                var rate = $rate;\n" .
-         "                var data = \"$log_data\";\n" .
-         "                </script>\n" .
-         "                <script src=\"chat.js\"></script>\n" .
-         "                <noscript>" .
-         $lang['js_warn'] . "</noscript>\n" .
-         "            </div>\n";
+    echo "            </nav>\n" .
+         "        </form>\n";
 } else {
     /**
     ********************************************************************
-    *                                                     LOGIN SCREEN *
+    *                                                            LOGIN *
     ********************************************************************
     */
 
-    echo "        <article class=\"block\">\n";
+    echo "        <form action=\"$host#LOGIN\" method=\"POST\" " .
+         "accept-charset=\"UTF-8\">\n" .
+         "            <article class=\"block\" id=\"home\">\n" .
+         "                <h2>" . $lang['welcome'] . "</h2>\n";
 
-    if (is_file($home)) {
-        include "./$home";
+    //** Cookie
+    if (!isset($_COOKIE['ac_cook'])) {
+        echo "                <h3>" . $lang['cook_perm'] . "</h3>\n" .
+             "                <p>\n" .
+             "                    " . $lang['cook_ask'] . "\n" .
+             "                    <input type=\"checkbox\" " .
+             "name=\"cook_perm\" id=\"cook_perm\" ".
+             "title=\"" . $lang['cook_title'] . "\"/> \n" .
+             "                </p>\n" .
+             "                <p>" . $lang['cook_del'] . "</p>\n";
     }
 
-    $stat = $lang['name_info'];
-    echo "        </article>\n" .
-         "        <nav class=\"block\" id=\"login\">\n" .
-         "            <form action=\"$host#LOGIN\" method=\"POST\" " .
-         "accept-charset=\"UTF-8\">\n" .
+    //** Info
+    echo "                <p>" . $lang['name_info'] . "</p>\n" .
+         "                <noscript>\n" .
+         "                    <h3>" . $lang['js_warn'] . "</h3>\n" .
+         "                    <p>" . $lang['js_info'] . "</p>\n" .
+         "                    <p>" . $lang['js_text'] . "</p>\n" .
+         "                </noscript>\n" .
+         "            </article>\n" .
+         "            <nav class=\"block\" id=\"login\">\n" .
          "                <div>\n" .
 
          //** Name
@@ -959,23 +975,12 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
          "                    <input name=\"name\" id=\"name\" " .
          "maxlength=\"16\" title=\"" . $lang['name_title'] . "\"/> \n" .
 
-         //** Cookie permissions
-         "                    <input type=\"checkbox\" checked " .
-         "name=\"cook_perm\" id=\"cook_perm\" ".
-         "title=\"" . $lang['cook_title'] . "\"/> \n" .
-
          //** Login
          "                    <input type=\"submit\" name=\"login\" " .
          "value=\"&gt;\" title=\"" . $lang['login'] . "\"/>\n" .
          "                </div>\n" .
-         "            </form>\n" .
-
-         //** Status and NOSCRIPT info
-         "            <div id=\"stat\">\n" .
-         "                <div>$stat</div>\n" .
-         "                <noscript>" .
-         $lang['js_warn'] . "</noscript>\n" .
-         "            </div>\n";
+         "            </nav>\n" .
+         "        </form>\n";
 }
 
 /**
@@ -984,16 +989,22 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
  ***********************************************************************
  */
 
-echo "            <div id=\"by\"><a href=\" " .
-     "https://github.com/phhpro/atomchat\" " .
-     "title=\"" . $lang['get'] . "\">PHP Atomchat v$ver</a></div>\n" .
-     "        </nav>\n" .
+echo "        <div id=\"by\">\n" .
+     "            <a href=\"https://github.com/phhpro/atomchat\" " .
+     "title=\"" . $lang['get'] . "\">PHP Atomchat v$ver</a>\n" .
+     "        </div>\n" .
+     "        <script>\n" .
+     "        var char = $char;\n" .
+     "        var rate = $rate;\n" .
+     "        var data = \"$log_data\";\n" .
+     "        </script>\n" .
+     "        <script src=\"chat.js\"></script>\n" .
      "    </body>\n" .
      "</html>\n";
 
 /**
  ***********************************************************************
- *                                                    DELETE OLD FILES *
+ *                                                          DELETE OLD *
  ***********************************************************************
  */
 

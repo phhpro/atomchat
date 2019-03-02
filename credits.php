@@ -13,19 +13,40 @@
  * @link      https://github.com/phhpro/atomchat
  */
 ?>
-                <dl>
-                    <dt>schouten.io</dt>
-                    <dd>Initial Dutch translation</dd>
-                    <dt>earab</dt>
-                    <dd>Fixes Arabic translation</dd>
-                    <dt>geany.org</dt>
-                    <dd>Excellent lightweight IDE</dd>
-                    <dt>github.com</dt>
-                    <dd>Source repository</dd>
-                    <dt>translate.google.com</dt>
-                    <dd>Machine translation</dd>
-                    <dt>stackoverflow.com</dt>
-                    <dd>Suggestions and solutions</dd>
-                    <dt>et al</dt>
-                    <dd>...</dd>
-                </dl>
+                <ul>
+                    <li>schouten.io
+                        <ul>
+                            <li>Initial Dutch translation</li>
+                        </ul>
+                    </li>
+                    <li>earab
+                        <ul>
+                            <li>Fixes Arabic translation</li>
+                        </ul>
+                    </li>
+                    <li>geany.org
+                        <ul>
+                            <li>Excellent lightweight IDE</li>
+                        </ul>
+                    </li>
+                    <li>github.com
+                        <ul>
+                            <li>Source repository</li>
+                        </ul>
+                    </li>
+                    <li>translate.google.com
+                        <ul>
+                            <li>Machine translation</li>
+                        </ul>
+                    </li>
+                    <li>stackoverflow.com
+                        <ul>
+                            <li>Inspiration</li>
+                        </ul>
+                    </li>
+                    <li>et al
+                        <ul>
+                            <li>...</li>
+                        </ul>
+                    </li>
+                </ul>

@@ -80,10 +80,9 @@ $log_fold   = "log";
 $log_name   = "atomchat-log";
 $log_mode   = 0;
 
-//** Auto reset, maximum size, low size warning -- percent of $log_size
-$log_auto   = 0;
+//** Maximum size, auto reset
 $log_size   = 100000;
-$log_warn   = 10;
+$log_auto   = 0;
 
 /*
  ***********************************************************************
@@ -94,14 +93,22 @@ $log_warn   = 10;
 /*
  * Super user prefix and suffix
  *
- * Provides an extra button to reset log without leaving the session.
+ * Provides an extra button to reset the log on the fly.
  *
  * Prefix is your public user name visible to everybody.
  * Suffix doubles as password and is obviously not visible.
  *
- * To login as super user enter prefix and suffix without spaces and
- * exactly as they appear here, e.g. atomchat is not ATOMCHAT. Unless
- * both values match you'll be logged in as user, just not super user.
+ * To login as super user, enter prefix and suffix exactly
+ * as they appear here, but without a space in between,
+ * though both may contain spaces in themselves.
+ *
+ * Example
+ *
+ * Prefix: Dr Who
+ * Suffix: Tardis roX
+ *
+ * Login : Dr WhoTardis roX  -- super user : Dr Who
+ * Login : Dr who tarDIS rox -- normal user: Dr who tarDIS rox_345
  */
 $su_pfx     = "atom";
 $su_sfx     = "chat";

@@ -14,7 +14,7 @@
 
 ### Logging
 
-The only logging applies to the chat history. The script can create either daily logs or one continously growing endless log. Additional options exist to set a maximum size, low-size warning trigger, and to auto-reset the log. Downloaded logs maintain all formatting -- no styles though -- and can be viewed offline with any HTML capable application. The default are unmetered daily logs.
+The only logging applies to the chat history. The script can create either daily logs or one continously growing endless log. Additional options exist to set maximum size and auto-reset. Downloaded logs maintain all formatting; no styles though; and can be viewed offline with any HTML capable application. The default are unmetered daily logs.
 
 ### Emojis
 
@@ -22,7 +22,7 @@ The definition file `emo.txt` only covers a basic set to avoid broken symbols on
 
 ### Uploads
 
-Image types `gif, jpeg, jpg, png` are converted to Base64 strings to minimise server requests. Only these will get auto-scaled thumbnails. Any other types are printed as normal text links. You may need to edit your CSP to add an exception for the `base` handler if you don't see the thumbnails. Refer to the *UPLOADS* section regarding file types.
+Image types `gif, jpeg, jpg, png` are converted to Base64 strings to minimise server requests. Only these will render auto-scaled thumbnails. Any other types produce normal text links. You may need to edit your CSP to add an exception for the `base` handler if you don't see the thumbnails. Refer to the *UPLOADS* section for details.
 
 ### Themes
 
