@@ -37,11 +37,15 @@ h1 {
 
 h2 {
     font-size: 115%;
-    margin: 0;
+    margin: 0 0 0.5em 0;
+}
+
+h2 input {
+    float: right;
 }
 
 h3 {
-    font-size: 100%;
+    font-size: 105%;
     margin: 0;
 }
 
@@ -65,35 +69,32 @@ nav {
 
 #post {
     position: absolute;
-    top: 0.2em;
+    top: 0.3em;
     right: 0;
 }
+
 #conf {
     position: absolute;
-    bottom: 2.9em;
+    top: 3em;
     right: 0;
 }
 
 #quit {
     position: absolute;
-    top: 0.2em;
+    top: 0.3em;
     left: 0;
 }
 
 #save {
     position: absolute;
-    bottom: 2.9em;
+    top: 3em;
     left: 0;
 }
 
 #reset {
     position: absolute;
-    bottom: 0.5em;
+    bottom: 0.3em;
     left: 0;
-}
-
-.flr {
-    float: right;
 }
 
 .s {
@@ -129,7 +130,7 @@ input {
 
 input[type=submit] {
     font-family: monospace;
-    font-size: 135%;
+    font-size: 125%;
     font-weight: bold;
     text-align: center;
     width: 32px;
@@ -140,6 +141,7 @@ input[type=submit] {
 }
 
 input[type=file] {
+    font-size: 85%;
     max-width: 65%;
 }
 
@@ -156,8 +158,8 @@ textarea {
     background-color: #9cc;
     background-image: linear-gradient(#99c, #9cc);
     color: #339;
-    font-size: 95%;
     border: 1px solid #99f;
+    font-size: 100%;
     padding: 4px;
     width: 65%;
 }
@@ -167,6 +169,7 @@ select {
     background-image: linear-gradient(#99c, #9cc);
     color: #339;
     border: 1px solid #99f;
+    font-size: 100%;
     margin: 0;
     padding: 1px;
 }
@@ -205,6 +208,12 @@ select {
     font-size: 95%;
 }
 
+.emo {
+    font-family: monospace;
+    font-size: 115%;
+    white-space: pre-nowrap;
+}
+
 input:hover, textarea:hover, select:hover, .item:hover {
     background-color: #99f;
     background-image: linear-gradient(#9cc, #99c);
@@ -221,10 +230,6 @@ a:link, a:visited {
 a:hover, a:active {
     background-color: transparent;
     color: #003;
-}
-
-.emo {
-    font-size: 135%;
 }
 
 hr {
@@ -263,19 +268,11 @@ hr {
 }
 
 @media screen and (max-width: 800px) {
-    body {
-        font-size: 85%;
-    }
-
     article {
         font-size: 100%;
     }
 
     .item_text {
         font-size: 125%;
-    }
-
-    input {
-        font-size: 85%;
     }
 }
