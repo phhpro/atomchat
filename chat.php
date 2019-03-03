@@ -241,7 +241,7 @@ if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
         }
     }
 
-    unset($lang_obj);    
+    unset($lang_obj);
 }
 
 if (isset($_POST['lang_apply'])) {
@@ -563,10 +563,9 @@ if (isset($_POST['login'])) {
         if (!isset($_COOKIE['ac_cook'])) {
 
             if (isset($cook_perm)) {
-                setcookie('ac_cook', '1', $cook_time, '/');
+                setcookie('ac_cook', 'accept', $cook_time, '/');
 
                 if (count($_COOKIE) > 0) {
-                    setcookie('ac_cook', '1', $cook_time, '/');
                     setcookie('ac_lang', $lang_def, $cook_time, '/');
                     setcookie('ac_css', $css_def, $cook_time, '/');
                     $_SESSION['ac_lang'] = $_COOKIE['ac_lang'];
@@ -659,7 +658,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
 
              //** Close
              "                    <input type=\"submit\" value=\"x\" " .
-             "title=\"" . $lang['close'] . "\" class=\"flr\"/>\n" .
+             "title=\"" . $lang['close'] . "\"/>\n" .
              "                </h2>\n" .
 
              //** Language
@@ -695,7 +694,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
         unset($lang_item);
         echo "                    </select>\n" .
              "                    <input type=\"submit\" " .
-             "name=\"lang_apply\" value=\"#\" " .
+             "name=\"lang_apply\" value=\"&gt;\" " .
              "title=\"" . $lang['apply'] . "\"/>\n" .
              "                </div>\n";
 
@@ -713,13 +712,25 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
             foreach ($css_list as $css_item) {
                 $css_link = basename($css_item);
                 $css_link = str_replace(".css", "", $css_link);
-                $css_text = str_replace(array("-", "_"), " ", $css_link);
-                echo "                        <option value=\"".
-                     "$css_link\" title=\"" . $lang['theme_title'] . " " .
+                $css_text
+                    = str_replace(array("-", "_"), " ", $css_link);
+                echo "                        <option " .
+                     "value=\"$css_link\" " .
+                     "title=\"" . $lang['theme_title'] . " " .
                      ucwords($css_text) . "\">" . ucwords($css_text);
 
-                if ($css_link === $_SESSION['ac_css']) {
+
+                if (isset($_COOKIE['ac_css'])
+                    && $css_link === $_COOKIE['ac_css']
+                ) {
                     echo " [x]";
+                } elseif ($css_link === $_SESSION['ac_css']) {
+                    echo " [x]";
+                } else {
+                    /*
+                     * No cookie, no session. Must be a dinosaur.
+                     * We shouldn't really be here anyway.
+                     */
                 }
 
                 echo "</option>\n";
@@ -728,7 +739,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
             unset($css_item);
             echo "                    </select>\n" .
                  "                    <input type=\"submit\" " .
-                 "name=\"css_apply\" value=\"#\" " .
+                 "name=\"css_apply\" value=\"&gt;\" " .
                  "title=\"" . $lang['apply'] . "\"/>\n" .
                  "                </div>\n";
         }
@@ -745,19 +756,17 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
 
             fclose($emo_open);
             echo "                <h3>" . $lang['emo'] . "</h3>\n" .
-                 "                <pre class=\"emo\">\n";
-
+                 "                <p class=\"emo\">";
             foreach ($emo_larr as $emo_item) {
      
                 if ($emo_item !== "") { 
                     $emo_line = explode("|", $emo_item);
-                    echo $emo_line[0] . " <span class=\"emo\">" .
-                         $emo_line[1] . "</span>\n";
+                    echo $emo_line[0] . $emo_line[1] . " ";
                 }
             }
 
             unset($emo_item);
-            echo "                </pre>\n";
+            echo "                </p>\n";
         }
 
         //** Upload
@@ -888,7 +897,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
 
     /**
      *******************************************************************
-     *                                                          NAVBAR *
+     *                                                             NAV *
      *******************************************************************
      */
     echo "            <nav class=\"block\">\n" .
@@ -943,7 +952,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
 
          //** Post
          "                    <input type=\"submit\" name=\"post\" " .
-         "id=\"post\" value=\"#\" " .
+         "id=\"post\" value=\"&gt;\" " .
          "title=\"" . $lang['post'] . "\"/>\n" .
          "                </div>\n";
 
@@ -1051,4 +1060,5 @@ if ($up_del === 1) {
 }
 
 //** Lulu time
+ob_flush();
 flush();
