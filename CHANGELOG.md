@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
-- Bell works on sender but doesn't get pushed to receiver
+- Bell works on sender but doesn't get pushed to receiver. HELP WANTED
 
 ## [20190303] - 2019-03-03
 ### Added
@@ -14,12 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Translation TR (Turkish)
 
 ### Changed
-- Update credits section
+- Update credits section and merged into main script
+- Clean-up emoji handler
 
 ## [20190302] - 2019-03-02
 ### Changed
 - Merged home screen into main script
-- Fix cookie handling
+- Fix cookie handler
 - Navigation buttons from below to left and right of textarea to save height
 
 ### Removed

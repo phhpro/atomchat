@@ -84,9 +84,7 @@ if (!is_file('conf.php')) {
             if (filesize($emo_conf) < 16 && trim($emo_trim) === false) {
                 $exit = "Invalid emoji definition!";
             } else {
-                $emo_parr = array();
-                $emo_sarr = array();
-                $emo_code = "";
+                $emo_larr = array();
             }
         } else {
             $exit = "Missing emoji definition!";
@@ -182,6 +180,8 @@ function go($tag)
 $su        = $su_pfx . $su_sfx;
 $log_init  = "<div class=\"item_log\">LOG INIT $date</div>\n";
 $cook_time = time() + (86400 * 30);
+$cr_data   = "credits.dat";
+$cr_line   = array();
 
 /**
  ***********************************************************************
@@ -250,6 +250,7 @@ if (isset($_POST['lang_apply'])) {
     if (isset($_COOKIE['ac_lang'])) {
         setcookie('ac_lang', $lang_id, $cook_time, '/');
         $lang_id             = $_COOKIE['ac_lang'];
+        $_COOKIE['ac_lang']  = $lang_id;
     } else {
         $_SESSION['ac_lang'] = $lang_id;
         $lang_id             = $_SESSION['ac_lang'];
@@ -282,6 +283,7 @@ if (is_file($lang_data)) {
     if (isset($_COOKIE['ac_lang'])) {
         setcookie('ac_lang', $lang_def, $cook_time, '/');
         $lang_def            = $_COOKIE['ac_lang'];
+        $_COOKIE['ac_lang']  = $lang_def;
     } else {
         $_SESSION['ac_lang'] = $lang_def;
         $lang_def            = $_SESSION['ac_lang'];
@@ -309,7 +311,8 @@ if (isset($_POST['css_apply'])) {
 
     if (isset($_COOKIE['ac_css'])) {
         setcookie('ac_css', $css_id, $cook_time, '/');
-        $css_id = $_COOKIE['ac_css'];
+        $_COOKIE['ac_css'] = $css_id;
+        $css_id            = $_COOKIE['ac_css'];
     } else {
         $_SESSION['ac_css'] = $css_id;
         $css_id = $_SESSION['ac_css'];
@@ -378,29 +381,27 @@ if (isset($_POST['post'])) {
             while (!feof($emo_open)) {
                 $emo_line   = fgets($emo_open);
                 $emo_line   = trim($emo_line);
-                $emo_parr[] = $emo_line;
+                $emo_larr[] = $emo_line;
             }
 
             fclose($emo_open);
 
-            foreach ($emo_parr as $emo_code) {
-                $emo_line   = explode("|", $emo_code);
-                $emo_sarr[] = $emo_line;
-                $emo_calt   = $emo_line[0];
-                $emo_ckey   = $emo_line[1];
+            foreach ($emo_larr as $emo_item) {
+                $emo_line = explode("|", $emo_item);
 
-                if (stripos($text, $emo_calt) !== false) {
+                if (stripos($text, $emo_line[0]) !== false) {
                     $text = trim(
                         str_replace(
-                            $emo_calt,
-                            "<span class=\"emo\">$emo_ckey</span>",
+                            $emo_line[0],
+                            "<span class=\"emo\">" .
+                            $emo_line[1] . "</span>",
                             $text
                         )
                     );
                 }
             }
 
-            unset($emo_code);
+            unset($emo_item);
         }
     }
 
@@ -739,26 +740,23 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
             while (!feof($emo_open)) {
                 $emo_line   = fgets($emo_open);
                 $emo_line   = trim($emo_line);
-                $emo_parr[] = $emo_line;
+                $emo_larr[] = $emo_line;
             }
 
             fclose($emo_open);
             echo "                <h3>" . $lang['emo'] . "</h3>\n" .
                  "                <pre class=\"emo\">\n";
 
-            foreach ($emo_parr as $emo_code) {
+            foreach ($emo_larr as $emo_item) {
      
-                if ($emo_code !== "") { 
-                    $emo_line   = explode("|", $emo_code);
-                    $emo_sarr[] = $emo_line;
-                    $emo_calt   = $emo_line[0];
-                    $emo_ckey   = $emo_line[1];
-                    echo $emo_calt .
-                         "<span class=\"emo\">$emo_ckey</span>\n";
+                if ($emo_item !== "") { 
+                    $emo_line = explode("|", $emo_item);
+                    echo $emo_line[0] . " <span class=\"emo\">" .
+                         $emo_line[1] . "</span>\n";
                 }
             }
 
-            unset($emo_code);
+            unset($emo_item);
             echo "                </pre>\n";
         }
 
@@ -854,12 +852,38 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
         }
 
         //** Credits
-        if (is_file('credits.php')) {
-            echo "                <h3>" . $lang['credits'] . "</h3>\n";
-            include 'credits.php';
+        if (is_file($cr_data)) {
+            $cr_open = fopen($cr_data, 'r');
+
+            while (!feof($cr_open)) {
+                $cr_lget   = fgets($cr_open);
+                $cr_lget   = trim($cr_lget);
+                $cr_line[] = $cr_lget;
+            }
+
+            fclose($cr_open);
+            echo "                <h3>" . $lang['credits'] . "</h3>\n" .
+                 "                <ul>\n";
+
+            foreach ($cr_line as $cr_item) {
+             
+                if ($cr_item !== "") { 
+                    $cr_line = explode("|", $cr_item);
+                    echo "                    <li>" .
+                         $cr_line[0] . "\n" .
+                         "                        <ul>\n" .
+                         "                            <li>" .
+                         $cr_line[1] . "</li>\n" .
+                         "                        </ul>\n" .
+                         "                    </li>\n";
+                }
+            }
+
+            unset($cr_item);
+            echo "                </ul>\n";
         }
 
-        echo "        </article>\n";
+        echo "            </article>\n";
     }
 
     /**
