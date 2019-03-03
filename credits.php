@@ -14,11 +14,6 @@
  */
 ?>
                 <ul>
-                    <li>schouten.io
-                        <ul>
-                            <li>Initial Dutch translation</li>
-                        </ul>
-                    </li>
                     <li>earab
                         <ul>
                             <li>Fixes Arabic translation</li>
@@ -34,14 +29,19 @@
                             <li>Source repository</li>
                         </ul>
                     </li>
-                    <li>translate.google.com
+                    <li>schouten.io
                         <ul>
-                            <li>Machine translation</li>
+                            <li>Initial Dutch translation</li>
                         </ul>
                     </li>
                     <li>stackoverflow.com
                         <ul>
                             <li>Inspiration</li>
+                        </ul>
+                    </li>
+                    <li>translate.google.com
+                        <ul>
+                            <li>Machine translation</li>
                         </ul>
                     </li>
                     <li>et al
