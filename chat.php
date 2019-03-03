@@ -249,8 +249,8 @@ if (isset($_POST['lang_apply'])) {
 
     if (isset($_COOKIE['ac_lang'])) {
         setcookie('ac_lang', $lang_id, $cook_time, '/');
-        $lang_id             = $_COOKIE['ac_lang'];
         $_COOKIE['ac_lang']  = $lang_id;
+        $lang_id             = $_COOKIE['ac_lang'];
     } else {
         $_SESSION['ac_lang'] = $lang_id;
         $lang_id             = $_SESSION['ac_lang'];
