@@ -30,7 +30,7 @@
 
 
 //** Version
-$ver = "20190302";
+$ver = "20190303";
 
 //** Required to get around "Headers already sent" warning
 ob_start();
@@ -175,6 +175,16 @@ function go($tag)
 
 /**
  ***********************************************************************
+ *                                                              BASICS *
+ ***********************************************************************
+ */
+
+$su        = $su_pfx . $su_sfx;
+$log_init  = "<div class=\"item_log\">LOG INIT $date</div>\n";
+$cook_time = time() + (86400 * 30);
+
+/**
+ ***********************************************************************
  *                                                                 URL *
  ***********************************************************************
  */
@@ -203,7 +213,7 @@ if (is_file($log_data) && $log_auto === 1) {
 
     if ($log_size - filesize($log_data) <= 0) {
         unlink($log_data);
-        file_put_contents($log_data, $init);
+        file_put_contents($log_data, $log_init);
     }
 }
 
@@ -236,13 +246,14 @@ if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
 
 if (isset($_POST['lang_apply'])) {
     $lang_id = htmlentities($_POST['lang_id'], ENT_QUOTES, 'UTF-8');
-    $_SESSION['ac_lang'] = $lang_id;
 
     if (isset($_COOKIE['ac_lang'])) {
         setcookie('ac_lang', $lang_id, $cook_time, '/');
+        $lang_id             = $_COOKIE['ac_lang'];
+    } else {
+        $_SESSION['ac_lang'] = $lang_id;
+        $lang_id             = $_SESSION['ac_lang'];
     }
-
-    $lang_id = $_SESSION['ac_lang'];
 } else {
 
     if (isset($_COOKIE['ac_lang'])) {
@@ -268,10 +279,12 @@ if (is_file($lang_data)) {
      * text. If for whatever obscure reason that one's gone too,
      * the script gracefully dies right here.
      */
-    $_SESSION['ac_lang'] = $lang_def;
-
     if (isset($_COOKIE['ac_lang'])) {
         setcookie('ac_lang', $lang_def, $cook_time, '/');
+        $lang_def            = $_COOKIE['ac_lang'];
+    } else {
+        $_SESSION['ac_lang'] = $lang_def;
+        $lang_def            = $_SESSION['ac_lang'];
     }
 
     include $lang_fold . '/' . $lang_def . '.php';
@@ -294,13 +307,11 @@ if (is_file($lang_data)) {
 if (isset($_POST['css_apply'])) {
     $css_id = htmlentities($_POST['css_id'], ENT_QUOTES, 'UTF-8');
 
-    if ($css_id !== "") {
+    if (isset($_COOKIE['ac_css'])) {
+        setcookie('ac_css', $css_id, $cook_time, '/');
+        $css_id = $_COOKIE['ac_css'];
+    } else {
         $_SESSION['ac_css'] = $css_id;
-
-        if (isset($_COOKIE['ac_css'])) {
-            setcookie('ac_css', $css_id, $cook_time, '/');
-        }
-
         $css_id = $_SESSION['ac_css'];
     }
 } else {
@@ -315,15 +326,6 @@ if (isset($_POST['css_apply'])) {
 }
 
 $css_file = $css_fold . "/" . $css_id . ".css";
-
-/**
- ***********************************************************************
- *                                                                MISC *
- ***********************************************************************
- */
-
-$su   = $su_pfx . $su_sfx;
-$init = "<div class=\"item_log\">LOG INIT $date</div>\n";
 
 /**
  ***********************************************************************
@@ -349,7 +351,7 @@ if (isset($_POST['save'])) {
 
 if (isset($_POST['reset']) && is_file($log_data)) {
     unlink($log_data);
-    file_put_contents($log_data, $init);
+    file_put_contents($log_data, $log_init);
     go('RESET_LOG');
 }
 
@@ -560,10 +562,9 @@ if (isset($_POST['login'])) {
         if (!isset($_COOKIE['ac_cook'])) {
 
             if (isset($cook_perm)) {
-                setcookie('ac_cook', '1');
+                setcookie('ac_cook', '1', $cook_time, '/');
 
                 if (count($_COOKIE) > 0) {
-                    $cook_time = time() + (86400 * 30);
                     setcookie('ac_cook', '1', $cook_time, '/');
                     setcookie('ac_lang', $lang_def, $cook_time, '/');
                     setcookie('ac_css', $css_def, $cook_time, '/');
@@ -574,9 +575,9 @@ if (isset($_POST['login'])) {
                 $_SESSION['ac_lang'] = $lang_def;
                 $_SESSION['ac_css']  = $css_def;
             }
-
-            go('LOGIN');
         }
+
+        go('LOGIN');
     }
 }
 
@@ -639,7 +640,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
     if (is_file($log_data)) {
         include $log_data;
     } else {
-        file_put_contents($log_data, $init);
+        file_put_contents($log_data, $log_init);
         include $log_data;
     }
 
@@ -952,7 +953,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
              "                <p>\n" .
              "                    " . $lang['cook_ask'] . "\n" .
              "                    <input type=\"checkbox\" " .
-             "name=\"cook_perm\" id=\"cook_perm\" ".
+             "name=\"cook_perm\" id=\"cook_perm\" " .
              "title=\"" . $lang['cook_title'] . "\"/> \n" .
              "                </p>\n" .
              "                <p>" . $lang['cook_del'] . "</p>\n";
