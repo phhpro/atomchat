@@ -14,7 +14,7 @@
  */
 ?>
                 <ul>
-                    <li>earab
+                    <li>earabic
                         <ul>
                             <li>Fixes Arabic translation</li>
                         </ul>
