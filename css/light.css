@@ -194,7 +194,7 @@ select {
 .item_log {
     background-color: transparent;
     color: #666;
-    font-size: 95%;
+    font-size: 75%;
 }
 
 input:hover, textarea:hover, select:hover, .item:hover {
