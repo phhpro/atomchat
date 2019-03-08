@@ -80,6 +80,8 @@ if (!is_file($conf_dat)) {
                  "\$up_max=500000;\n";
 
     file_put_contents($conf_dat, $conf_txt);
+
+    //** FIXME -- may produce endless loop !!!
     header("Location: #WELCOME");
     exit;
 }
@@ -93,7 +95,7 @@ if (!is_file($conf_dat)) {
 if (!is_file($conf_dat)) {
     $exit = "Missing config!";
 } else {
-    include "./$conf_dat";
+    include $conf_dat;
 }
 
 if (!is_dir($lang_dir)) {
