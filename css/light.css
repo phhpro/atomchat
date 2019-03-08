@@ -15,38 +15,12 @@ body {
 }
 
 article {
-    font-size: 95%;
     position: fixed;
-    top: 2.2em;
+    top: 0;
     right: 0;
-    bottom: 9.5em;
+    bottom: 10em;
     left: 0;
     overflow: auto;
-}
-
-#settings, #login {
-    z-index: 2;
-}
-
-h1 {
-    font-size: 95%;
-    text-align: center;
-    margin: 0;
-    padding: 0 0 4px 0;
-}
-
-h2 {
-    font-size: 115%;
-    margin: 0 0 0.5em 0;
-}
-
-h2 input {
-    float: right;
-}
-
-h3 {
-    font-size: 105%;
-    margin: 0;
 }
 
 nav {
@@ -56,15 +30,6 @@ nav {
     right: 0;
     bottom: 0;
     left: 0;
-    height: 9em;
-}
-
-#home {
-    bottom: 5.5em;
-}
-
-#login {
-    height: 5em;
 }
 
 #post {
@@ -91,33 +56,56 @@ nav {
     left: 0;
 }
 
-#reset {
+#su {
     position: absolute;
     bottom: 0.3em;
     left: 0;
 }
 
-.s {
-    font-size: 85%;
-}
-
 #by {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    font-size: 85%;
-    text-align: center;
-    padding: 4px;
-    z-index: 2;
+    font-size: 75%;
+    padding-top: 8px;
 }
 
-label, ul li {
-    font-weight: bold;
+#by span {
+    display: inline-block;
+    vertical-align: middle;
+    width: 4px;
+    height: 4px;
+    background-color: #000;
+    color: #fff;
+    border-radius: 50%;
+    animation: anim 0.9s infinite alternate;
 }
 
-ul li ul li {
-    font-weight: normal;
+#by span:nth-of-type(2) {
+    animation-delay: 0.3s;
+}
+
+#by span:nth-of-type(3) {
+    animation-delay: 0.6s;
+}
+
+@keyframes anim {
+    0% {
+        opacity: 0.9;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0.1;
+        transform: translateY(-8px);
+    }
+}
+
+h1 {
+    font-size: 125%;
+    margin: 0 0 1em 0;
+}
+
+h2 {
+    font-size: 115%;
+    margin: 0;
 }
 
 input {
@@ -125,7 +113,9 @@ input {
     background-image: linear-gradient(#fff, #666);
     color: #333;
     border: 1px solid #999;
+    font-size: 100%;
     vertical-align: middle;
+    max-width: 50%;
 }
 
 input[type=submit] {
@@ -136,7 +126,6 @@ input[type=submit] {
     width: 32px;
     height: 32px;
     margin: 8px;
-    padding: 4px;
     border-radius: 50%;
 }
 
@@ -145,7 +134,7 @@ input[type=file] {
     max-width: 65%;
 }
 
-#char {
+#txta {
     background-color: transparent;
     background-image: none;
     color: #000;
@@ -159,7 +148,7 @@ textarea {
     background-image: linear-gradient(#fff, #666);
     color: #000;
     border: 1px solid #999;
-    font-size: 100%;
+    margin: 4px;
     padding: 4px;
     width: 65%;
 }
@@ -208,17 +197,42 @@ select {
     font-size: 95%;
 }
 
-.emo {
-    font-family: monospace;
-    font-size: 115%;
-    white-space: pre-nowrap;
-}
-
 input:hover, textarea:hover, select:hover, .item:hover {
     background-color: #999;
     background-image: linear-gradient(#666, #fff);
     color: #000;
     border: 1px solid #666;
+}
+
+ul li {
+    font-size: 75%;
+    font-weight: bold;
+}
+
+ul li ul li {
+    font-size: 115%;
+    font-weight: normal;
+}
+
+#super p {
+    text-align: right;
+}
+
+#super .aleft {
+    text-align: left;
+}
+
+#super label {
+    float: left;
+}
+
+#super select {
+    font-size: 85%;
+    padding: 0;
+}
+
+p#nav {
+    text-align: center;
 }
 
 a:link, a:visited {
@@ -232,47 +246,20 @@ a:hover, a:active {
     color: #000;
 }
 
+.emo {
+    font-family: monospace;
+    font-size: 115%;
+    white-space: pre-nowrap;
+}
+
+.glue {
+    white-space: line-wrap;
+}
+
+.s {
+    font-size: 85%;
+}
+
 hr {
     display: none;
-}
-
-#anim span {
-    display: inline-block;
-    vertical-align: middle;
-    width: 4px;
-    height: 4px;
-    background-color: #000;
-    color: #fff;
-    border-radius: 50%;
-    animation: anim 0.9s infinite alternate;
-}
-
-#anim span:nth-of-type(2) {
-    animation-delay: 0.3s;
-}
-
-#anim span:nth-of-type(3) {
-    animation-delay: 0.6s;
-}
-
-@keyframes anim {
-    0% {
-        opacity: 0.9;
-        transform: translateY(0);
-    }
-
-    100% {
-        opacity: 0.1;
-        transform: translateY(-8px);
-    }
-}
-
-@media screen and (max-width: 800px) {
-    article {
-        font-size: 100%;
-    }
-
-    .item_text {
-        font-size: 125%;
-    }
 }
