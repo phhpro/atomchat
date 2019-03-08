@@ -1,12 +1,22 @@
 # Changelog
-All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+Project: [PHP Atomchat](https://github.com/phhpro/atomchat)
 
 ## [Unreleased]
 ### Changed
-- Bell works on sender but doesn't get pushed to receiver. HELP WANTED
+- Bell works on sender but doesn't get pushed to receiver.
+- *Make user posts editable???*
+- *Add moderator feature to edit/delete posts???*
+
+## [20190308] - 2019-03-08
+### Added
+- Super user screen to configure script without having to manually edit.
+- Timeout handler. Experimental. Default: 15 minutes between posts. *Requires manual change of `$out` in `conf.php'*.
+
+### Changed
+- Language files and themes updated to match new features.
+- Fixed double-render when viewed without styles.
+- Moved navigation mark-up above chatlog to keep focus when viewed without styles.
 
 ## [20190303] - 2019-03-03
 ### Added

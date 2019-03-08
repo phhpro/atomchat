@@ -16,9 +16,9 @@
 function chars(chat)
 {
     if (chat.text.value.length >= char) {
-        chat.text.value = chat.text.value.substring(0, char);
+        chat.txta.value = chat.text.value.substring(0, text);
     } else {
-        chat.char.value = char - chat.text.value.length;
+        chat.txta.value = char - chat.text.value.length;
     }
 }
 
