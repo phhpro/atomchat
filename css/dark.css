@@ -115,6 +115,7 @@ input {
     border: 1px solid #333;
     font-size: 100%;
     vertical-align: middle;
+    max-width: 50%;
 }
 
 input[type=submit] {
@@ -170,7 +171,7 @@ select {
 .item_head {
     background-color: #333;
     color: #999;
-    font-size: 75%;
+    font-size: 85%;
     font-weight: bold;
     padding: 2px;
 }
