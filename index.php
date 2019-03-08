@@ -33,6 +33,16 @@ $ver  = "20190308";
 
 /**
  ***********************************************************************
+ *                                                            FIRSTRUN *
+ ***********************************************************************
+ */
+
+if (isset($run) && $run < 1) {
+    echo "FATAL: Cannot write config! Script halted.";
+}
+
+/**
+ ***********************************************************************
  *                                                              CONGIG *
  ***********************************************************************
  */
@@ -80,8 +90,7 @@ if (!is_file($conf_dat)) {
                  "\$up_max=500000;\n";
 
     file_put_contents($conf_dat, $conf_txt);
-
-    //** FIXME -- may produce endless loop !!!
+    $run ++;
     header("Location: #WELCOME");
     exit;
 }
@@ -92,11 +101,7 @@ if (!is_file($conf_dat)) {
  ***********************************************************************
  */
 
-if (!is_file($conf_dat)) {
-    $exit = "Missing config!";
-} else {
-    include $conf_dat;
-}
+include $conf_dat;
 
 if (!is_dir($lang_dir)) {
     $exit = "Missing language folder!";
