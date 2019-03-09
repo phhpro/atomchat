@@ -3,109 +3,16 @@
 body {
     background-color: #000;
     color: #666;
-    font-family: sans-serif;
 }
 
 .block {
     background-color: #000;
     color: #666;
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 4px;
-}
-
-article {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 10em;
-    left: 0;
-    overflow: auto;
-}
-
-nav {
-    font-size: 95%;
-    text-align: center;
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    left: 0;
-}
-
-#post {
-    position: absolute;
-    top: 0.3em;
-    right: 0;
-}
-
-#conf {
-    position: absolute;
-    top: 3em;
-    right: 0;
-}
-
-#quit {
-    position: absolute;
-    top: 0.3em;
-    left: 0;
-}
-
-#save {
-    position: absolute;
-    top: 3em;
-    left: 0;
-}
-
-#su {
-    position: absolute;
-    bottom: 0.3em;
-    left: 0;
-}
-
-#by {
-    font-size: 75%;
-    padding-top: 8px;
 }
 
 #by span {
-    display: inline-block;
-    vertical-align: middle;
-    width: 4px;
-    height: 4px;
     background-color: #666;
     color: #000;
-    border-radius: 50%;
-    animation: anim 0.9s infinite alternate;
-}
-
-#by span:nth-of-type(2) {
-    animation-delay: 0.3s;
-}
-
-#by span:nth-of-type(3) {
-    animation-delay: 0.6s;
-}
-
-@keyframes anim {
-    0% {
-        opacity: 0.9;
-        transform: translateY(0);
-    }
-
-    100% {
-        opacity: 0.1;
-        transform: translateY(-8px);
-    }
-}
-
-h1 {
-    font-size: 125%;
-    margin: 0 0 1em 0;
-}
-
-h2 {
-    font-size: 115%;
-    margin: 0;
 }
 
 input {
@@ -113,34 +20,10 @@ input {
     background-image: linear-gradient(#666, #000);
     color: #999;
     border: 1px solid #333;
-    font-size: 100%;
-    vertical-align: middle;
-    max-width: 50%;
-}
-
-input[type=submit] {
-    font-family: monospace;
-    font-size: 125%;
-    font-weight: bold;
-    text-align: center;
-    width: 32px;
-    height: 32px;
-    margin: 8px;
-    border-radius: 50%;
-}
-
-input[type=file] {
-    font-size: 75%;
-    max-width: 65%;
 }
 
 #txta {
-    background-color: transparent;
-    background-image: none;
     color: #666;
-    text-align: center;
-    border: 0;
-    padding: 0 0 2px 0;
 }
 
 textarea {
@@ -148,9 +31,6 @@ textarea {
     background-image: linear-gradient(#666, #000);
     color: #ccc;
     border: 1px solid #333;
-    margin: 4px;
-    padding: 4px;
-    width: 65%;
 }
 
 select {
@@ -158,22 +38,15 @@ select {
     background-image: linear-gradient(#666, #000);
     color: #999;
     border: 1px solid #333;
-    font-size: 100%;
-    margin: 0;
-    padding: 1px;
 }
 
 .item {
     border: 1px solid #333;
-    margin: 8px 0 16px 0;
 }
 
 .item_head {
     background-color: #333;
     color: #999;
-    font-size: 85%;
-    font-weight: bold;
-    padding: 2px;
 }
 
 .item:hover .item_head {
@@ -181,20 +54,9 @@ select {
     color: #000;
 }
 
-.item_name {
-    float: right;
-}
-
-.item_text {
-    white-space: pre-wrap;
-    margin: 0;
-    padding: 2px;
-}
-
 .item_log {
     background-color: transparent;
     color: #333;
-    font-size: 75%;
 }
 
 input:hover, textarea:hover, select:hover, .item:hover {
@@ -204,41 +66,9 @@ input:hover, textarea:hover, select:hover, .item:hover {
     border: 1px solid #666;
 }
 
-ul li {
-    font-size: 75%;
-    font-weight: bold;
-}
-
-ul li ul li {
-    font-size: 115%;
-    font-weight: normal;
-}
-
-#super p {
-    text-align: right;
-}
-
-#super .aleft {
-    text-align: left;
-}
-
-#super label {
-    float: left;
-}
-
-#super select {
-    font-size: 85%;
-    padding: 0;
-}
-
-p#nav {
-    text-align: center;
-}
-
 a:link, a:visited {
     background-color: transparent;
     color: #ccc;
-    text-decoration: none;
 }
 
 a:hover, a:active {
@@ -246,20 +76,8 @@ a:hover, a:active {
     color: #fff;
 }
 
-.emo {
-    font-family: monospace;
-    font-size: 115%;
-    white-space: pre-nowrap;
-}
-
-.glue {
-    white-space: line-wrap;
-}
-
-.s {
-    font-size: 85%;
-}
-
-hr {
-    display: none;
+#mo_list {
+    background-color: #000;
+    color: #666;
+    border: 1px solid #333;
 }
