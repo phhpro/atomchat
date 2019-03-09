@@ -3,14 +3,12 @@
 **PHP Atomchat** is a **free PHP chat script** for low-volume and individual websites.
 
 ## Features
-- Works OOTB
-- Completely anonymous
+- Works OOTB and is completely anonymous
 - No registration or passwords ever
 - Emoji auto-conversion and auto-select
-- File uploads
-- Fully themeable
-- Multi-lingual
-- Responsive
+- Fully themeable and multi-lingual
+- Responsive, cross browser, cross platform
+- File uploads, next to zero dependencies
 - No database required
 
 ### Config
