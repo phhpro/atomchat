@@ -1,0 +1,265 @@
+@charset "UTF-8";
+
+body {
+    font-family: sans-serif;
+}
+
+.block {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 4px;
+}
+
+article {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 10em;
+    left: 0;
+    overflow: auto;
+}
+
+nav {
+    font-size: 95%;
+    text-align: center;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    max-height: 10em;
+}
+
+#post {
+    position: absolute;
+    top: 0.3em;
+    right: 0;
+}
+
+#conf {
+    position: absolute;
+    top: 3em;
+    right: 0;
+}
+
+#quit {
+    position: absolute;
+    top: 0.3em;
+    left: 0;
+}
+
+#save {
+    position: absolute;
+    top: 3em;
+    left: 0;
+}
+
+#su {
+    position: absolute;
+    bottom: 0.3em;
+    left: 0;
+}
+
+#by {
+    font-size: 75%;
+    padding-top: 8px;
+}
+
+#by span {
+    display: inline-block;
+    vertical-align: middle;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    animation: anim 0.9s infinite alternate;
+}
+
+#by span:nth-of-type(2) {
+    animation-delay: 0.3s;
+}
+
+#by span:nth-of-type(3) {
+    animation-delay: 0.6s;
+}
+
+@keyframes anim {
+    0% {
+        opacity: 0.9;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0.1;
+        transform: translateY(-8px);
+    }
+}
+
+h1 {
+    font-size: 125%;
+    margin: 0 0 1em 0;
+}
+
+h2 {
+    font-size: 115%;
+    margin: 0;
+}
+
+input {
+    font-size: 100%;
+    vertical-align: middle;
+    max-width: 50%;
+}
+
+input[type=submit] {
+    font-family: monospace;
+    font-size: 125%;
+    font-weight: bold;
+    text-align: center;
+    width: 32px;
+    height: 32px;
+    margin: 8px;
+    border-radius: 50%;
+}
+
+input[type=file] {
+    font-size: 85%;
+    max-width: 65%;
+}
+
+#txta {
+    background-color: transparent;
+    background-image: none;
+    border: 0;
+    padding: 0 0 2px 0;
+}
+
+textarea {
+    padding: 4px;
+    width: 65%;
+}
+
+select {
+    font-size: 100%;
+    margin: 0;
+    padding: 1px;
+}
+
+.item {
+    margin: 8px 0 16px 0;
+}
+
+.item_head {
+    font-size: 85%;
+    font-weight: bold;
+    padding: 2px;
+}
+
+.item_name {
+    float: right;
+}
+
+.item_text {
+    white-space: pre-wrap;
+    margin: 0;
+    padding: 2px;
+}
+
+.item_log {
+    font-size: 75%;
+}
+
+ul li {
+    font-size: 75%;
+    font-weight: bold;
+}
+
+ul li ul li {
+    font-size: 115%;
+    font-weight: normal;
+}
+
+#super p {
+    text-align: right;
+}
+
+#super .aleft {
+    text-align: left;
+}
+
+#super label {
+    float: left;
+}
+
+#super select {
+    font-size: 85%;
+    padding: 0;
+}
+
+p#nav {
+    text-align: center;
+}
+
+a:link, a:visited {
+    text-decoration: none;
+}
+
+#mo {
+    width: 66%;
+    font-size: 85%;
+    text-align: center;
+    margin: 4px auto;
+}
+
+#mo_list {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 65%;
+    height: 4em;
+    overflow: auto;
+    text-align: left;
+    margin: 4px -4px;
+    padding: 2px 2px 4px 2px;
+    visibility: hidden;
+}
+
+#mo:hover #mo_list {
+    top: 1.5em;
+    visibility: visible;
+}
+
+.emo_id {
+    background-color: transparent;
+    color: inherit;
+    border: 0;
+    font-family: monospace;
+    font-size: 135%;
+    font-weight: bold;
+    text-align: center;
+    width: 22px;
+    height: 22px;
+    margin: 4px;
+    padding: 0;
+    border-radius: 50%;
+}
+
+.emo_id:hover {
+    border: 0;
+}
+
+.emo {
+    font-family: monospace;
+    font-size: 115%;
+    white-space: pre-nowrap;
+}
+
+.glue {
+    white-space: line-wrap;
+}
+
+.s {
+    font-size: 85%;
+}
+
+hr {
+    display: none;
+}

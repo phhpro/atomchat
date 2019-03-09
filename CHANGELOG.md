@@ -5,17 +5,24 @@ Project: [PHP Atomchat](https://github.com/phhpro/atomchat)
 ## [Unreleased]
 ### Changed
 - Bell works on sender but doesn't get pushed to receiver.
-- *Make user posts editable???*
-- *Add moderator feature to edit/delete posts???*
+- Indicator of own posts while active
+
+## [20190309] - 2019-03-09
+### Added
+- Emoji auto-selection hover menu. (Requires JS)
+- New Theme: Lemon
+
+### Changed
+- Exported core styles to `default.css` to simplify editing. Themes now focus on providing their colours.
 
 ## [20190308] - 2019-03-08
 ### Added
 - Super user screen to configure script without having to manually edit.
-- Timeout handler. Experimental. Default: 15 minutes between posts. *Requires manual change of `$out` in `conf.php'*.
+- Experimental: Timeout handler. Default: 15 minutes between posts. *Requires manual change of `$out` in `conf.php'*.
 
 ### Changed
 - Language files and themes updated to match new features.
-- Fixed double-render when viewed without styles.
+- Fix: Double-render when viewed without styles.
 - Moved navigation mark-up above chatlog to keep focus when viewed without styles.
 
 ## [20190303] - 2019-03-03

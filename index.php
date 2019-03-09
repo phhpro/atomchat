@@ -29,7 +29,7 @@
  */
 
 
-$ver  = "20190308";
+$ver  = "20190309";
 
 /**
  ***********************************************************************
@@ -364,7 +364,7 @@ if (isset($_POST['css_apply'])) {
     }
 }
 
-$css_dat = "./" . $css_dir . "/" . $css_id . ".css";
+$css_dat = $css_dir . "/" . $css_id . ".css";
 
 /**
  ***********************************************************************
@@ -912,6 +912,8 @@ echo "<!DOCTYPE html>\n" .
      "height=device-height, initial-scale=1\"/>\n" .
      "        <link rel=\"icon\" href=\"" . $host . "favicon.png\" " .
      "type=\"image/png\"/>\n" .
+     "        <link rel=\"stylesheet\" " .
+     "href=\"" . $host. "default.css\"/>\n" .
      "        <link rel=\"stylesheet\" href=\"$host$css_dat\"/>\n" .
      "    </head>\n" .
      "    <body>\n" .
@@ -933,11 +935,12 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
          "                    " . $lang['text'] . " <input " .
          "id=\"txta\" size=\"4\" value=\"$char\" disabled />\n" .
          "                </div>\n" .
+
     //** Text
          "                <textarea name=\"text\" id=\"text\" " .
          "rows=\"2\" cols=\"45\" maxlength=\"$char\" " .
          "title=\"" . $lang['text_tip'] . "\" " .
-         "onkeydown=\"chars(this.form);\" ".
+         "onkeydown=\"chars(this.form);\" " .
          "onkeypress=\"chars(this.form);\" " .
          "onkeyup=\"chars(this.form);\">";
 
@@ -950,6 +953,40 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
     }
 
     echo "</textarea>\n" .
+
+    //** Emoji
+         "                <div id=\"mo\">\n" .
+         "                    <span class=\"emo\">&#x1F60A;</span> " .
+         $lang['emo_sel'] . "\n" .
+         "                    <div id=\"mo_list\">\n";
+
+    $emo_open = fopen($emo_dat, 'r');
+
+    while (!feof($emo_open)) {
+        $emo_line   = fgets($emo_open);
+        $emo_line   = trim($emo_line);
+        $emo_larr[] = $emo_line;
+    }
+
+    fclose($emo_open);
+
+    foreach ($emo_larr as $item) {
+
+        if ($item !== "") {
+            $emo_line = explode("|", $item);
+            $emo_id   = str_replace("&#x", "", $emo_line[1]);
+            $emo_id   = str_replace(";", "", $emo_id);
+            $emo_id   = "emo_$emo_id";
+            echo "<input id=\"$emo_id\" type=\"text\" " .
+                 "class=\"emo_id\" value=\"$emo_line[1]\" " .
+                 "title=\"" . $emo_line[0] . "\" " .
+                 "onclick=\"emo('text', '$emo_id');\"/>\n";
+        }
+    }
+
+    unset($item);
+    echo "                    </div>\n" .
+         "                </div>\n" .
          "                <div>\n" .
 
     //** Name -- hidden session token
@@ -988,7 +1025,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
     if ($up === 1) {
         echo "                <div>\n" .
              "                    <input type=\"file\" name=\"file\" " .
-             "title=\"" . $lang['up_sel'] . "\"/>\n" .
+             "id=\"file\" title=\"" . $lang['up_sel'] . "\"/>\n" .
              "                    <div class=\"s\">" .
              $lang['max'] . " $up_max</div>\n" .
              "                </div>\n";
@@ -1108,6 +1145,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
 
             fclose($emo_open);
             echo "                <h2>" . $lang['emo'] . "</h2>\n" .
+                 "                <p>" . $lang['emo_txt'] . "</p>\n" .
                  "                <p class=\"emo\">";
 
             foreach ($emo_larr as $item) {

@@ -22,6 +22,32 @@ function chars(chat)
     }
 }
 
+function emo(id, str)
+{
+    var id  = document.getElementById(id);
+    var str = document.getElementById(str).value;
+
+    if (document.selection) {
+        id.focus();
+        var sel = document.selection.createRange();
+        sel.str = str;
+        id.focus();
+    } else if (id.selectionStart || id.selectionStart === 0) {
+        var beg  = id.selectionStart;
+        var end  = id.selectionEnd;
+        var top  = id.top;
+        id.value = id.value.substring(0, beg) + str +
+                   id.value.substring(end, id.value.length);
+        id.focus();
+        id.selectionStart = beg + str.length;
+        id.selectionEnd   = beg + str.length;
+        id.top            = top;
+    } else {
+        id.value += str;
+        id.focus();
+    }
+}
+
 var http = null;
 
 function ajax()
