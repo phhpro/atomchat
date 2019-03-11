@@ -731,13 +731,8 @@ if (isset($_POST['post'])) {
             while (!feof($emo_fh)) {
                 $emo_ln   = fgets($emo_fh);
                 $emo_ln   = trim($emo_ln);
+                $emo_ln   = explode("|", $emo_ln);
                 $emo_la[] = $emo_ln;
-            }
-
-            fclose($emo_fh);
-
-            foreach ($emo_la as $item) {
-                $emo_ln = explode("|", $item);
 
                 if (stripos($txt, $emo_ln[0]) !== false) {
                     $txt = trim(
@@ -749,9 +744,10 @@ if (isset($_POST['post'])) {
                         )
                     );
                 }
+
             }
 
-            unset($item);
+            fclose($emo_fh);
         }
     }
 
@@ -1014,7 +1010,7 @@ echo "<!DOCTYPE html>\n" .
 
 /**
  ***********************************************************************
- *                                                            Chat Log *
+ *                                                             Chatlog *
  ***********************************************************************
  */
 
@@ -1026,7 +1022,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
          "                    " . $lc_str['text'] . " <input " .
          "id=\"txta\" size=\"4\" value=\"$char\" disabled /> " .
 
-    //** Emoji auto select hover menu
+    //** Emoji hover menu
          "<span class=\"emo\">&#x1F60E;</span> " .
          $lc_str['emo'] . "\n" .
          "                    <div id=\"mo_list\">\n";
@@ -1036,19 +1032,13 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
     while (!feof($emo_fh)) {
         $emo_ln   = fgets($emo_fh);
         $emo_ln   = trim($emo_ln);
+        $emo_ln   = explode("|", $emo_ln);
         $emo_la[] = $emo_ln;
-    }
+        $emo_id   = str_replace("&#x", "", $emo_ln[1]);
+        $emo_id   = str_replace(";", "", $emo_id);
+        $emo_id   = "emo_$emo_id";
 
-    fclose($emo_fh);
-
-    foreach ($emo_la as $item) {
-
-        if ($item !== "") {
-            $emo_ln = explode("|", $item);
-            $emo_id = str_replace("&#x", "", $emo_ln[1]);
-            $emo_id = str_replace(";", "", $emo_id);
-            $emo_id = "emo_$emo_id";
-
+        if ($emo_ln[0] !== "") {
             echo "                        <input type=\"text\" " .
                  "id=\"$emo_id\" class=\"emo_id\" " .
                  "value=\"$emo_ln[1]\" " .
@@ -1057,7 +1047,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
         }
     }
 
-    unset($item);
+    fclose($emo_fh);
 
     echo "                    </div>\n" .
          "                </div>\n" .
@@ -1232,28 +1222,23 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
         if ($emo === 1) {
             echo "                <h2>" . $lc_str['emo'] . "</h2>\n" .
                  "                <p>" . $lc_str['emo_txt'] . "</p>\n" .
-                 "                <p class=\"emo\">";
+                 "                <p class=\"emo_big\">";
 
             $emo_fh = fopen($emo_dat, 'r');
 
             while (!feof($emo_fh)) {
                 $emo_ln   = fgets($emo_fh);
                 $emo_ln   = trim($emo_ln);
+                $emo_ln   = explode("|", $emo_ln);
                 $emo_la[] = $emo_ln;
-            }
 
-            fclose($emo_fh);
-
-            foreach ($emo_la as $item) {
-     
-                if ($item !== "") { 
-                    $emo_ln = explode("|", $item);
+                if ($emo_ln[1] !== "") {
                     echo "<span class=\"glue\">" . $emo_ln[0] .
                          "&nbsp;" . $emo_ln[1] . "</span> ";
                 }
             }
 
-            unset($item);
+            fclose($emo_fh);
 
             echo "</p>\n";
         }
@@ -1667,7 +1652,7 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
          "                    <p>" . $lc_str['js_txt'] . "</p>\n" .
          "                </noscript>\n" .
          "            </article>\n" .
-         "            <nav class=\"block\">\n" .
+         "            <nav class=\"block login\">\n" .
          "                <div>\n" .
 
     //** Name

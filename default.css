@@ -28,6 +28,15 @@ nav {
     height: 9em;
 }
 
+#login {
+    bottom: 3em;
+}
+
+.login{
+    height: 2em;
+    margin: 4px auto;
+}
+
 #post {
     position: absolute;
     top: 0.3em;
@@ -56,6 +65,10 @@ nav {
     position: absolute;
     bottom: 0.3em;
     left: 0;
+}
+
+#close {
+    margin: 4px auto;
 }
 
 #by {
@@ -173,11 +186,12 @@ select {
 }
 
 ul li {
-    font-size: small;
+    font-size: smaller;
     font-weight: bold;
 }
 
 ul li ul li {
+    font-size: small;
     font-weight: normal;
 }
 
@@ -248,6 +262,12 @@ a:link, a:visited {
 }
 
 .emo {
+    font-family: monospace;
+    font-size: medium;
+    white-space: pre-nowrap;
+}
+
+.emo_big {
     font-family: monospace;
     font-size: large;
     white-space: pre-nowrap;
