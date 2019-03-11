@@ -1,0 +1,83 @@
+@charset "UTF-8";
+
+body {
+    background-color: #ff3;
+    color: #030;
+}
+
+.block {
+    background-color: #ff3;
+    color: #030;
+}
+
+#by span {
+    background-color: #060;
+    color: #ff3;
+}
+
+input {
+    background-color: #ff3;
+    background-image: linear-gradient(#ff3, #993);
+    color: #030;
+    border: 1px solid #990;
+}
+
+#txta {
+    color: #030;
+}
+
+textarea {
+    background-color: #ff3;
+    background-image: linear-gradient(#ff3, #993);
+    color: #030;
+    border: 1px solid #990;
+}
+
+select {
+    background-color: #ff3;
+    background-image: linear-gradient(#ff3, #993);
+    color: #030;
+    border: 1px solid #990;
+}
+
+.item {
+    border: 1px solid #060;
+}
+
+.item_head {
+    background-color: #060;
+    color: #ff3;
+}
+
+.item:hover .item_head {
+    background-color: #030;
+    color: #ff3;
+}
+
+.item_log {
+    background-color: transparent;
+    color: #360;
+}
+
+input:hover, textarea:hover, select:hover, .item:hover {
+    background-color: #ff0;
+    background-image: linear-gradient(#993, #ff3);
+    color: #030;
+    border: 1px solid #660;
+}
+
+a:link, a:visited {
+    background-color: transparent;
+    color: #333;
+}
+
+a:hover, a:active {
+    background-color: transparent;
+    color: #030;
+}
+
+#mo_list {
+    background-color: #ff3;
+    color: #030;
+    border: 1px solid #990;
+}
