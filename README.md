@@ -13,13 +13,15 @@
 
 ### Config
 
-The script generates a default config when first run or in case the config file has been accidentally deleted. All relevant settings can be configured from the super user screen and are usually effective immediately. Simply refresh the page if in doubt.
+The script generates a default configuration in `config.php` when first run or in case the file has been accidentally deleted. All relevant settings can be configured from the superuser screen and are usually effective immediately. Simply refresh the page if in doubt. You can also enable a timeout option to automatically logout inactive users after a given time. This feature is initially disabled to leave session handling to the PHP default.
 
-Please visit the super user screen before making the script public and change at least the prefix and suffix. The rest of the default settings should be fairly save to leave for the time being until you have a better understanding of how things work.
+Please visit the superuser screen before making the script public and change at least the prefix and suffix. The rest of the default settings should be fairly save to leave for the time being until you have a better understanding of how things work.
 
-### Super User
+Note: The script will *not* check your input. If you enter text into a field expecting numbers, the script will accept that, but likely break after reading the new configuration. In case you somehow managed to invalidate the setup, your best option is to delete `config.php` and restart from scratch.
 
-The super user login gives you an extra button to open a special screen from where you can configure all relevant settings or reset the log on the fly. May come in handy when using auto-reset and the current log is approaching its limit. Just post a message to inform everyone else to hold pending uploads to prevent things getting dumped. Default login is `atomchat`.
+### Superuser
+
+The superuser login gives you an extra button to open a special screen from where you can configure all relevant settings or reset the log on the fly. May come in handy when using auto-reset and the current log is approaching its limit. Just post a message to inform everyone else to hold pending uploads to prevent things getting dumped. Default login is `atomchat`.
 
 ### Logging
 
@@ -27,7 +29,7 @@ Logging applies to the chatlog. The script can create either daily logs or one c
 
 ### Emojis
 
-When enabled, this feature automatically converts registered text tokens to Unicode emojis. Hence, you'll get an image, which in fact is entirely text itself and thus saves bandwidth and doesn't cost any extra server requests. However, since rendering varies greatly across devices and platforms, the definitions file `emo.dat` currently only covers a very basic set to avoid broken symbols. In addition, the script also provides an auto-select hover menu to insert emojis into the text. (Requires JavaScript)
+When enabled, this feature automatically converts registered text tokens to Unicode emojis. Hence, you'll get an image, which in fact is entirely text itself and thus saves bandwidth and doesn't cost any extra server requests. However, rendering and Unicode support varies greatly across devices and platforms. Google Chrome for desktops is particulary prone to fail. Interestingly though, the mobile version seems to have gotten all the Unicode support the desktop version is lacking. Therefore, the definitions file `emo.dat` only covers a minimal set. In addition to textual input, the script also provides a hover menu to insert emojis into the text at the current cursor position. (Requires JavaScript)
 
 ### Uploads
 
@@ -43,7 +45,7 @@ Per default the script has multi themes enabled to allow users to change themes 
 
 The script attempts to auto-detect the browser's language preference and checks if a translation exists. If so, the interface will use that language. Else, whatever you have configured as default is applied. Users can change language settings at any time.
 
-Considering an edge case where you'd be a native speaker of Japanese, on vacation in Italy, and for some obscure reason the browser was configured to prefer Turkish, your inital screenful would be  Turkish. Click the question mark and select Japanese from the list. Tada, we're talking Japanese. Refer to `TRANSLATE.md` if your language is missing.
+Considering an edge case where you'd be a native speaker of Japanese, on vacation in Italy, and for some obscure reason the browser was configured to prefer Turkish, your inital screenful would be Turkish. Click the question mark and select Japanese from the list. Tada, we're talking Japanese. Refer to `TRANSLATE.md` if your language is missing.
 
 ### Limitations And Issues
 

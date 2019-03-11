@@ -22,9 +22,9 @@ function chars(chat)
     }
 }
 
-function emo(id, str)
+function emo(str)
 {
-    var id  = document.getElementById(id);
+    var id  = document.getElementById("text");
     var str = document.getElementById(str).value;
 
     if (document.selection) {

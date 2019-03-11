@@ -7,6 +7,18 @@ Project: [PHP Atomchat](https://github.com/phhpro/atomchat)
 - Bell works on sender but doesn't get pushed to receiver.
 - Indicator of own posts while active
 
+## [20190311] - 2019-03-11
+### Added
+- Timeout feature added to superuser screen.
+
+### Changed
+- Changed font sizes in `default.css` from percentage to keyword, fixed some mobile issues and cleared redundant settings.
+- Merged credits into main script.
+- Moved hover menu from below textarea to top and adjusted visuals. Selecting emojis no longer hides existing text.
+- Plenty of internal house-keeping renaming variables.
+- Moved themes from `css` to `themes`.
+- Moved `conf.php` to `config.php`.
+
 ## [20190309] - 2019-03-09
 ### Added
 - Emoji auto-selection hover menu. (Requires JS)

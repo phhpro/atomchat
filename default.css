@@ -14,19 +14,18 @@ article {
     position: fixed;
     top: 0;
     right: 0;
-    bottom: 10em;
+    bottom: 11em;
     left: 0;
     overflow: auto;
 }
 
 nav {
-    font-size: 95%;
     text-align: center;
     position: fixed;
     right: 0;
     bottom: 0;
     left: 0;
-    max-height: 10em;
+    height: 9em;
 }
 
 #post {
@@ -35,7 +34,7 @@ nav {
     right: 0;
 }
 
-#conf {
+#set {
     position: absolute;
     top: 3em;
     right: 0;
@@ -60,8 +59,13 @@ nav {
 }
 
 #by {
-    font-size: 75%;
-    padding-top: 8px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    font-size: small;
+    margin: auto auto;
+    padding: 4px;
 }
 
 #by span {
@@ -94,24 +98,24 @@ nav {
 }
 
 h1 {
-    font-size: 125%;
+    font-size: x-large;
     margin: 0 0 1em 0;
 }
 
 h2 {
-    font-size: 115%;
+    font-size: large;
     margin: 0;
 }
 
 input {
-    font-size: 100%;
+    font-size: medium;
     vertical-align: middle;
     max-width: 50%;
 }
 
 input[type=submit] {
     font-family: monospace;
-    font-size: 125%;
+    font-size: large;
     font-weight: bold;
     text-align: center;
     width: 32px;
@@ -121,7 +125,7 @@ input[type=submit] {
 }
 
 input[type=file] {
-    font-size: 85%;
+    font-size: small;
     max-width: 65%;
 }
 
@@ -129,6 +133,7 @@ input[type=file] {
     background-color: transparent;
     background-image: none;
     border: 0;
+    font-size: small;
     padding: 0 0 2px 0;
 }
 
@@ -138,17 +143,17 @@ textarea {
 }
 
 select {
-    font-size: 100%;
+    font-size: medium;
     margin: 0;
     padding: 1px;
 }
 
 .item {
+    font-size: small;
     margin: 8px 0 16px 0;
 }
 
 .item_head {
-    font-size: 75%;
     padding: 2px;
 }
 
@@ -157,22 +162,22 @@ select {
 }
 
 .item_text {
+    font-size: larger;
     white-space: pre-wrap;
     margin: 0;
     padding: 2px;
 }
 
 .item_log {
-    font-size: 75%;
+    font-size: small;
 }
 
 ul li {
-    font-size: 75%;
+    font-size: small;
     font-weight: bold;
 }
 
 ul li ul li {
-    font-size: 115%;
     font-weight: normal;
 }
 
@@ -189,7 +194,6 @@ ul li ul li {
 }
 
 #super select {
-    font-size: 85%;
     padding: 0;
 }
 
@@ -202,52 +206,50 @@ a:link, a:visited {
 }
 
 #mo {
-    width: 66%;
-    font-size: 85%;
+    font-size: small;
     text-align: center;
-    margin: 4px auto;
+    max-width: 15em;
+    margin: auto auto;
 }
 
 #mo_list {
     position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 65%;
-    height: 4em;
-    overflow: auto;
+    top: -2em;
+    right: 0;
+    bottom: 10em;
+    left: 0;
     text-align: left;
-    margin: 4px -4px;
-    padding: 2px 2px 4px 2px;
+    overflow: auto;
     visibility: hidden;
+    z-index: 2;
 }
 
 #mo:hover #mo_list {
-    top: 1.5em;
     visibility: visible;
 }
 
 .emo_id {
     background-color: transparent;
-    color: inherit;
-    border: 0;
+    background-image: none;
+    color: inerit;
     font-family: monospace;
-    font-size: 135%;
-    font-weight: bold;
-    text-align: center;
-    width: 22px;
-    height: 22px;
-    margin: 4px;
-    padding: 0;
-    border-radius: 50%;
+    font-size: x-large;
+    border: 0;
+    width: 1em;
+    height: 1em;
+    margin: 8px;
 }
 
 .emo_id:hover {
+    background-color: transparent;
+    background-image: none;
+    color: inherit;
     border: 0;
 }
 
 .emo {
     font-family: monospace;
-    font-size: 115%;
+    font-size: large;
     white-space: pre-nowrap;
 }
 
@@ -256,7 +258,7 @@ a:link, a:visited {
 }
 
 .s {
-    font-size: 85%;
+    font-size: small;
 }
 
 hr {
