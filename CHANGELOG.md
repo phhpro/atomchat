@@ -5,17 +5,20 @@ Project: [PHP Atomchat](https://github.com/phhpro/atomchat)
 ## [Unreleased]
 ### Changed
 - Bell works on sender but doesn't get pushed to receiver.
-- Indicator of own posts while active
+- Superuser screen doesn't allow selecting emojis from hover menu. ??
 
-## [20190311] - 2019-03-11
+## [20190312] - 2019-03-12
 ### Added
-- Timeout feature added to superuser screen.
+- Timeout feature now available on superuser screen.
+- Styles for hover state when selecting emojis from hover menu.
 
 ### Changed
-- Changed font sizes in `default.css` from percentage to keyword, fixed some mobile issues and cleared redundant settings.
+- Fix: Form handler no longer accepts null values when updating config.
+- Fix: Mobile scaling factor no longer cuts off.
+- Fix: Form handler now keeps text intact after error, e.g. text + image when image is too big or invalid.
+- Changed font sizes in `default.css` from percentage to keyword.
 - Merged credits into main script.
-- Moved hover menu from below textarea to top and adjusted visuals. Selecting emojis no longer hides existing text.
-- Plenty of internal house-keeping renaming variables.
+- Moved hover menu above textarea and adjusted visuals. Selecting emojis no longer hides existing text.
 - Moved themes from `css` to `themes`.
 - Moved `conf.php` to `config.php`.
 

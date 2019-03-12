@@ -29,7 +29,8 @@
  */
 
 
-$ver = "20190311";
+$ver = "20190312";
+
 
 /**
  ***********************************************************************
@@ -58,7 +59,7 @@ $cfg_txt = "<?php\n" .
            "\$log=\"atomchat\";\n" .
            "\$up_dir=\"upload\";\n" .
            "\$emo_dat=\"emo.dat\";\n" .
-           "\$dt=date('Y-m-d H:i');";
+           "\$dt=date('Y-m-d H:i');\n";
 
 if (!is_file($cfg_dat)) {
     $cfg_txt .= "\$su_pfx=\"atom\";\n" .
@@ -119,7 +120,7 @@ if (!is_dir($lc_dir)) {
     }
 }
 
-if (isset($exit) && !empty($exit)) {
+if (isset($exit) && $exit !== "") {
     echo "$exit Script halted.";
     exit;
 }
@@ -253,7 +254,7 @@ function b64($src)
     return $str;
 }
 
-$b64  = array('gif', 'jpeg', 'jpg', 'png');
+$b64 = array('gif', 'jpeg', 'jpg', 'png');
 
 /**
  * Function go()
@@ -264,8 +265,8 @@ $b64  = array('gif', 'jpeg', 'jpg', 'png');
  */
 function go($tag)
 {
-    global $hst;
-    header("Location: $hst#$tag");
+    global $host;
+    header("Location: $host#$tag");
     exit;
 }
 
@@ -281,7 +282,7 @@ if (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS']) {
     $pro = "s";
 }
 
-$hst = "http$pro://" . $_SERVER['HTTP_HOST'] . "/$dir/";
+$host = "http$pro://" . $_SERVER['HTTP_HOST'] . "/$dir/";
 
 /**
  ***********************************************************************
@@ -332,13 +333,18 @@ if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
 if (isset($_POST['language'])) {
     $lc_use = htmlentities($_POST['lc_use'], ENT_QUOTES, 'UTF-8');
 
-    if (isset($_COOKIE['ac_language'])) {
-        setcookie('ac_language', $lc_use, $cook_time, '/');
-        $_COOKIE['ac_language']  = $lc_use;
-        $lc_use                  = $_COOKIE['ac_language'];
+    if ($lc_use !== "") {
+
+        if (isset($_COOKIE['ac_language'])) {
+            setcookie('ac_language', $lc_use, $cook_time, '/');
+            $_COOKIE['ac_language']  = $lc_use;
+            $lc_use                  = $_COOKIE['ac_language'];
+        } else {
+            $_SESSION['ac_language'] = $lc_use;
+            $lc_use                  = $_SESSION['ac_language'];
+        }
     } else {
-        $_SESSION['ac_language'] = $lc_use;
-        $lc_use                  = $_SESSION['ac_language'];
+        go('MISSING_SELECTION');
     }
 } else {
 
@@ -369,7 +375,7 @@ if (is_file($lc_dat)) {
     include "./" . $lc_dir . "/" . $lc . ".php";
 
     echo "<p>The requested file is no longer available!</p>\n" .
-         "<p><a href=\"$hst\" title=\"Click here to try default " .
+         "<p><a href=\"$host\" title=\"Click here to try default " .
          "settings\">Click here to try default settings.</a></p>\n" .
          "<p>If that fails, and you know how to contact the site " .
          "owner, now would be a good moment.</p>";
@@ -385,13 +391,18 @@ if (is_file($lc_dat)) {
 if (isset($_POST['theme'])) {
     $th_use = htmlentities($_POST['th_use'], ENT_QUOTES, 'UTF-8');
 
-    if (isset($_COOKIE['ac_theme'])) {
-        setcookie('ac_theme', $th_use, $cook_time, '/');
-        $_COOKIE['ac_theme']  = $th_use;
-        $th_use               = $_COOKIE['ac_theme'];
+    if ($th_use !== "") {
+
+        if (isset($_COOKIE['ac_theme'])) {
+            setcookie('ac_theme', $th_use, $cook_time, '/');
+            $_COOKIE['ac_theme']  = $th_use;
+            $th_use               = $_COOKIE['ac_theme'];
+        } else {
+            $_SESSION['ac_theme'] = $th_use;
+            $th_use               = $_SESSION['ac_theme'];
+        }
     } else {
-        $_SESSION['ac_theme'] = $th_use;
-        $th_use               = $_SESSION['ac_theme'];
+        go('MISSING_SELECTION');
     }
 } else {
 
@@ -501,176 +512,177 @@ if (isset($_POST['update'])) {
         = htmlentities($_POST['log_set'], ENT_QUOTES, 'UTF-8');
 
     //** SU prefix
-    if (isset($su_pfx_new) && $su_pfx !== "") {
+    if ($su_pfx_new !== "") {
         $su_pfx_new = $su_pfx_new;
     } else {
         $su_pfx_new = $su_pfx;
     }
 
     //** SU suffix
-    if (isset($su_sfx_new) && $su_sfx_new !== "") {
+    if ($su_sfx_new !== "") {
         $su_sfx_new = $su_sfx_new;
     } else {
         $su_sfx_new = $su_sfx;
     }
 
     //** Page title
-    if (isset($page_new) && $page_new !== "") {
+    if ($page_new !== "") {
         $page_new = $page_new;
     } else {
         $page_new = $page;
     }
 
     //** META description
-    if (isset($meta_d) && $meta_d_new !== "") {
+    if ($meta_d_new !== "") {
         $meta_d_new = $meta_d_new;
     } else {
         $meta_d_new = $meta_d;
     }
 
     //** META keywords
-    if (isset($meta_k_new) && $meta_k_new !== "") {
+    if ($meta_k_new !== "") {
         $meta_k_new = $meta_k_new;
     } else {
         $meta_k_new = $meta_k;
     }
 
     //** Language
-    if (isset($lc_new) && $lc_new !== "select") {
+    if ($lc_new !== "") {
         $lc_new = $lc_new;
     } else {
         $lc_new = $lc;
     }
         
     //** Theme
-    if (isset($th_new) && $th_new !== "select") {
+    if ($th_new !== "") {
         $th_new = $th_new;
     } else {
         $th_new = $th;
     }
 
     //** Theme multi
-    if (isset($th_m_new) && $th_m_new !== "") {
+    if ($th_m_new !== "") {
         $th_m_new = 1;
     } else {
         $th_m_new = 0;
     }
 
     //** Characters per post
-    if (isset($char_new) && $char_new !== "") {
+    if ($char_new !== "") {
         $char_new = $char_new;
     } else {
         $char_new = $char;
     }
 
     //** Emoji auto conversion
-    if (isset($emo_new) && $emo_new !== "") {
+    if ($emo_new !== "") {
         $emo_new = 1;
     } else {
         $emo_new = 0;
     }
 
     //** Refresh rate
-    if (isset($rate_new) && $rate_new !== "") {
+    if ($rate_new !== "") {
         $rate_new = $rate_new;
     } else {
         $rate_new = $rate;
     }
 
     //** Timeout
-    if (isset($out_new) && $out_new !== "") {
+    if ($out_new !== "") {
         $out_new = 1;
     } else {
         $out_new = 0;
     }
 
     //** Timeout max
-    if (isset($out_max_new) && $out_max_new !== "") {
+    if ($out_max_new !== "") {
         $out_max_new = $out_max_new;
     } else {
         $out_max_new = $out_max;
     }
 
     //** Random max
-    if (isset($rn_max_new) && $rn_max_new !== "") {
+    if ($rn_max_new !== "") {
         $rn_max_new = $rn_max_new;
     } else {
         $rn_max_new = $rn_max;
     }
 
     //** Random min
-    if (isset($rn_min_new) && $rn_min_new !== "") {
+    if ($rn_min_new !== "") {
         $rn_min_new = $rn_min_new;
     } else {
         $rn_min_new = $rn_min;
     }
 
     //** Uploads
-    if (isset($up_new) && $up_new !== "") {
+    if ($up_new !== "") {
         $up_new = 1;
     } else {
         $up_new = 0;
     }
 
     //** Uploads size max
-    if (isset($up_max_new) && $up_max_new !== "") {
+    if ($up_max_new !== "") {
         $up_max_new = $up_max_new;
     } else {
         $up_max_new = $up_max;
     }
 
     //** Type delete
-    if (isset($type_del) && $type_del !== "select") {
+    if ($type_del !== "") {
         $type = array_diff($type, array($type_del));
     }
 
     //** Type add
-    if (isset($type_add) && $type_add !== "") {
+    if ($type_add !== "") {
         $type[] = $type_add;
     }
 
     //** Thumbnail w/h max
-    if (isset($tn_new) && $tn_new !== "") {
+    if ($tn_new !== "") {
         $tn_new = $tn_new;
     } else {
         $tn_new = $tn;
     }
 
     //** Auto remove old files
-    if (isset($rm_new) && $rm_new !== "") {
+    if (!$rm_new !== "") {
         $rm_new = 1;
     } else {
         $rm_new = 0;
     }
 
     //** Days to keep files
-    if (isset($rm_max_new) && $rm_max_new !== "") {
+    if ($rm_max_new !== "") {
         $rm_max_new = $rm_max_new;
     } else {
         $rm_max_new = $rm_max;
     }
 
     //** Log endless
-    if (isset($log_end_new) && $log_end_new !== "") {
+    if ($log_end_new !== "") {
         $log_end_new = 1;
     } else {
         $log_end_new = 0;
     }
 
     //** Log size max
-    if (isset($log_max_new) && $log_max_new !== "") {
+    if ($log_max_new !== "") {
         $log_max_new = $log_max_new;
     } else {
         $log_max_new = $log_max;
     }
 
     //** Log auto reset
-    if (isset($log_set_new) && $log_set_new !== "") {
+    if ($log_set_new !== "") {
         $log_set_new = 1;
     } else {
         $log_set_new = 0;
     }
 
+    //** Update config
     $type_new = implode(",", $type);
     $type_new = str_replace(",", "','", $type_new);
     $cfg_txt .= "\$su_pfx=\"$su_pfx_new\";\n" .
@@ -719,11 +731,12 @@ $ok = 0;
 
 if (isset($_POST['post'])) {
     $name = htmlentities($_POST['name'], ENT_QUOTES, 'UTF-8');
-    $txt  = htmlentities($_POST['text'], ENT_QUOTES, 'UTF-8');
+    $text = htmlentities($_POST['text'], ENT_QUOTES, 'UTF-8');
 
-    if ($txt !== "") {
-        $txt = wordwrap($txt, 68);
-        $ok  = 1;
+    if ($text !== "") {
+        $_SESSION['ac_text'] = $text;
+        $text                = wordwrap($text, 68);
+        $ok                  = 1;
 
         if ($emo === 1) {
             $emo_fh = fopen($emo_dat, 'r');
@@ -734,13 +747,13 @@ if (isset($_POST['post'])) {
                 $emo_ln   = explode("|", $emo_ln);
                 $emo_la[] = $emo_ln;
 
-                if (stripos($txt, $emo_ln[0]) !== false) {
-                    $txt = trim(
+                if (stripos($text, $emo_ln[0]) !== false) {
+                    $text = trim(
                         str_replace(
                             $emo_ln[0],
                             "<span class=\"emo\">" .
                             $emo_ln[1] . "</span>",
-                            $txt
+                            $text
                         )
                     );
                 }
@@ -762,7 +775,7 @@ if (isset($_POST['post'])) {
             $up_ext = strtolower(pathinfo($up_to, PATHINFO_EXTENSION));
             $up_rn  = mt_rand() . "." . $up_ext;
             $up_sav = str_replace($up_fh, $up_rn, $up_to);
-            $up_url = $hst . $up_sav;
+            $up_url = $host . $up_sav;
 
             if ($up_sz > $up_max) {
                 go('INVALID_FILESIZE');
@@ -837,32 +850,33 @@ if (isset($_POST['post'])) {
         }
     }
 
-    if ($txt !== "" && $up_link === "") {
-        $post = $txt;
-    } elseif ($txt !== "" && $up_link !== "") {
-        $post = $txt . " " . $up_link;
-    } elseif ($txt === "" && $up_link !== "") {
-        $post = $up_link;
+    if ($text !== "" && $up_link === "") {
+        $item = $text;
+    } elseif ($text !== "" && $up_link !== "") {
+        $item = $text . " " . $up_link;
+    } elseif ($text === "" && $up_link !== "") {
+        $item = $up_link;
     } else {
         $ok = 0;
     }
 
     if ($ok === 1) {
-        $post  = "                <div class=\"item\">\n" .
-                 "                    <div class=\"item_head\">\n" .
-                 "                        <span class=\"item_date\">" .
-                 "$dt</span> \n" .
-                 "                        <span class=\"item_name\">" .
-                 $_SESSION['ac_name'] . "</span>\n" .
-                 "                    </div>\n" .
-                 "                    <pre class=\"item_text\">\n" .
-                 "$post\n" .
-                 "                    </pre>\n" .
-                 "                </div>\n" .
-                 "                <hr/>\n";
+        $item = "                <div class=\"item\">\n" .
+                "                    <div class=\"item_head\">\n" .
+                "                        <span class=\"item_date\">" .
+                "$dt</span> \n" .
+                "                        <span class=\"item_name\">" .
+                $_SESSION['ac_name'] . "</span>\n" .
+                "                    </div>\n" .
+                "                    <pre class=\"item_text\">\n" .
+                "$item\n" .
+                "                    </pre>\n" .
+                "                </div>\n" .
+                "                <hr/>\n";
 
-        $post .= file_get_contents($log_dat);
-        file_put_contents($log_dat, $post);
+        $item .= file_get_contents($log_dat);
+        file_put_contents($log_dat, $item);
+        unset($_SESSION['ac_text']);
 
         if ($out === 1) {
             $_SESSION['ac_post'] = time();
@@ -881,7 +895,7 @@ if (isset($_POST['post'])) {
  */
 
 if (isset($_POST['login'])) {
-    $name      = htmlentities($_POST['name'], ENT_QUOTES, 'UTF-8');
+    $name = htmlentities($_POST['name'], ENT_QUOTES, 'UTF-8');
     $perm = htmlentities($_POST['perm'], ENT_QUOTES, 'UTF-8');
 
     if (!empty($perm)) {
@@ -907,14 +921,14 @@ if (isset($_POST['login'])) {
                 = $name . "_" . mt_rand($rn_min, $rn_max);
         }
 
-        $txt = "                <div class=\"item_log\">$dt " .
-               $_SESSION['ac_name'] . " LOGIN</div>\n";
+        $text = "                <div class=\"item_log\">$dt " .
+                $_SESSION['ac_name'] . " LOGIN</div>\n";
 
         if (is_file($log_dat)) {
-            $txt .= file_get_contents($log_dat);
+            $text .= file_get_contents($log_dat);
         }
 
-        file_put_contents($log_dat, $txt);
+        file_put_contents($log_dat, $text);
 
         if (!isset($_COOKIE['ac_cookie'])) {
 
@@ -956,10 +970,10 @@ if (isset($_SESSION['ac_post'])
 }
 
 if ($stat === 1) {
-    $txt  = "                <div class=\"item_log\">$dt " .
-            $_SESSION['ac_name'] . " $exit</div>\n";
-    $txt .= file_get_contents($log_dat);
-    file_put_contents($log_dat, $txt);
+    $text  = "                <div class=\"item_log\">$dt " .
+             $_SESSION['ac_name'] . " $exit</div>\n";
+    $text .= file_get_contents($log_dat);
+    file_put_contents($log_dat, $text);
     $_SESSION = array();
 
     if (ini_get("session.use_cookies")) {
@@ -997,24 +1011,24 @@ echo "<!DOCTYPE html>\n" .
      "        <meta name=\"robots\" content=\"noodp, noydir\"/>\n" .
      "        <meta name=\"viewport\" content=\"width=device-width, " .
      "height=device-height, initial-scale=1\"/>\n" .
-     "        <link rel=\"icon\" href=\"" . $hst . "favicon.png\" " .
+     "        <link rel=\"icon\" href=\"" . $host . "favicon.png\" " .
      "type=\"image/png\"/>\n" .
      "        <link rel=\"stylesheet\" " .
-     "href=\"" . $hst. "default.css\"/>\n" .
-     "        <link rel=\"stylesheet\" href=\"$hst$th_dat\"/>\n" .
+     "href=\"" . $host. "default.css\"/>\n" .
+     "        <link rel=\"stylesheet\" href=\"$host$th_dat\"/>\n" .
      "    </head>\n" .
      "    <body>\n" .
-     "        <form action=\"$hst#CHAT\" name=\"chat\" " .
+     "        <form action=\"$host#CHAT\" name=\"chat\" " .
      "method=\"POST\" accept-charset=\"UTF-8\" " .
      "enctype=\"multipart/form-data\">\n";
 
 /**
  ***********************************************************************
- *                                                             Chatlog *
+ *                                                          Navigation *
  ***********************************************************************
  */
 
-if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
+if (isset($_SESSION['ac_name']) && $_SESSION['ac_name'] !== "") {
     echo "            <nav class=\"block\">\n" .
          "                <div id=\"mo\">\n" .
  
@@ -1060,12 +1074,9 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
          "onkeypress=\"chars(this.form);\" " .
          "onkeyup=\"chars(this.form);\">";
 
-    if (!empty($_POST['text'])) {
-        $txt_tmp = $_POST['text'];
-    }
-
-    if (isset($txt_tmp)) {
-        echo $txt_tmp;
+    if ($_SESSION['ac_text'] !== "") {
+        $_POST['ac_text'] = $_SESSION['ac_text'];
+        echo $_SESSION['ac_text'];
     }
 
     echo "</textarea>\n" .
@@ -1119,17 +1130,28 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
          "&nbsp;<a href=\"https://github.com/phhpro/atomchat\" " .
          "title=\"" . $lc_str['get'] . "\">PHP Atomchat v$ver</a>\n" .
          "                </div>\n" .
-         "            </nav>\n" .
-         "            <article class=\"block\" id=\"push\">\n";
+         "            </nav>\n";
 
-    if (is_file($log_dat)) {
-        include $log_dat;
-    } else {
-        file_put_contents($log_dat, $log_init);
-        include $log_dat;
+
+
+    /**
+     *******************************************************************
+     *                                                        Chatlog *
+     *******************************************************************
+     */
+
+    if (!isset($_POST['set']) && !isset($_POST['su'])) {
+        echo "            <article class=\"block\" id=\"push\">\n";
+
+        if (is_file($log_dat)) {
+            include $log_dat;
+        } else {
+            file_put_contents($log_dat, $log_init);
+            include $log_dat;
+        }
+
+        echo "            </article>\n";
     }
-
-    echo "            </article>\n";
 
     /**
      *******************************************************************
@@ -1146,7 +1168,10 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
              "                    <label for=\"lc_use\">" .
              $lc_str['lc'] . "</label>\n" .
              "                    <select name=\"lc_use\" " .
-             "title=\"" . $lc_str['lc_tip'] . "\">\n";
+             "title=\"" . $lc_str['lc_tip'] . "\">\n" .
+             "                        <option value=\"select\" " .
+             "title=\"" . $lc_str['sel_tip'] . "\" selected " .
+             "disabled>" . $lc_str['sel'] . "</option>\n";
 
         foreach ($lc_ls as $item) {
             $lc_get = file_get_contents($item);
@@ -1184,7 +1209,10 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
                  "                    <label for=\"th_use\">" .
                  $lc_str['th'] . "</label>\n" .
                  "                    <select name=\"th_use\" " .
-                 "title=\"" . $lc_str['th_tip'] . "\">\n";
+                 "title=\"" . $lc_str['th_tip'] . "\">\n" .
+                 "                        <option value=\"select\" " .
+                 "title=\"" . $lc_str['sel_tip'] . "\" selected " .
+                 "disabled>" . $lc_str['sel'] . "</option>\n";
 
             foreach ($th_ls as $item) {
                 $th_val = basename($item);
@@ -1272,20 +1300,22 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
         echo "                <h2>" . $lc_str['cr'] . "</h2>\n" .
              $cr .
 
-        //** Close
-             "                <p id=\"nav\">\n" .
+        //** Close settings screen
+             "                <p class=\"exec\">\n" .
              "                    <input type=\"submit\" " .
              "name=\"close\" id=\"close\" value=\"x\" " .
              "title=\"" . $lc_str['close'] . "\"/>\n" .
              "                </p>\n" .
              "            </article>\n";
-    } elseif (isset($_POST['su'])) {
+    }
 
-        /**
-         ***************************************************************
-         *                                                   Superuser *
-         ***************************************************************
-         */
+    /**
+     *******************************************************************
+     *                                                       Superuser *
+     *******************************************************************
+    */
+
+    if (isset($_POST['su'])) {
 
         echo "            <article class=\"block\" id=\"super\">\n" .
              "                <h1>" . $lc_str['su'] . "</h1>\n" .
@@ -1346,8 +1376,8 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
              "                    <select name=\"lc\" " .
              "id=\"lc\" title=\"" . $lc_str['sel_tip'] . "\">\n" .
              "                        <option value=\"select\" " .
-             "title=\"" . $lc_str['sel_tip'] . "\">" .
-             $lc_str['sel'] . "</option>\n";
+             "title=\"" . $lc_str['sel_tip'] . "\" selected " .
+             "disabled>" . $lc_str['sel'] . "</option>\n";
 
         foreach ($lc_ls as $item) {
             $lc_val = basename($item);
@@ -1372,8 +1402,8 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
              "                    <select name=\"th\" " .
              "id=\"th\" title=\"" . $lc_str['sel_tip'] . "\">\n" .
              "                        <option value=\"select\" " .
-             "title=\"" . $lc_str['sel_tip'] . "\">" .
-             $lc_str['sel'] . "</option>\n";
+             "title=\"" . $lc_str['sel_tip'] . "\" selected " .
+             "disabled>" . $lc_str['sel'] . "</option>\n";
 
         foreach ($th_ls as $item) {
             $th_val = basename($item);
@@ -1519,8 +1549,8 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
              "name=\"type_del\" id=\"type_del\" " .
              "title=\"" . $lc_str['sel_tip'] . "\">\n" .
              "                        <option value=\"select\" " .
-             "title=\"" . $lc_str['sel_tip'] . "\">" .
-             $lc_str['sel'] . "</option>\n";
+             "title=\"" . $lc_str['sel_tip'] . "\" selected " .
+             "disabled>" . $lc_str['sel'] . "</option>\n";
 
         foreach ($type as $item) {
             echo "                        <option " .
@@ -1604,8 +1634,8 @@ if (isset($_SESSION['ac_name']) && !empty($_SESSION['ac_name'])) {
         echo "/>\n" .
              "                </p>\n" .
 
-        //** Post
-             "                <p id=\"nav\">\n" .
+        //** Actions
+             "                <p class=\"exec\">\n" .
              "                    <input type=\"submit\" " .
              "name=\"close\" id=\"close\" value=\"x\" " .
              "title=\"" . $lc_str['close'] . "\"/>\n";

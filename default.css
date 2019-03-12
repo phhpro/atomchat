@@ -199,6 +199,10 @@ ul li ul li {
     text-align: right;
 }
 
+#super .exec, .exec {
+    text-align: center;
+}
+
 #super .aleft {
     text-align: left;
 }
@@ -209,10 +213,6 @@ ul li ul li {
 
 #super select {
     padding: 0;
-}
-
-p#nav {
-    text-align: center;
 }
 
 a:link, a:visited {
@@ -259,6 +259,11 @@ a:link, a:visited {
     background-image: none;
     color: inherit;
     border: 0;
+}
+
+.emo_id:hover {
+    display: inline-block;
+    transform: scale(1.5);
 }
 
 .emo {
