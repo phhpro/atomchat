@@ -7,6 +7,19 @@ Project: [PHP Atomchat](https://github.com/phhpro/atomchat)
 - Bell works on sender but doesn't get pushed to receiver.
 - Superuser screen doesn't allow selecting emojis from hover menu. ??
 
+## [20190315] - 2019-03-15
+### Changed
+- Fix: Language auto detect was missing condition.
+- Moved uploads and credits to sub screens.
+- Reverted buttons back to below textarea due to space gained by exporting uploads.
+- Emoji hover menu now dynamically expands up to top of screen or maximum height, whichever comes first.
+- Raised `$rate` default to 12 to ease bandwidth and user data.
+- Merged log and upload folders into new tmp folder.
+
+## Removed
+- Log options: endless, max size, auto reset
+- Dropped translations EL, IW, PL, TR
+
 ## [20190312] - 2019-03-12
 ### Added
 - Timeout feature now available on superuser screen.

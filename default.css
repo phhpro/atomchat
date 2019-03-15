@@ -5,27 +5,27 @@ body {
 }
 
 .block {
-    max-width: 600px;
+    max-width: 35em;
     margin: 0 auto;
-    padding: 4px;
+    padding: 0.2em;
 }
 
 article {
     position: fixed;
     top: 0;
     right: 0;
-    bottom: 11em;
+    bottom: 10em;
     left: 0;
     overflow: auto;
 }
 
 nav {
-    text-align: center;
-    position: fixed;
+    position: absolute;
     right: 0;
     bottom: 0;
     left: 0;
-    height: 9em;
+    font-size: small;
+    text-align: center;
 }
 
 #login {
@@ -33,59 +33,15 @@ nav {
 }
 
 .login{
-    height: 2em;
-    margin: 4px auto;
-}
-
-#post {
-    position: absolute;
-    top: 0.3em;
-    right: 0;
-}
-
-#set {
-    position: absolute;
-    top: 3em;
-    right: 0;
-}
-
-#quit {
-    position: absolute;
-    top: 0.3em;
-    left: 0;
-}
-
-#save {
-    position: absolute;
-    top: 3em;
-    left: 0;
-}
-
-#su {
-    position: absolute;
-    bottom: 0.3em;
-    left: 0;
-}
-
-#close {
-    margin: 4px auto;
-}
-
-#by {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    font-size: small;
-    margin: auto auto;
-    padding: 4px;
+    height: 3em;
+    margin: 0.2em auto;
 }
 
 #by span {
     display: inline-block;
     vertical-align: middle;
-    width: 4px;
-    height: 4px;
+    width: 0.2em;
+    height: 0.2em;
     border-radius: 50%;
     animation: anim 0.9s infinite alternate;
 }
@@ -106,7 +62,7 @@ nav {
 
     100% {
         opacity: 0.1;
-        transform: translateY(-8px);
+        transform: translateY(-0.4em);
     }
 }
 
@@ -116,24 +72,23 @@ h1 {
 }
 
 h2 {
-    font-size: large;
-    margin: 0;
+    font-size: medium;
 }
 
-input {
-    font-size: medium;
+input[type=text], input {
+    font-size: small;
     vertical-align: middle;
     max-width: 50%;
 }
 
 input[type=submit] {
     font-family: monospace;
-    font-size: large;
+    font-size: larger;
     font-weight: bold;
     text-align: center;
-    width: 32px;
-    height: 32px;
-    margin: 8px;
+    width: 1.8em;
+    height: 1.8em;
+    margin: 0.4em;
     border-radius: 50%;
 }
 
@@ -146,28 +101,25 @@ input[type=file] {
     background-color: transparent;
     background-image: none;
     border: 0;
+    padding: 0 0 0.1em 0;
     font-size: small;
-    padding: 0 0 2px 0;
 }
 
 textarea {
-    padding: 4px;
-    width: 65%;
+    width: 85%;
 }
 
 select {
-    font-size: medium;
-    margin: 0;
-    padding: 1px;
+    font-size: small;
 }
 
 .item {
     font-size: small;
-    margin: 8px 0 16px 0;
+    margin: 0.2em auto;
 }
 
 .item_head {
-    padding: 2px;
+    padding: 0.1em;
 }
 
 .item_name {
@@ -178,7 +130,7 @@ select {
     font-size: larger;
     white-space: pre-wrap;
     margin: 0;
-    padding: 2px;
+    padding: 0.1em;
 }
 
 .item_log {
@@ -199,7 +151,7 @@ ul li ul li {
     text-align: right;
 }
 
-#super .exec, .exec {
+#super .close, .close {
     text-align: center;
 }
 
@@ -211,27 +163,21 @@ ul li ul li {
     float: left;
 }
 
-#super select {
-    padding: 0;
-}
-
 a:link, a:visited {
     text-decoration: none;
 }
 
 #mo {
-    font-size: small;
     text-align: center;
-    max-width: 15em;
-    margin: auto auto;
 }
 
 #mo_list {
     position: absolute;
-    top: -2em;
-    right: 0;
-    bottom: 10em;
-    left: 0;
+    right: 0.2em;
+    bottom: 9.5em;
+    left: 0.2em;
+    min-height: 10em;
+    max-height: 20em;
     text-align: left;
     overflow: auto;
     visibility: hidden;
@@ -247,11 +193,14 @@ a:link, a:visited {
     background-image: none;
     color: inerit;
     font-family: monospace;
-    font-size: x-large;
     border: 0;
     width: 1em;
     height: 1em;
-    margin: 8px;
+    margin: 0.2em;
+}
+
+#mo:hover #mo_list .emo_id {
+    font-size: large;
 }
 
 .emo_id:hover {
@@ -272,18 +221,12 @@ a:link, a:visited {
     white-space: pre-nowrap;
 }
 
-.emo_big {
-    font-family: monospace;
-    font-size: large;
-    white-space: pre-nowrap;
-}
-
 .glue {
     white-space: line-wrap;
 }
 
-.s {
-    font-size: small;
+.large {
+    font-size: large;
 }
 
 hr {

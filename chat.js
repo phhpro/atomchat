@@ -65,10 +65,10 @@ function ajax()
 function push()
 {
     http = ajax();
-    data = data + "?" + Math.floor(Math.random() * 10000);
+    data = data;
 
     if (http != null) {
-        http.open("GET", data, true);
+        http.open("POST", data);
 
         http.onreadystatechange = function()
         {
@@ -81,7 +81,7 @@ function push()
         http.send();
     }
 
-    setTimeout('push()', rate);
+    setTimeout('push()', (1000 * rate));
 }
 
 push();
