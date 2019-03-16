@@ -29,7 +29,7 @@
  */
 
 
-$ver = "20190315";
+$ver = "20190316";
 
 /**
  ***********************************************************************
@@ -127,6 +127,7 @@ if (isset($exit) && $exit !== "") {
 
 ob_start();
 header_remove('X-Powered-By');
+$lock  = "./$tmp/su.lock";
 $init  = "                <div class=\"item_log\">" .
          "LOG INIT $dt</div>\n";
 $cval  = time() + (86400 * 30);
@@ -882,11 +883,11 @@ if (isset($_POST['login'])) {
 
         if ($name === $su) {
 
-            if ($su_on === 1) {
+            if (is_file($lock)) {
                 go('ALREADY_LOGGED_IN');
             } else {
+                file_put_contents($lock, "1");
                 $_SESSION['ac_name'] = $su_pfx;
-                $su_on = 1;
             }
         } else {
             $_SESSION['ac_name']
@@ -936,6 +937,14 @@ if (isset($_SESSION['ac_post'])
 ) {
     $exit = "LOGOUT_INACTIVE";
 } elseif (isset($_POST['quit'])) {
+
+    if ($_SESSION['ac_name'] = $su_pfx) {
+
+        if (is_file($lock)) {
+            unlink($lock);
+        }
+    }
+
     $exit = "LOGOUT";
 } else {
     $stat = 0;
