@@ -29,7 +29,7 @@
  */
 
 
-$ver = "20190316";
+$ver = "20190318";
 
 /**
  ***********************************************************************
@@ -308,7 +308,13 @@ if (!is_file($log)) {
  ***********************************************************************
  */
 
-$lc_id = $lc;
+/*
+ * Asian scripts in "html lang" and "meta name language" appear to break
+ * fonts, formatting, and colour emojis. Binding both to static EN fixes
+ * the issue. Interface localisation works as expected.
+ */
+
+$lc_id = "en";  //** $lc;
 
 //** Try auto detect
 if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
