@@ -59,7 +59,7 @@ $cfg_txt = "<?php\n" .
            "\$emo_dat=\"emo.dat\";\n" .
            "\$dt=date('Y-m-d H:i');\n";
 
-//** Dynamic with pre-filled defaults -- updated from superuser screen
+//** Dynamic with pre-filled defaults -- editable on superuser screen
 if (!is_file($cfg_dat)) {
     $cfg_txt .= "\$su_pfx=\"atom\";\n" .
                 "\$su_sfx=\"chat\";\n" .
@@ -73,7 +73,7 @@ if (!is_file($cfg_dat)) {
                 "\$emo=1;\n" .
                 "\$out=0;\n" .
                 "\$out_max=15;\n" .
-                "\$rate=12;\n" .
+                "\$rate=15;\n" .
                 "\$rn_max=900;\n" .
                 "\$rn_min=100;\n" .
                 "\$up=1;\n" .
@@ -309,12 +309,12 @@ if (!is_file($log)) {
  */
 
 /*
- * Asian scripts in "html lang" and "meta name language" appear to break
- * fonts, formatting, and colour emojis. Binding both to static EN fixes
- * the issue. Interface localisation works as expected.
+ * Asian scripts in page language meta seem to break fonts, formatting,
+ * and colour emojis. Can't test on non-Asian system but hard-linking
+ * static Western locale fixes the issue.
  */
 
-$lc_id = "en";  //** $lc;
+$lc_id = "en";
 
 //** Try auto detect
 if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
@@ -840,16 +840,21 @@ if (isset($_POST['post'])) {
     }
 
     if ($ok === 1) {
+        $id_t = "item_" . time();
+        $id_d = $id_t;
+
         $item = "                <div class=\"item\">\n" .
                 "                    <div class=\"item_head\">\n" .
                 "                        <span class=\"item_date\">" .
                 "$dt</span> \n" .
+                "                        <span onClick=\"" .
+                "selectID('$id_d');\">&nbsp;&hArr;&nbsp;</span> \n" .
                 "                        <span class=\"item_name\">" .
                 $_SESSION['ac_name'] . "</span>\n" .
                 "                    </div>\n" .
-                "                    <pre class=\"item_text\">\n" .
+                "<pre class=\"item_text\" id=\"$id_d\">\n" .
                 "$item\n" .
-                "                    </pre>\n" .
+                "</pre>\n" .
                 "                </div>\n" .
                 "                <hr/>\n";
 

@@ -127,6 +127,7 @@ select {
 }
 
 .item_text {
+    clear: both;
     font-size: larger;
     white-space: pre-wrap;
     margin: 0;

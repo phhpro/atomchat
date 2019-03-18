@@ -48,6 +48,22 @@ function emo(str)
     }
 }
 
+function selectText(txt)
+{
+    var rng = document.createRange();
+        rng.selectNodeContents(txt);
+
+    var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(rng);
+}
+
+function selectID(id)
+{
+    var txt = document.getElementById(id);
+    selectText(txt);
+}
+
 var http = null;
 
 function ajax()

@@ -8,8 +8,9 @@
 - Emoji auto-conversion and auto-select
 - Fully themeable and multi-lingual
 - Responsive, cross browser, cross platform
-- File uploads, next to zero dependencies
-- No database required
+- File uploads, literally zero dependencies
+- One-click text select for easy copy/paste
+- Absolutely no database required
 
 ### Config
 
@@ -27,7 +28,9 @@ Logging applies to the chatlog. The script creates unmetered daily logs, which a
 
 When enabled, this feature automatically converts registered text tokens to graphical Unicode emojis. Hence, you'll get an image, which in fact is entirely text itself and thus saves bandwidth and doesn't cost any extra server requests. However, Unicode support varies greatly across devices and platforms. 
 
-Google Chrome for desktops is particulary prone to fail. Interestingly though, the mobile version seems to have gotten all the Unicode support the desktop version is lacking. Therefore, the definition file `emo.dat` only covers a minimal set. In addition to direct textual input, the script also provides a hover menu to point-and-click insert emojis at the current cursor position. This feature requires JavaScript.
+Google Chrome for desktops is particulary prone to fail. Interestingly though, the mobile version seems to have gotten all the Unicode support the desktop version is lacking. Therefore, the definition file `emo.dat` only covers a minimal set.
+
+In addition to direct textual input, the script also provides a point-and-click hover menu to insert emojis at the current cursor position and one-click text-select for easy copy/paste operations. These features require JavaScript.
 
 ### Uploads
 
@@ -52,6 +55,6 @@ Sockets are clearly the better approach, but require running a daemon on the ser
 Where JavaScript is not available, or when using a text-mode browser, the page needs manual refreshing to execute the selected action or to update the log. In this case neither character counter nor emoji hover menu will have any effect. You can still input emojis by typing the assigned text token as illustrated on the settings screen. Text is auto cut after reaching the maximum set in 
 `$char`.
 
-The only possible caveat lies in setting a *bad* value for `$rate`. The default are 12 seconds and works just fine. Be careful if you intend to lower the value. The smaller the value, the more bandwidth and user data. In addition, there's a good chance it will freeze the browser; or even hang the whole system!
+The only possible caveat lies in setting too small a value for `$rate`. The default are 15 seconds. In general, the smaller the value, the more bandwidth and user data. Plus, there's a good chance it will freeze the browser; or even hang the whole system!
 
 That all said, happy Atomchatting.

@@ -6,11 +6,14 @@ Project: [PHP Atomchat](https://github.com/phhpro/atomchat)
 ### Changed
 - Bell works on sender but doesn't get pushed to receiver.
 - Superuser screen doesn't allow selecting emojis from hover menu. ??
-- JS helper to auto-select item text onclick for easy copy/paste
 
 ## [20190315] - 2019-03-15
 ### Changed
-- Fix: Fonts, formatting, and emojis were broken when using Asian scripts. Hard-linking page language meta to "en" fixes the issue. Localisation now works as expected.
+- Fix: Hard-linked Western page language meta to prevent Asian scripts breaking fonts, formatting and colour emojis.
+- Further increased refresh rate default from 12 to 15 seconds.
+
+##Added
+- One-click text-select for easy copy/paste operations.
 
 ## [20190315] - 2019-03-15
 ### Changed
