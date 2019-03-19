@@ -29,7 +29,7 @@
  */
 
 
-$ver = "20190318";
+$ver = "20190319";
 
 /**
  ***********************************************************************
@@ -841,20 +841,20 @@ if (isset($_POST['post'])) {
 
     if ($ok === 1) {
         $id_t = "item_" . time();
-        $id_d = $id_t;
+        $id_r = $id_t;
 
         $item = "                <div class=\"item\">\n" .
                 "                    <div class=\"item_head\">\n" .
                 "                        <span class=\"item_date\">" .
                 "$dt</span> \n" .
-                "                        <span onClick=\"" .
-                "selectID('$id_d');\">&nbsp;&hArr;&nbsp;</span> \n" .
+                "                        <span title=\°" .
+                $lc_str['copy'] . "\" onClick=\"" .
+                "selectID('$id_r');\">&nbsp;&hArr;&nbsp;</span> \n" .
                 "                        <span class=\"item_name\">" .
                 $_SESSION['ac_name'] . "</span>\n" .
                 "                    </div>\n" .
-                "<pre class=\"item_text\" id=\"$id_d\">\n" .
-                "$item\n" .
-                "</pre>\n" .
+                "                    <pre class=\"item_text\" " .
+                "id=\"$id_r\">$item</pre>\n" .
                 "                </div>\n" .
                 "                <hr/>\n";
 
@@ -1360,7 +1360,6 @@ if (isset($_SESSION['ac_name']) && $_SESSION['ac_name'] !== "") {
     */
 
     if (isset($_POST['su'])) {
-
         echo "            <article class=\"block\" id=\"super\">\n" .
              "                <h1>" . $lc_str['su'] . "</h1>\n" .
              "                <p class=\"aleft\">" .
@@ -1672,10 +1671,13 @@ if (isset($_SESSION['ac_name']) && $_SESSION['ac_name'] !== "") {
     if (!isset($_COOKIE['ac_cookie'])) {
         echo "                <h2>" . $lc_str['perm'] . "</h2>\n" .
              "                <p>\n" .
-             "                    " . $lc_str['cook_txt'] . "\n" .
-             "                    <input type=\"checkbox\" " .
+             "                    " . $lc_str['cook_txt'] . "</p>\n" .
+             "                <p id=\"check\">\n" .
+             "                    <span id=\"box\">\n" .
+             "                        <input type=\"checkbox\" " .
              "name=\"perm\" id=\"perm\" " .
-             "title=\"" . $lc_str['perm_tip'] . "\"/> \n" .
+             "title=\"" . $lc_str['perm_tip'] . "\"/>\n" .
+             "                    </span>\n" .
              "                </p>\n" .
              "                <p>" . $lc_str['cook_del'] . "</p>\n";
     }

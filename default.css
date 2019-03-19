@@ -92,6 +92,16 @@ input[type=submit] {
     border-radius: 50%;
 }
 
+#check {
+    font-size: large;
+    text-align: center;
+}
+
+#box {
+    border-radius: 50%;
+    padding: 0.2em 0.3em 0.4em 0.2em;
+}
+
 input[type=file] {
     font-size: small;
     max-width: 65%;

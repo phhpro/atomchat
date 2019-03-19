@@ -22,6 +22,7 @@ $lc_str['char']       = "Carácteres";
 $lc_str['close']      = "Haga clic aquí para cerrar esta ventana";
 $lc_str['cook_txt']   = "Marque la casilla para aceptar cookies si desea que el script recuerde la configuración de su idioma y tema.";
 $lc_str['cook_del']   = "Las cookies son válidas durante 30 días, después de lo cual, si no ha iniciado sesión, se eliminan automáticamente.";
+$lc_str['copy']       = "Haga clic aquí para seleccionar este mensaje";
 $lc_str['cr']         = "Creditos";
 $lc_str['cr_tip']     = "Haga clic aquí para abrir la referencia de créditos.";
 $lc_str['cr_txt']     = "Los autores desean expresar su agradecimiento a los siguientes sitios y personas por sus valiosas contribuciones a este proyecto.";

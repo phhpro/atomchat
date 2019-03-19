@@ -22,6 +22,7 @@ $lc_str['char']       = "Letters";
 $lc_str['close']      = "Klik hier om het scherm af te sluiten";
 $lc_str['cook_txt']   = "Vink het vakje aan om cookies te accepteren als u wilt dat het script uw taal- en thema-instellingen onthoudt.";
 $lc_str['cook_del']   = "Cookies zijn 30 dagen geldig, waarna ze, als u niet bent ingelogd, automatisch worden verwijderd.";
+$lc_str['copy']       = "Klik hier om dit bericht te selecteren";
 $lc_str['cr']         = "Credits";
 $lc_str['cr_tip']     = "Klik hier om de creditsreferentie te openen";
 $lc_str['cr_txt']     = "De auteurs willen hun dank uitspreken aan de volgende sites en mensen voor hun waardevolle bijdragen aan dit project.";

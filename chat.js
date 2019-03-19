@@ -48,10 +48,10 @@ function emo(str)
     }
 }
 
-function selectText(txt)
+function selectText(id)
 {
     var rng = document.createRange();
-        rng.selectNodeContents(txt);
+        rng.selectNodeContents(id);
 
     var sel = window.getSelection();
         sel.removeAllRanges();
@@ -60,8 +60,8 @@ function selectText(txt)
 
 function selectID(id)
 {
-    var txt = document.getElementById(id);
-    selectText(txt);
+    var id = document.getElementById(id);
+    selectText(id);
 }
 
 var http = null;

@@ -15,7 +15,7 @@ body {
     color: #ff3;
 }
 
-input {
+input, #box {
     background-color: #ff3;
     background-image: linear-gradient(#ff3, #993);
     color: #030;
