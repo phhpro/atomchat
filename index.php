@@ -17,10 +17,10 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
@@ -28,8 +28,7 @@
  * MA 02110-1301, USA.
  */
 
-
-$ver = "20190319";
+$ver = "20190320";
 
 /**
  ***********************************************************************
@@ -140,31 +139,6 @@ sort($type);
 
 /**
  ***********************************************************************
- *                                                    Delete old files *
- ***********************************************************************
- */
-
-if ($rm === 1) {
-    $rm_now = 60 * 60 * 24 * $rm_max;
-
-    foreach (new DirectoryIterator($tmp) as $item) {
-
-        if ($item -> isDot()) {
-            continue;
-        }
-
-        if ($item -> isFile()
-            && time() - $item -> getMTime() >= $rm_now
-        ) {
-            unlink($item -> getRealPath());
-        }
-    }
-
-    unset($item);
-}
-
-/**
- ***********************************************************************
  *                                                             Credits *
  ***********************************************************************
  */
@@ -208,6 +182,31 @@ $cr = "                <ul>\n" .
       "                    </li>\n" .
       "                </ul>\n" .
       "                <p>et al</p>\n";
+
+/**
+ ***********************************************************************
+ *                                                    Delete old files *
+ ***********************************************************************
+ */
+
+if ($rm === 1) {
+    $rm_now = 60 * 60 * 24 * $rm_max;
+
+    foreach (new DirectoryIterator($tmp) as $item) {
+
+        if ($item -> isDot()) {
+            continue;
+        }
+
+        if ($item -> isFile()
+            && time() - $item -> getMTime() >= $rm_now
+        ) {
+            unlink($item -> getRealPath());
+        }
+    }
+
+    unset($item);
+}
 
 /**
  ***********************************************************************
@@ -847,7 +846,7 @@ if (isset($_POST['post'])) {
                 "                    <div class=\"item_head\">\n" .
                 "                        <span class=\"item_date\">" .
                 "$dt</span> \n" .
-                "                        <span title=\°" .
+                "                        <span title=\"" .
                 $lc_str['copy'] . "\" onClick=\"" .
                 "selectID('$id_r');\">&nbsp;&hArr;&nbsp;</span> \n" .
                 "                        <span class=\"item_name\">" .
@@ -962,14 +961,15 @@ if (isset($_SESSION['ac_post'])
 }
 
 if ($stat === 1) {
-    $text  = "                <div class=\"item_log\">$dt " .
-             $_SESSION['ac_name'] . " $exit</div>\n";
-    $text .= file_get_contents($log);
+    $text = "                <div class=\"item_log\">$dt " .
+            $_SESSION['ac_name'] . " $exit</div>\n" .
+            file_get_contents($log);
     file_put_contents($log, $text);
     $_SESSION = array();
 
     if (ini_get("session.use_cookies")) {
         $para = session_get_cookie_params();
+
         setcookie(
             session_name(), '', time() - 42000,
             $para["path"], $para["domain"],
@@ -1048,7 +1048,7 @@ if (isset($_SESSION['ac_name']) && $_SESSION['ac_name'] !== "") {
         if ($emo_ln[0] !== "") {
             echo "                        <input type=\"text\" " .
                  "id=\"$emo_id\" class=\"emo_id\" " .
-                 "value=\"$emo_ln[1]\" " .
+                 "value=\"" . $emo_ln[1] . "\" " .
                  "title=\"" . $emo_ln[0] . "\" " .
                  "onclick=\"emo('$emo_id');\"/>\n";
         }
@@ -1077,8 +1077,8 @@ if (isset($_SESSION['ac_name']) && $_SESSION['ac_name'] !== "") {
          "                <div>\n" .
 
     //** Name -- hidden session token
-         "                    <input type=\"hidden\" name=\"name\" " .
-         "value=\"" . $_SESSION['ac_name'] . "\"/>\n";
+         "                    <input type=\"hidden\" " .
+         "name=\"name\" value=\"" . $_SESSION['ac_name'] . "\"/>\n";
 
     //** Superuser
     if ($_SESSION['ac_name'] === $su_pfx) {
@@ -1133,29 +1133,6 @@ if (isset($_SESSION['ac_name']) && $_SESSION['ac_name'] !== "") {
          "                </script>\n" .
          "                <script src=\"chat.js\"></script>\n" .
          "            </nav>\n";
-
-    /**
-     *******************************************************************
-     *                                                  Chatlog screen *
-     *******************************************************************
-     */
-
-    if (!isset($_POST['set'])
-        && !isset($_POST['upload'])
-        && !isset($_POST['credit'])
-        && !isset($_POST['su'])
-    ) {
-        echo "            <article class=\"block\" id=\"push\">\n";
-
-        if (is_file($log)) {
-            include $log;
-        } else {
-            file_put_contents($log, $init);
-            include $log;
-        }
-
-        echo "            </article>\n";
-    }
 
     /**
      *******************************************************************
@@ -1283,7 +1260,7 @@ if (isset($_SESSION['ac_name']) && $_SESSION['ac_name'] !== "") {
              "title=\"" . $lc_str['close'] . "\"/>\n" .
              "                </div>\n" .
              "            </article>\n";
-    }
+    } elseif (isset($_POST['upload'])) {
 
     /**
      *******************************************************************
@@ -1291,7 +1268,6 @@ if (isset($_SESSION['ac_name']) && $_SESSION['ac_name'] !== "") {
      *******************************************************************
      */
 
-    if (isset($_POST['upload'])) {
         echo "            <article class=\"block\" id=\"uploads\">\n" .
              "                <h1>" . $lc_str['up'] . "</h1>\n" .
              "                <p>" . $lc_str['up_txt'] . "</p>\n" .
@@ -1329,8 +1305,7 @@ if (isset($_SESSION['ac_name']) && $_SESSION['ac_name'] !== "") {
              "title=\"" . $lc_str['close'] . "\"/>\n" .
              "                </div>\n" .
              "            </article>\n";
-    }
-
+    } elseif (isset($_POST['cr'])) {
 
     /**
      *******************************************************************
@@ -1338,7 +1313,6 @@ if (isset($_SESSION['ac_name']) && $_SESSION['ac_name'] !== "") {
      *******************************************************************
      */
 
-    if (isset($_POST['cr'])) {
         echo "            <article class=\"block\" id=\"credits\">\n" .
              "                <h1>" . $lc_str['cr'] . "</h1>\n" .
              "                <p>" . $lc_str['cr_txt'] . "</p>\n" .
@@ -1351,7 +1325,7 @@ if (isset($_SESSION['ac_name']) && $_SESSION['ac_name'] !== "") {
              "title=\"" . $lc_str['close'] . "\"/>\n" .
              "                </div>\n" .
              "            </article>\n";
-    }
+    } elseif (isset($_POST['su'])) {
 
     /**
      *******************************************************************
@@ -1359,7 +1333,6 @@ if (isset($_SESSION['ac_name']) && $_SESSION['ac_name'] !== "") {
      *******************************************************************
     */
 
-    if (isset($_POST['su'])) {
         echo "            <article class=\"block\" id=\"super\">\n" .
              "                <h1>" . $lc_str['su'] . "</h1>\n" .
              "                <p class=\"aleft\">" .
@@ -1655,6 +1628,24 @@ if (isset($_SESSION['ac_name']) && $_SESSION['ac_name'] !== "") {
              "title=\"" . $lc_str['update'] . "\"/>\n" .
              "                </div>\n" .
              "            </article>\n";
+    } else {
+
+    /**
+     *******************************************************************
+     *                                                  Chatlog screen *
+     *******************************************************************
+     */
+
+        echo "            <article class=\"block\" id=\"push\">\n";
+
+        if (is_file($log)) {
+            include $log;
+        } else {
+            file_put_contents($log, $init);
+            include $log;
+        }
+
+        echo "            </article>\n";
     }
 } else {
 

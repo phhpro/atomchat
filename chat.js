@@ -24,27 +24,27 @@ function chars(chat)
 
 function emo(str)
 {
-    var id  = document.getElementById("text");
+    var txt = document.getElementById("text");
     var str = document.getElementById(str).value;
 
     if (document.selection) {
-        id.focus();
+        txt.focus();
         var sel = document.selection.createRange();
         sel.str = str;
-        id.focus();
-    } else if (id.selectionStart || id.selectionStart === 0) {
-        var beg  = id.selectionStart;
-        var end  = id.selectionEnd;
-        var top  = id.top;
-        id.value = id.value.substring(0, beg) + str +
-                   id.value.substring(end, id.value.length);
-        id.focus();
-        id.selectionStart = beg + str.length;
-        id.selectionEnd   = beg + str.length;
-        id.top            = top;
+        txt.focus();
+    } else if (txt.selectionStart || txt.selectionStart === 0) {
+        var beg   = txt.selectionStart;
+        var end   = txt.selectionEnd;
+        var top   = txt.top;
+        txt.value = txt.value.substring(0, beg) + str +
+                    txt.value.substring(end, txt.value.length);
+        txt.focus();
+        txt.selectionStart = beg + str.length;
+        txt.selectionEnd   = beg + str.length;
+        txt.top            = top;
     } else {
-        id.value += str;
-        id.focus();
+        txt.value += str;
+        txt.focus();
     }
 }
 
