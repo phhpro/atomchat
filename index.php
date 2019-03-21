@@ -28,7 +28,7 @@
  * MA 02110-1301, USA.
  */
 
-$ver = "20190320";
+$ver = "20190321";
 
 /**
  ***********************************************************************
@@ -68,6 +68,8 @@ if (!is_file($cfg_dat)) {
                 "\$lc=\"en\";\n" .
                 "\$th=\"light\";\n" .
                 "\$th_m=1;\n" .
+                "\$at=0;\n" .
+                "\$at_val=\"chat\";\n" .
                 "\$char=512;\n" .
                 "\$emo=1;\n" .
                 "\$out=0;\n" .
@@ -130,6 +132,7 @@ $lock  = "./$tmp/su.lock";
 $init  = "                <div class=\"item_log\">" .
          "LOG INIT $dt</div>\n";
 $cval  = time() + (86400 * 30);
+$query = $_SERVER['QUERY_STRING'];
 $su    = $su_pfx . $su_sfx;
 $lc_ls = glob("$lang/*.php");
 $th_ls = glob("$theme/*.css");
@@ -272,7 +275,14 @@ $b64 = array('gif', 'jpeg', 'jpg', 'png');
 function go($tag)
 {
     global $host;
-    header("Location: $host#$tag");
+
+    if (!empty($tag)) {
+        $tag = "#$tag";
+    } else {
+        $tag = "";
+    }
+
+    header("Location: $host$tag");
     exit;
 }
 
@@ -288,8 +298,14 @@ if (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS']) {
     $pro = "s";
 }
 
+if ($at === 1) {
+    $at_go = "?$at_val";
+} else {
+    $at_go = "";
+}
+
 $host = "http$pro://" . $_SERVER['HTTP_HOST'] .
-        "/" . basename(getcwd()) . "/";
+        "/" . basename(getcwd()) . "/$at_go";
 
 /**
  ***********************************************************************
@@ -482,6 +498,10 @@ if (isset($_POST['update'])) {
         = htmlentities($_POST['th'], ENT_QUOTES, 'UTF-8');
     $th_m_new
         = htmlentities($_POST['th_m'], ENT_QUOTES, 'UTF-8');
+    $at_new
+        = htmlentities($_POST['at'], ENT_QUOTES, 'UTF-8');
+    $at_val_new
+        = htmlentities($_POST['at_val'], ENT_QUOTES, 'UTF-8');
     $char_new
         = htmlentities($_POST['char'], ENT_QUOTES, 'UTF-8');
     $emo_new
@@ -565,6 +585,20 @@ if (isset($_POST['update'])) {
         $th_m_new = 1;
     } else {
         $th_m_new = 0;
+    }
+
+    //** Access token
+    if ($at_new !== "") {
+        $at_new = 1;
+    } else {
+        $at_new = 0;
+    }
+
+    //** Access token value
+    if ($at_val_new !== "") {
+        $at_val_new = $at_val_new;
+    } else {
+        $at_val_new = $at_val;
     }
 
     //** Characters max per post
@@ -672,11 +706,13 @@ if (isset($_POST['update'])) {
                 "\$lc=\"$lc_new\";\n" .
                 "\$th=\"$th_new\";\n" .
                 "\$th_m=$th_m_new;\n" .
+                "\$at=$at_new;\n" .
+                "\$at_val=\"$at_val_new\";\n" .
                 "\$char=$char_new;\n" .
                 "\$emo=$emo_new;\n" .
                 "\$rate=$rate_new;\n" .
-                "\$out=\"$out_new\";\n" .
-                "\$out_max=\"$out_max_new\";\n" .
+                "\$out=$out_new;\n" .
+                "\$out_max=$out_max_new;\n" .
                 "\$rn_max=$rn_max_new;\n" .
                 "\$rn_min=$rn_min_new;\n" .
                 "\$up=$up_new;\n" .
@@ -844,11 +880,9 @@ if (isset($_POST['post'])) {
 
         $item = "                <div class=\"item\">\n" .
                 "                    <div class=\"item_head\">\n" .
-                "                        <span class=\"item_date\">" .
-                "$dt</span> \n" .
-                "                        <span title=\"" .
-                $lc_str['copy'] . "\" onClick=\"" .
-                "selectID('$id_r');\">&nbsp;&hArr;&nbsp;</span> \n" .
+                "                        <span class=\"item_date\" " .
+                "title=\"" . $lc_str['copy'] . "\" onClick=\"" .
+                "selectID('$id_r');\">$dt</span> \n" .
                 "                        <span class=\"item_name\">" .
                 $_SESSION['ac_name'] . "</span>\n" .
                 "                    </div>\n" .
@@ -990,6 +1024,12 @@ if ($stat === 1) {
  ***********************************************************************
  */
 
+if ($at === 1) {
+    $url = str_replace("?$at_val", "", $host);
+} else {
+    $url = $host;
+}
+
 echo "<!DOCTYPE html>\n" .
      "<html lang=\"$lc_id\">\n" .
      "    <head>\n" .
@@ -1003,14 +1043,14 @@ echo "<!DOCTYPE html>\n" .
      "        <meta name=\"robots\" content=\"noodp, noydir\"/>\n" .
      "        <meta name=\"viewport\" content=\"width=device-width, " .
      "height=device-height, initial-scale=1\"/>\n" .
-     "        <link rel=\"icon\" href=\"" . $host . "favicon.png\" " .
+     "        <link rel=\"icon\" href=\"" . $url . "favicon.png\" " .
      "type=\"image/png\"/>\n" .
      "        <link rel=\"stylesheet\" " .
-     "href=\"" . $host. "default.css\"/>\n" .
-     "        <link rel=\"stylesheet\" href=\"$host$th_dat\"/>\n" .
+     "href=\"" . $url . "default.css\"/>\n" .
+     "        <link rel=\"stylesheet\" href=\"$url$th_dat\"/>\n" .
      "    </head>\n" .
      "    <body>\n" .
-     "        <form action=\"$host#CHAT\" name=\"chat\" " .
+     "        <form action=\"$host\" name=\"chat\" " .
      "method=\"POST\" accept-charset=\"UTF-8\" " .
      "enctype=\"multipart/form-data\">\n";
 
@@ -1450,6 +1490,30 @@ if (isset($_SESSION['ac_name']) && $_SESSION['ac_name'] !== "") {
         echo "/>\n" .
              "                </p>\n" .
 
+        //** Access token
+             "                <p>\n" .
+             "                    <label for=\"at\">" .
+             $lc_str['at'] . "</label>\n" .
+             "                    <input type=\"checkbox\" " .
+             "name=\"at\" id=\"at\" " .
+             "title=\"" . $lc_str['tick'] . "\"";
+
+        if ($at === 1) {
+            echo " checked ";
+        }
+
+        echo "/>\n" .
+             "                </p>\n" .
+
+        //** Access token value
+             "                <p>\n" .
+             "                    <label for=\"at_val\">" .
+             $lc_str['at_val'] . "</label>\n" .
+             "                    <input type=\"text\" " .
+             "name=\"at_val\" id=\"at_val\" value=\"$at_val\" " .
+             "title=\"" . $lc_str['edit'] . "\"/>\n" .
+             "                </p>\n" .
+
         //** Characters per post
              "                <p>\n" .
              "                    <label for=\"char\">" .
@@ -1658,43 +1722,60 @@ if (isset($_SESSION['ac_name']) && $_SESSION['ac_name'] !== "") {
     echo "            <article class=\"block\" id=\"login\">\n" .
          "                <h1>" . $lc_str['welcome'] . "</h1>\n";
 
-    //** Cookie
-    if (!isset($_COOKIE['ac_cookie'])) {
-        echo "                <h2>" . $lc_str['perm'] . "</h2>\n" .
-             "                <p>\n" .
-             "                    " . $lc_str['cook_txt'] . "</p>\n" .
-             "                <p id=\"check\">\n" .
-             "                    <span id=\"box\">\n" .
-             "                        <input type=\"checkbox\" " .
-             "name=\"perm\" id=\"perm\" " .
-             "title=\"" . $lc_str['perm_tip'] . "\"/>\n" .
-             "                    </span>\n" .
-             "                </p>\n" .
-             "                <p>" . $lc_str['cook_del'] . "</p>\n";
+    if ($at === 1) {
+
+        if (!isset($query) || $query !== $at_val) {
+            echo "                <p>" . $lc_str['at_inf'] . "</p>\n" .
+                 "                <p>" . $lc_str['at_txt'] . "</p>\n" .
+                 "            </article>\n";
+        } else {
+            $at_go = 1;
+
+            //** Cookie
+            if (!isset($_COOKIE['ac_cookie'])) {
+                echo "                <h2>" . $lc_str['perm'] .
+                     "</h2>\n" .
+                     "                <p>\n" . $lc_str['cook_txt'] .
+                     "</p>\n" .
+                     "                <p id=\"check\">\n" .
+                     "                    <span id=\"box\">\n" .
+                     "                        <input " .
+                     "type=\"checkbox\" name=\"perm\" id=\"perm\" " .
+                     "title=\"" . $lc_str['perm_tip'] . "\"/>\n" .
+                     "                    </span>\n" .
+                     "                </p>\n" .
+                     "                <p>" . $lc_str['cook_del'] .
+                     "</p>\n";
+            }
+
+            //** Info
+            echo "                <p>" . $lc_str['name_txt'] .
+                 "</p>\n" .
+                 "                <noscript>\n" .
+                 "                    <h2>" . $lc_str['js'] .
+                 "</h2>\n" .
+                 "                    <p>" . $lc_str['js_txt'] .
+                 "</p>\n" .
+                 "                </noscript>\n" .
+                 "            </article>\n" .
+                 "            <nav class=\"block login\">\n" .
+
+            //** Name
+                 "                <div>\n" .
+                 "                    <label for=\"name\">" .
+                 $lc_str['name'] . "</label>\n" .
+                 "                    <input type=\"text\" " .
+                 "name=\"name\" id=\"name\" maxlength=\"16\" " .
+                 "title=\"" . $lc_str['name_tip'] . "\"/> \n" .
+
+            //** Login
+                 "                    <input type=\"submit\" " .
+                 "name=\"login\" value=\"&gt;\" " .
+                 "title=\"" . $lc_str['login'] . "\"/>\n" .
+                 "                </div>\n" .
+                 "            </nav>\n";
+        }
     }
-
-    //** Info
-    echo "                <p>" . $lc_str['name_txt'] . "</p>\n" .
-         "                <noscript>\n" .
-         "                    <h2>" . $lc_str['js'] . "</h2>\n" .
-         "                    <p>" . $lc_str['js_txt'] . "</p>\n" .
-         "                </noscript>\n" .
-         "            </article>\n" .
-         "            <nav class=\"block login\">\n" .
-
-    //** Name
-         "                <div>\n" .
-         "                    <label for=\"name\">" .
-         $lc_str['name'] . "</label>\n" .
-         "                    <input type=\"text\" name=\"name\" " .
-         "id=\"name\" maxlength=\"16\" " .
-         "title=\"" . $lc_str['name_tip'] . "\"/> \n" .
-
-    //** Login
-         "                    <input type=\"submit\" name=\"login\" " .
-         "value=\"&gt;\" title=\"" . $lc_str['login'] . "\"/>\n" .
-         "                </div>\n" .
-         "            </nav>\n";
 }
 
 /**

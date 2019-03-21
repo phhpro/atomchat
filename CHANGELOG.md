@@ -5,11 +5,18 @@ Project: [PHP Atomchat](https://github.com/phhpro/atomchat)
 ## [Unreleased]
 ### Changed
 - Bell works on sender but doesn't get pushed to receiver.
-- Superuser screen doesn't allow selecting emojis from hover menu. ??
+- Superuser screen doesn't allow selecting emojis from hover menu.
+
+## [20190321] - 2019-03-21
+### Changed
+- Moved copy/paste trigger from symbol to timestamp.
+
+##Added
+- Simple query string check to restrict access, primarily aiming at bots.
 
 ## [20190315] - 2019-03-15
 ### Changed
-- Fix: Hard-linked Western page language meta to prevent Asian scripts breaking fonts, formatting and colour emojis.
+- Fix: Hard-linked Western page language meta to prevent non-Western scripts from breaking things.
 - Further increased refresh rate default from 12 to 15 seconds.
 
 ##Added

@@ -12,49 +12,56 @@
 - One-click text select for easy copy/paste
 - Absolutely no database required
 
-### Config
+### Configuration
 
 The script generates a default configuration in `config.php` when first run or in case the file has been accidentally deleted. All relevant settings can be configured from the superuser screen and are usually effective immediately. Simply refresh the page if in doubt. You can also enable a timeout option to automatically logout inactive users after a given time. The default is to leave session handling to PHP settings.
 
-Please visit the superuser screen before making the script public and change at least the prefix and suffix. The rest of the default settings should be fairly save to leave for the time being until you have a better understanding of how things work. Default login is `atomchat`.
+Please visit the superuser screen before making the script public and change at least the prefix and suffix. The rest of the default settings should be fairly save to keep for the time being. Default login is `atomchat`.
 
-Note: The script will *not* check your input. If you enter text into a field expecting numbers, the script will accept that, but likely break after reading the new configuration. In case you somehow managed to break the setup, your best option is to delete `config.php` and restart from scratch.
+Also please note that whatever you enter will be accepted AS IS. In other words, if you put text into a field expecting numbers, the script will accept that but likely break after reading the new configuration. In any such case your best option is to delete `config.php` and restart from scratch.
+
+### Access And *Security*
+
+An optional query string check exists to restrict access without a valid access token, e.g. to keep bots out. You should also change the token value when using the feature. The setting is disabled per default to simplify testing the script but is strongly recommended to be enabled in public environments. Just make sure to let your users know the proper access token before they start hitting your inbox. Providing the complete URL would be the easiest, like `example.com/atomchat/?chat`
+
+***This script is absolutely NOT fit to serve in secure environments!***
 
 ### Logging
 
-Logging applies to the chatlog. The script creates unmetered daily logs, which are; together with any uploaded files; auto deleted after 24 hours. You can change the value on the superuser screen. Downloaded logs maintain all formatting; no styles though; and can be viewed offline with any HTML capable application.
+Logging applies to the chatlog. The script creates unmetered daily logs, which are; together with any uploaded files; auto deleted after 24 hours. The exact behaviour can be changed on the superuser screen. Downloaded logs maintain all formatting; no styles though or JavaScript features; and can be viewed offline with any HTML capable application. No other logging takes place; nor is planned to be implemented.
 
-### Emojis
+### Emoji Auto Conversion
 
-When enabled, this feature automatically converts registered text tokens to graphical Unicode emojis. Hence, you'll get an image, which in fact is entirely text itself and thus saves bandwidth and doesn't cost any extra server requests. However, Unicode support varies greatly across devices and platforms. 
+When enabled, this feature attempts to automatically convert registered text tokens into graphical Unicode emojis. Hence, you'll get an image, which in fact is entirely text. However, Unicode support varies greatly across devices and platforms. 
 
-Google Chrome for desktops is particulary prone to fail. Interestingly though, the mobile version seems to have gotten all the Unicode support the desktop version is lacking. Therefore, the definition file `emo.dat` only covers a minimal set.
+Google Chrome for desktops is particulary prone to fail. Interestingly though, the mobile version seems to have gotten all the Unicode support the desktop version is lacking; or maybe fonts on Android are just better prepared. Therefore, the definition file `emo.dat` only covers a minimal set. YMMV.
 
-In addition to direct textual input, the script also provides a point-and-click hover menu to insert emojis at the current cursor position and one-click text-select for easy copy/paste operations. These features require JavaScript.
+In addition to direct text input, the script also provides a point-and-click hover menu to insert emojis at the current cursor position and one-click text-select for easy copy/paste operations. Simply click the message's timestamp to auto select the corresponding text. These features require JavaScript.
 
-### Uploads
+### File Uploads
 
-Image types `gif, jpeg, jpg, png` are managed internally and converted to Base64 strings to minimise server requests. Only these will render auto-scaled thumbnails. Any other types produce normal text links. You may need to edit your CSP to add an exception for the `base` handler if you don't see the thumbnails.
+Image types `gif, jpeg, jpg, png` are managed internally and converted to Base64 strings to minimise server requests and also to be available in downloaded offline logs. Only these will render auto scaled thumbnails. Any other types produce standard text links. You may need to edit your CSP to add an exception for the `base` handler if you don't see the thumbnails.
 
-### Themes
+### Multi Themes
 
-The script provides a small collection of pre-made themes. These are kept simple and primarily aim to serve as guidance to *'roll your own'*. Themes focus on colours. The actual core styles are managed in `default.css`. You are advised not to touch this file unless you know what you're doing. Multi themes are enabled per default to allow users to change themes as they see fit. Disable this option if you prefer a fixed theme.
+The script provides a small collection of pre-made themes. These are kept simple and primarily aim to serve as guidance to *'roll your own'*. Themes typically just provide colours. The actual core styles are managed in `default.css`. You are advised not to touch this file unless you know what you're doing. Multi themes are enabled per default to allow users to change themes as they see fit. You can disable this option if you prefer a fixed theme.
 
-### Languages
+### Multi Lingual
 
-The script attempts to auto-detect the browser's language preference and checks if a translation exists. If so, the interface will use that language. Else, the  configured default language is applied. Users can change language settings at any time.
+The script attempts to auto detect the browser's language preferences and checks if a translation exists. If so, the interface will use that language. Else, the  configured default language is applied. Users can change language settings at any time.
 
-As an example, consider a native speaker of Japanese on vacation in Italy, and the browser was configured to prefer Hindi. The script would talk Hindi. Open the settings screen and select Japanese from the list. The script talks Japanese instantly. Refer to `TRANSLATE.md` if your language is missing.
+As an example, consider a native speaker of Japanese on vacation in Italy on a publci terminal configured to prefer Italian. The script would talk Italian. Open the settings screen and select Japanese from the list. The script talks Japanese instantly. Refer to `TRANSLATE.md` if your language is missing.
 
 ### Limitations And Issues
 
-**PHP Atomchat** uses a very crude AJAX call to perform a pseudo push. While this works OK for the target audience running the occasinal P2P session, it means the script is contiously polling every `$rate` seconds, creating plenty of overhead on the server and bandwidth on the user end; depending the log size.
+The script uses a very crude AJAX call to perform a pseudo push using some sort of long polling. While this works OK for the target audience running the occasinal P2P session, it still means the script is creating extra overhead on the server and data on the user end; depending the log size.
 
-Sockets are clearly the better approach, but require running a daemon on the server; which may be well beyond the usual hobbyist user; or outright impossible on shared hosting. The primary intention of this script is to keep it as simple as possible with next to zero dependencies and minimal user efforts; and while it says PHP 5 in the header, it actually runs on obsolete PHP 4x machines all the same.
+Sockets are clearly the better approach, but require running a daemon on the server; which may be well beyond the usual hobbyist user; or outright impossible on shared or free hosting. The primary intention of this script was to keep it as simple as possible with next to zero dependencies and minimal user efforts. It says PHP 5 in the header, but actually runs on obsolete 4x machines all the same.
 
-Where JavaScript is not available, or when using a text-mode browser, the page needs manual refreshing to execute the selected action or to update the log. In this case neither character counter nor emoji hover menu will have any effect. You can still input emojis by typing the assigned text token as illustrated on the settings screen. Text is auto cut after reaching the maximum set in 
-`$char`.
+Where JavaScript is not available, or when using a text-mode browser, the page needs manual refreshing to execute the selected action or to update the log. In this case neither character counter, nor emoji hover menu, nor auto select will have any effect. You can still input emojis by typing the assigned text token as illustrated on the settings screen. Text is auto cut after reaching the character limit.
 
-The only possible caveat lies in setting too small a value for `$rate`. The default are 15 seconds. In general, the smaller the value, the more bandwidth and user data. Plus, there's a good chance it will freeze the browser; or even hang the whole system!
+Setting a non-Western default as the page language META produces strange rendering. In mild cases it's just black and white emojis, in more extreme scenarios effectively placing the hover menu out of reach and hence making it completely unusable. Hard-linking a Western locale fixes the issue. Translations are not affected and work as expected.
+
+The only possible caveat lies in setting the refresh rate too small. Default are 15 seconds. In general, the smaller the value, the more bandwidth and user data. Plus, there's a good chance it will freeze the browser; or even hang the whole system!
 
 That all said, happy Atomchatting.

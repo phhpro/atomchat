@@ -132,6 +132,10 @@ select {
     padding: 0.1em;
 }
 
+.item_date {
+    cursor: pointer;
+}
+
 .item_name {
     float: right;
 }
