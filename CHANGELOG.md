@@ -17,7 +17,7 @@ Project: [PHP Atomchat](https://github.com/phhpro/atomchat)
 ### Changed
 - Moved copy/paste trigger from symbol to timestamp.
 
-##Added
+### Added
 - Optional access token to restrict access, primarily aiming at bots.
 
 ## [20190315] - 2019-03-15
@@ -25,7 +25,7 @@ Project: [PHP Atomchat](https://github.com/phhpro/atomchat)
 - Fix: Hard-linked Western page language meta to prevent non-Western scripts from breaking things.
 - Further increased refresh rate default from 12 to 15 seconds.
 
-##Added
+### Added
 - One-click text-select for easy copy/paste operations.
 
 ## [20190315] - 2019-03-15
@@ -37,7 +37,7 @@ Project: [PHP Atomchat](https://github.com/phhpro/atomchat)
 - Raised `$rate` default to 12 to ease bandwidth and user data.
 - Merged log and upload folders into new tmp folder.
 
-## Removed
+### Removed
 - Log options: endless, max size, auto reset
 - Dropped translations EL, IW, PL, TR
 
