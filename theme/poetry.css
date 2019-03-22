@@ -1,0 +1,83 @@
+@charset "UTF-8";
+
+body {
+    background-color: #fff;
+    color: #006;
+}
+
+.block {
+    background-color: #fff;
+    color: #006;
+}
+
+#by span {
+    background-color: #006;
+    color: #fff;
+}
+
+input, #box {
+    background-color: #ccf;
+    background-image: linear-gradient(#fff, #ccf);
+    color: #33c;
+    border: 1px solid #99f;
+}
+
+#txta {
+    color: #006;
+}
+
+textarea {
+    background-color: #ccf;
+    background-image: linear-gradient(#fff, #ccf);
+    color: #33c;
+    border: 1px solid #99f;
+}
+
+select {
+    background-color: #ccf;
+    background-image: linear-gradient(#fff, #ccf);
+    color: #33c;
+    border: 1px solid #99f;
+}
+
+.item {
+    border: 1px solid #99f;
+}
+
+.item_head {
+    background-color: #ccf;
+    color: #006;
+}
+
+.item:hover .item_head {
+    background-color: #003;
+    color: #ccf;
+}
+
+.item_log {
+    background-color: transparent;
+    color: #006;
+}
+
+input:hover, textarea:hover, select:hover, .item:hover, #box:hover {
+    background-color: #009;
+    background-image: linear-gradient(#ccf, #fff);
+    color: #006;
+    border: 1px solid #669;
+}
+
+a:link, a:visited {
+    background-color: transparent;
+    color: #003;
+}
+
+a:hover, a:active {
+    background-color: transparent;
+    color: #006;
+}
+
+#mo_list {
+    background-color: #fff;
+    color: #006;
+    border: 1px solid #99f;
+}

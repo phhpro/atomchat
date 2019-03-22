@@ -45,7 +45,7 @@ select {
 }
 
 .item_head {
-    background-color: #060;
+    background-color: #660;
     color: #ff3;
 }
 
@@ -62,7 +62,7 @@ select {
 input:hover, textarea:hover, select:hover, .item:hover, #box:hover {
     background-color: #ff0;
     background-image: linear-gradient(#993, #ff3);
-    color: #030;
+    color: #000;
     border: 1px solid #660;
 }
 

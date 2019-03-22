@@ -17,7 +17,7 @@ body {
 
 input, #box {
     background-color: #999;
-    background-image: linear-gradient(#666, #ccc);
+    background-image: linear-gradient(#ccc, #666);
     color: #333;
     border: 1px solid #666;
 }
@@ -28,14 +28,14 @@ input, #box {
 
 textarea {
     background-color: #999;
-    background-image: linear-gradient(#666, #ccc);
+    background-image: linear-gradient(#ccc, #666);
     color: #333;
     border: 1px solid #666;
 }
 
 select {
     background-color: #999;
-    background-image: linear-gradient(#666, #ccc);
+    background-image: linear-gradient(#ccc, #666);
     color: #333;
     border: 1px solid #666;
 }
@@ -61,7 +61,7 @@ select {
 
 input:hover, textarea:hover, select:hover, .item:hover, #box:hover {
     background-color: #ccc;
-    background-image: linear-gradient(#ccc, #666);
+    background-image: linear-gradient(#666, #ccc);
     color: #000;
     border: 1px solid #666;
 }

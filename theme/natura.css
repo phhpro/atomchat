@@ -50,7 +50,7 @@ select {
 }
 
 .item:hover .item_head {
-    background-color: #996;
+    background-color: #663;
     color: #000;
 }
 
