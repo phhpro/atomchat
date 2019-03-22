@@ -90,8 +90,7 @@ if (!is_file($cfg_dat)) {
 
     file_put_contents($cfg_dat, $cfg_txt);
     $run ++;
-    header("Location: #WELCOME");
-    exit;
+    go('WELCOME');
 }
 
 /**
@@ -1724,57 +1723,52 @@ if (isset($_SESSION['ac_name']) && $_SESSION['ac_name'] !== "") {
 
     if ($at === 1) {
 
-        if (!isset($query) || $query !== $at_val) {
+        if (empty($query) || $query !== $at_val) {
             echo "                <p>" . $lc_str['at_inf'] . "</p>\n" .
                  "                <p>" . $lc_str['at_txt'] . "</p>\n" .
                  "            </article>\n";
-        } else {
-            $at_go = 1;
-
-            //** Cookie
-            if (!isset($_COOKIE['ac_cookie'])) {
-                echo "                <h2>" . $lc_str['perm'] .
-                     "</h2>\n" .
-                     "                <p>\n" . $lc_str['cook_txt'] .
-                     "</p>\n" .
-                     "                <p id=\"check\">\n" .
-                     "                    <span id=\"box\">\n" .
-                     "                        <input " .
-                     "type=\"checkbox\" name=\"perm\" id=\"perm\" " .
-                     "title=\"" . $lc_str['perm_tip'] . "\"/>\n" .
-                     "                    </span>\n" .
-                     "                </p>\n" .
-                     "                <p>" . $lc_str['cook_del'] .
-                     "</p>\n";
-            }
-
-            //** Info
-            echo "                <p>" . $lc_str['name_txt'] .
-                 "</p>\n" .
-                 "                <noscript>\n" .
-                 "                    <h2>" . $lc_str['js'] .
-                 "</h2>\n" .
-                 "                    <p>" . $lc_str['js_txt'] .
-                 "</p>\n" .
-                 "                </noscript>\n" .
-                 "            </article>\n" .
-                 "            <nav class=\"block login\">\n" .
-
-            //** Name
-                 "                <div>\n" .
-                 "                    <label for=\"name\">" .
-                 $lc_str['name'] . "</label>\n" .
-                 "                    <input type=\"text\" " .
-                 "name=\"name\" id=\"name\" maxlength=\"16\" " .
-                 "title=\"" . $lc_str['name_tip'] . "\"/> \n" .
-
-            //** Login
-                 "                    <input type=\"submit\" " .
-                 "name=\"login\" value=\"&gt;\" " .
-                 "title=\"" . $lc_str['login'] . "\"/>\n" .
-                 "                </div>\n" .
-                 "            </nav>\n";
         }
+    } else {
+        $at_go = 1;
+
+        //** Cookie
+        if (!isset($_COOKIE['ac_cookie'])) {
+            echo "                <h2>" . $lc_str['perm'] . "</h2>\n" .
+                 "                <p>\n" . $lc_str['cook_txt'] .
+                 "</p>\n" .
+                 "                <p id=\"check\">\n" .
+                 "                    <span id=\"box\">\n" .
+                 "                        <input " .
+                 "type=\"checkbox\" name=\"perm\" id=\"perm\" " .
+                 "title=\"" . $lc_str['perm_tip'] . "\"/>\n" .
+                 "                    </span>\n" .
+                 "                </p>\n" .
+                 "                <p>" . $lc_str['cook_del'] . "</p>\n";
+        }
+
+        //** Info
+        echo "                <p>" . $lc_str['name_txt'] . "</p>\n" .
+             "                <noscript>\n" .
+             "                    <h2>" . $lc_str['js'] . "</h2>\n" .
+             "                    <p>" . $lc_str['js_txt'] . "</p>\n" .
+             "                </noscript>\n" .
+             "            </article>\n" .
+             "            <nav class=\"block login\">\n" .
+
+        //** Name
+             "                <div>\n" .
+             "                    <label for=\"name\">" .
+             $lc_str['name'] . "</label>\n" .
+             "                    <input type=\"text\" " .
+             "name=\"name\" id=\"name\" maxlength=\"16\" " .
+             "title=\"" . $lc_str['name_tip'] . "\"/> \n" .
+
+        //** Login
+             "                    <input type=\"submit\" " .
+             "name=\"login\" value=\"&gt;\" " .
+             "title=\"" . $lc_str['login'] . "\"/>\n" .
+             "                </div>\n" .
+             "            </nav>\n";
     }
 }
 
