@@ -7,12 +7,17 @@ Project: [PHP Atomchat](https://github.com/phhpro/atomchat)
 - Bell works on sender but doesn't get pushed to receiver.
 - Superuser screen doesn't allow selecting emojis from hover menu.
 
+## [20190322] - 2019-03-22
+### Changed
+- Replaced AJAX with SSE. Polling option still available but deactivated.
+- Fix: Access token condition was broken on login screen.
+
 ## [20190321] - 2019-03-21
 ### Changed
 - Moved copy/paste trigger from symbol to timestamp.
 
 ##Added
-- Simple query string check to restrict access, primarily aiming at bots.
+- Optional access token to restrict access, primarily aiming at bots.
 
 ## [20190315] - 2019-03-15
 ### Changed

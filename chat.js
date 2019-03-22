@@ -64,6 +64,19 @@ function selectID(id)
     selectText(id);
 }
 
+
+/*
+ * As of v20190322 AJAX has been replaced with SSE, making the below
+ * obsolete. It is kept here for the time being as a fallback in case
+ * your main audience uses MSIE.
+ *
+ * MSIE has very poor support for server sent events and may throw an
+ * error. Uncomment the below section and edit the "chatlog screen"
+ * section in index.php to revert to polling.
+ */
+
+
+/*
 var http = null;
 
 function ajax()
@@ -101,3 +114,4 @@ function push()
 }
 
 push();
+*/

@@ -12,6 +12,10 @@
 - One-click text select for easy copy/paste
 - Absolutely no database required
 
+### News
+
+As of v20190322 previous AJAX long polling has been replaced with SSE. The polling option is still available but deactivated.
+
 ### Configuration
 
 The script generates a default configuration in `config.php` when first run or in case the file has been accidentally deleted. All relevant settings can be configured from the superuser screen and are usually effective immediately. Simply refresh the page if in doubt. You can also enable a timeout option to automatically logout inactive users after a given time. The default is to leave session handling to PHP settings.
@@ -54,14 +58,8 @@ As an example, consider a native speaker of Japanese on vacation in Italy on a p
 
 ### Limitations And Issues
 
-The script uses a very crude AJAX call to perform a pseudo push using some sort of long polling. While this works OK for the target audience running the occasinal P2P session, it still means the script is creating extra overhead on the server and data on the user end; depending the log size.
-
-Sockets are clearly the better approach, but require running a daemon on the server; which may be well beyond the usual hobbyist user; or outright impossible on shared or free hosting. The primary intention of this script was to keep it as simple as possible with next to zero dependencies and minimal user efforts. It says PHP 5 in the header, but actually runs on obsolete 4x machines all the same.
-
 Where JavaScript is not available, or when using a text-mode browser, the page needs manual refreshing to execute the selected action or to update the log. In this case neither character counter, nor emoji hover menu, nor auto select will have any effect. You can still input emojis by typing the assigned text token as illustrated on the settings screen. Text is auto cut after reaching the character limit.
 
-Setting a non-Western default as the page language META produces strange rendering. In mild cases it's just black and white emojis, in more extreme scenarios effectively placing the hover menu out of reach and hence making it completely unusable. Hard-linking a Western locale fixes the issue. Translations are not affected and work as expected.
-
-The only possible caveat lies in setting the refresh rate too small. Default are 15 seconds. In general, the smaller the value, the more bandwidth and user data. Plus, there's a good chance it will freeze the browser; or even hang the whole system!
+Setting a non-Western default as the page language META produces strange rendering. In mild cases it's just black and white emojis, in more extreme scenarios effectively placing the hover menu out of reach and hence making it completely unusable. Hard-linking a Western locale fixes the issue. Translations are not affected.
 
 That all said, happy Atomchatting.

@@ -28,7 +28,7 @@
  * MA 02110-1301, USA.
  */
 
-$ver = "20190321";
+$ver = "20190322";
 
 /**
  ***********************************************************************
@@ -1701,11 +1701,51 @@ if (isset($_SESSION['ac_name']) && $_SESSION['ac_name'] !== "") {
 
         echo "            <article class=\"block\" id=\"push\">\n";
 
-        if (is_file($log)) {
-            include $log;
-        } else {
+        if (!is_file($log)) {
             file_put_contents($log, $init);
-            include $log;
+        } else {
+
+            /*
+             * As of v20190322 AJAX has been replaced with SSE. MSIE
+             * has very poor support for server sent events and may
+             * throw an error. Uncomment the below include and comment
+             * out the entire script echo block to revert to polling.
+             */
+
+            //** include $log;
+
+            echo "            <script>\n" .
+                 "                if (typeof(EventSource) " .
+                 "!== 'undefined') {\n" .
+                 "                    var src " .
+                 "= new EventSource('sse.php?src=$log');\n" .
+                 "                    var sel " .
+                 "= document.querySelector('article');\n" .
+                 "                    console." .
+                 "log(src.withCredentials);\n" .
+                 "                    console." .
+                 "log(src.readyState);\n" .
+                 "                    console." .
+                 "log(src.url);\n\n" .
+                 "                    src.onopen = function() {\n" .
+                 "                        console." .
+                 "log('Connection established');\n" .
+                 "                    };\n\n" .
+                 "                    src.onclose = function() {\n" .
+                 "                        console." .
+                 "log('Connection closed');\n" .
+                 "                    };\n\n" .
+                 "                    src.onerror = function() {\n" .
+                 "                        console." .
+                 "log('EventSource failed!');\n" .
+                 "                    };\n\n" .
+                 "                    src.onmessage = function(e) {\n" .
+                 "                        sel.innerHTML = e.data;\n" .
+                 "                    };\n" .
+                 "                } else {\n" .
+                 "                    alert('SSE not supprted!');\n" .
+                 "                }\n" .
+                 "            </script>\n";
         }
 
         echo "            </article>\n";
