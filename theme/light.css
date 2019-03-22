@@ -51,7 +51,7 @@ select {
 
 .item:hover .item_head {
     background-color: #666;
-    color: #000;
+    color: #ccc;
 }
 
 .item_log {

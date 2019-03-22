@@ -1718,7 +1718,7 @@ if (isset($_SESSION['ac_name']) && $_SESSION['ac_name'] !== "") {
                  "                if (typeof(EventSource) " .
                  "!== 'undefined') {\n" .
                  "                    var src " .
-                 "= new EventSource('sse.php?src=$log');\n" .
+                 "= new EventSource('push.php?src=$log');\n" .
                  "                    var sel " .
                  "= document.querySelector('article');\n" .
                  "                    console." .
