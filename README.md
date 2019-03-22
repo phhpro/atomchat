@@ -44,7 +44,7 @@ In addition to direct text input, the script also provides a point-and-click hov
 
 ### File Uploads
 
-Image types `gif, jpeg, jpg, png` are managed internally and converted to Base64 strings to minimise server requests and also to be available in downloaded offline logs. Only these will render auto scaled thumbnails. Any other types produce standard text links. You may need to edit your CSP to add an exception for the `base` handler if you don't see the thumbnails.
+Image types `gif, jpeg, jpg, png` are managed internally and converted to Base64 strings to be available in offline logs. Only these will render auto scaled thumbnails. Any other types produce standard text links. You may need to edit your CSP to add an exception for the `base` handler if you don't see the thumbnails.
 
 ### Multi Themes
 

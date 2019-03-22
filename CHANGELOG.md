@@ -11,6 +11,7 @@ Project: [PHP Atomchat](https://github.com/phhpro/atomchat)
 ### Changed
 - Replaced AJAX with SSE. Polling option still available but deactivated.
 - Fix: Access token condition was broken on login screen.
+- Fix: Missing hover state on box ID.
 
 ## [20190321] - 2019-03-21
 ### Changed

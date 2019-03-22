@@ -59,7 +59,7 @@ select {
     color: #360;
 }
 
-input:hover, textarea:hover, select:hover, .item:hover {
+input:hover, textarea:hover, select:hover, .item:hover, #box:hover {
     background-color: #ff0;
     background-image: linear-gradient(#993, #ff3);
     color: #030;
