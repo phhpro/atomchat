@@ -1086,7 +1086,7 @@ if (isset($_SESSION['ac_name']) && $_SESSION['ac_name'] !== "") {
 
         if ($emo_ln[0] !== "") {
             echo "                        <input type=\"text\" " .
-                 "id=\"$emo_id\" class=\"emo_id\" " .
+                 "id=\"$emo_id\" class=\"emo_id\" size=\"1\" " .
                  "value=\"" . $emo_ln[1] . "\" " .
                  "title=\"" . $emo_ln[0] . "\" " .
                  "onclick=\"emo('$emo_id');\"/>\n";
@@ -1706,10 +1706,14 @@ if (isset($_SESSION['ac_name']) && $_SESSION['ac_name'] !== "") {
         } else {
 
             /*
-             * As of v20190322 AJAX has been replaced with SSE. MSIE
-             * has very poor support for server sent events and may
-             * throw an error. Uncomment the below include and comment
-             * out the entire script echo block to revert to polling.
+             * As of v20190322 AJAX has been replaced with SSE. MSIE has
+             * very poor support for server sent events and may throw an
+             * error. To revert to AJAX:
+             *
+             * - Uncomment the below include and comment out the entire
+             *   script echo block.
+             *
+             * - Edit chat.js and uncomment the corresponding section.
              */
 
             //** include $log;

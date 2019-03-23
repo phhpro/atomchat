@@ -9,9 +9,12 @@ Project: [PHP Atomchat](https://github.com/phhpro/atomchat)
 
 ## [20190322] - 2019-03-22
 ### Changed
-- Replaced AJAX with SSE. Polling option still available but deactivated.
+- Replaced AJAX with SSE. Polling option still available but disabled.
 - Fix: Access token condition was broken on login screen.
 - Fix: Missing hover state on box ID.
+
+### Added
+- New theme 'Poetry'.
 
 ## [20190321] - 2019-03-21
 ### Changed

@@ -12,7 +12,7 @@
  * @link      https://github.com/phhpro/atomchat
  */
 
-
+//** Character counter
 function chars(chat)
 {
     if (chat.text.value.length >= char) {
@@ -22,6 +22,7 @@ function chars(chat)
     }
 }
 
+//** Insert emoji from hover menu
 function emo(str)
 {
     var txt = document.getElementById("text");
@@ -48,6 +49,7 @@ function emo(str)
     }
 }
 
+//** Select text of given ID
 function selectText(id)
 {
     var rng = document.createRange();
@@ -58,6 +60,7 @@ function selectText(id)
         sel.addRange(rng);
 }
 
+//** Select ID to select text from
 function selectID(id)
 {
     var id = document.getElementById(id);
@@ -67,18 +70,20 @@ function selectID(id)
 
 /*
  * As of v20190322 AJAX has been replaced with SSE, making the below
- * obsolete. It is kept here for the time being as a fallback in case
- * your main audience uses MSIE.
+ * section obsolete. It's kept here for the time being as a fallback
+ * if your main audience uses MSIE and you'd rather revert to AJAX
+ * because MSIE has very poor support for server sent events and may
+ * well throw an error and exit. To revrt to AJAX:
  *
- * MSIE has very poor support for server sent events and may throw an
- * error. Uncomment the below section and edit the "chatlog screen"
- * section in index.php to revert to polling.
+ * - Uncomment the below section.
+ * - Edit the "chatlog screen" section in index.php.
  */
 
 
 /*
 var http = null;
 
+//** Check browser support
 function ajax()
 {
     if (window.ActiveXObject) {
@@ -91,6 +96,7 @@ function ajax()
     }
 }
 
+//** Pseudo push new content
 function push()
 {
     http = ajax();
@@ -113,5 +119,6 @@ function push()
     setTimeout('push()', (1000 * rate));
 }
 
+//** Init polling
 push();
 */
